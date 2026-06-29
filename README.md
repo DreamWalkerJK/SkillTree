@@ -1,4 +1,4 @@
-# SkillTree
+# <center>SkillTree</center>
 
 开发者知识笔记。
 
