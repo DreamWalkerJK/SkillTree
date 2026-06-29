@@ -33,9 +33,10 @@ SkillTree/
 
 ## 内容导航
 
-### DataBase
+### 数据库 - DataBase
 
-- [SQL Server 执行计划](<DataBase/SQL Server执行计划.md>)
+- [SQL Server 执行计划](<DataBase/SQL Server执行计划.md>)  
+- [CTE和View](<DataBase/CTE和View.md>)
 
 #### MySql
 
@@ -56,18 +57,18 @@ SkillTree/
 - [SQL Server 笔记](<DataBase/SQL Server/SQLServer.md>)
 - [SQL Server 常用脚本](<DataBase/SQL Server/常用.sql>)
 
-### DesignPattern
+### 设计模式 - DesignPattern
 
 - [设计模式](<DesignPattern/设计模式.md>)
 
-### DesignPrinciples
+### 设计原则 - DesignPrinciples
 
 - [SOLID](<DesignPrinciples/SOLID.md>)
 
-### GeneralCodingSkills
+### 通用代码技能 - GeneralCodingSkills
 
 - [正则表达式](<GeneralCodingSkills/正则表达式.md>)
 
-### Network
+### 计算机网络 - Network
 
 - [网络模型](<Network/网络模型.md>)
