@@ -25,6 +25,8 @@ SkillTree/
 |   +-- 设计模式.md
 +-- DesignPrinciples/
 |   +-- SOLID.md
++-- DotNet/
+|   +-- ExecutionContext 和 SynchronizationContext.md
 +-- GeneralCodingSkills/
 |   +-- 正则表达式.md
 +-- Network/
@@ -63,7 +65,11 @@ SkillTree/
 
 ### 设计原则 - DesignPrinciples
 
-- [SOLID](<DesignPrinciples/SOLID.md>)
+- [SOLID](<DesignPrinciples/SOLID.md>)  
+
+### .NET
+
+- [ExecutionContext 和 SynchronizationContext](<DotNet/ExecutionContext和SynchronizationContext.md>)
 
 ### 通用代码技能 - GeneralCodingSkills
 
