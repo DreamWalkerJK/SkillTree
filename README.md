@@ -26,6 +26,8 @@ SkillTree/
 +-- DesignPrinciples/
 |   +-- SOLID.md
 +-- DotNet/
+|   +-- Question/
+|   |   +-- 多线程并发访问DbContext.md
 |   +-- ExecutionContext 和 SynchronizationContext.md
 +-- GeneralCodingSkills/
 |   +-- 正则表达式.md
@@ -37,22 +39,22 @@ SkillTree/
 
 ### 数据库 - DataBase
 
-- [SQL Server 执行计划](<DataBase/SQL Server执行计划.md>)  
-- [CTE和View](<DataBase/CTE和View.md>)
+- [SQL Server 执行计划](<DataBase/SQL Server执行计划.md>)
+- [CTE和View](DataBase/CTE和View.md)
 
 #### MySql
 
-- [MySQL 笔记](<DataBase/MySql/MySQL.md>)
-- [LeetCode SQL](<DataBase/MySql/LeetCode.sql>)
-- [优化脚本](<DataBase/MySql/优化.sql>)
-- [并行查询](<DataBase/MySql/并行查询.sql>)
-- [数据库慢查询](<DataBase/MySql/数据库慢查询.sql>)
-- [评估数据体量与单表数据量过大处理方式](<DataBase/MySql/评估数据体量&单表数据量过大处理方式.sql>)
+- [MySQL 笔记](DataBase/MySql/MySQL.md)
+- [LeetCode SQL](DataBase/MySql/LeetCode.sql)
+- [优化脚本](DataBase/MySql/优化.sql)
+- [并行查询](DataBase/MySql/并行查询.sql)
+- [数据库慢查询](DataBase/MySql/数据库慢查询.sql)
+- [评估数据体量与单表数据量过大处理方式](DataBase/MySql/评估数据体量&单表数据量过大处理方式.sql)
 
 #### PostgreSQL
 
-- [PostgreSQL 笔记](<DataBase/PostgreSQL/pssql.md>)
-- [PostgreSQL 学习记录](<DataBase/PostgreSQL/pssql学习.txt>)
+- [PostgreSQL 笔记](DataBase/PostgreSQL/pssql.md)
+- [PostgreSQL 学习记录](DataBase/PostgreSQL/pssql学习.txt)
 
 #### SQL Server
 
@@ -61,20 +63,26 @@ SkillTree/
 
 ### 设计模式 - DesignPattern
 
-- [设计模式](<DesignPattern/设计模式.md>)
+- [设计模式](DesignPattern/设计模式.md)
 
 ### 设计原则 - DesignPrinciples
 
-- [SOLID](<DesignPrinciples/SOLID.md>)  
+- [SOLID](DesignPrinciples/SOLID.md)
 
-### .NET
+### .NET  
 
-- [ExecutionContext 和 SynchronizationContext](<DotNet/ExecutionContext和SynchronizationContext.md>)
+- [ExecutionContext 和 SynchronizationContext](DotNet/ExecutionContext和SynchronizationContext.md)  
+
+#### Question
+- [多线程并发访问DbContext](/DotNet/Question/多线程并发访问DbContext.md)
+
+
 
 ### 通用代码技能 - GeneralCodingSkills
 
-- [正则表达式](<GeneralCodingSkills/正则表达式.md>)
+- [正则表达式](GeneralCodingSkills/正则表达式.md)
 
 ### 计算机网络 - Network
 
-- [网络模型](<Network/网络模型.md>)
+- [网络模型](Network/网络模型.md)
+
