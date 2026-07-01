@@ -1,0 +1,6 @@
+*.cs linguist-language=C#      
+*.md linguist-language=C#   
+
+*.sql linguist-documentation=true  
+*.txt linguist-documentation=true  
+*.xml linguist-documentation=true 
