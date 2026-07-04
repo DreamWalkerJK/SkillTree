@@ -1,4 +1,6 @@
-开发者知识笔记。
+# <center>技能树</center>  
+
+开发者技能相关。
 
 ## 目录结构
 
@@ -25,7 +27,8 @@ SkillTree/
 |   +-- SOLID.md
 +-- DotNet/
 |   +-- Question/
-|   |   +-- 多线程并发访问DbContext.md
+|   |   +-- 多线程并发访问DbContext.md  
+|   |   +-- 多线程并发访问 HashSet.md
 |   +-- ExecutionContext 和 SynchronizationContext.md  
 |   +-- EndpointFilter.md
 +-- GeneralCodingSkills/
@@ -75,7 +78,8 @@ SkillTree/
 
 #### Question
 
-- [多线程并发访问DbContext](/DotNet/Question/多线程并发访问DbContext.md)
+- [多线程并发访问DbContext](/DotNet/Question/多线程并发访问DbContext.md)  
+- [多线程并发访问 HashSet](/DotNet/Question/多线程并发访问Hashset.md)
 
 ### 通用代码技能 - GeneralCodingSkills
 
