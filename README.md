@@ -29,6 +29,7 @@ SkillTree/
 |   +-- Question/
 |   |   +-- 多线程并发访问DbContext.md  
 |   |   +-- 多线程并发访问 HashSet.md
+|   +-- DistinctBy性能.md  
 |   +-- ExecutionContext 和 SynchronizationContext.md  
 |   +-- EndpointFilter.md
 +-- GeneralCodingSkills/
@@ -73,6 +74,7 @@ SkillTree/
 
 ### .NET
 
+- [DistinctBy 性能](DotNet/DistinctBy性能.md)  
 - [ExecutionContext 和 SynchronizationContext](DotNet/ExecutionContext和SynchronizationContext.md)
 - [EndpointFilter](DotNet/EndpointFilter.md)
 
