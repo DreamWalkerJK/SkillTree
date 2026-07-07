@@ -29,6 +29,7 @@ SkillTree/
 |   +-- Question/
 |   |   +-- 多线程并发访问DbContext.md  
 |   |   +-- 多线程并发访问 HashSet.md
+|   +-- ChangeTracker.TrackGraph.md
 |   +-- DistinctBy性能.md  
 |   +-- ExecutionContext 和 SynchronizationContext.md  
 |   +-- EndpointFilter.md  
@@ -75,6 +76,7 @@ SkillTree/
 
 ### .NET
 
+- [ChangeTracker.TrackGraph](DotNet/ChangeTracker.TrackGraph.md)  
 - [DistinctBy 性能](DotNet/DistinctBy性能.md)  
 - [ExecutionContext 和 SynchronizationContext](DotNet/ExecutionContext和SynchronizationContext.md)
 - [EndpointFilter](DotNet/EndpointFilter.md)  
