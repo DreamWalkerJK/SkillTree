@@ -31,7 +31,8 @@ SkillTree/
 |   |   +-- 多线程并发访问 HashSet.md
 |   +-- DistinctBy性能.md  
 |   +-- ExecutionContext 和 SynchronizationContext.md  
-|   +-- EndpointFilter.md
+|   +-- EndpointFilter.md  
+|   +-- Interlocked.md
 +-- GeneralCodingSkills/
 |   +-- 正则表达式.md
 +-- Network/
@@ -76,7 +77,8 @@ SkillTree/
 
 - [DistinctBy 性能](DotNet/DistinctBy性能.md)  
 - [ExecutionContext 和 SynchronizationContext](DotNet/ExecutionContext和SynchronizationContext.md)
-- [EndpointFilter](DotNet/EndpointFilter.md)
+- [EndpointFilter](DotNet/EndpointFilter.md)  
+- [Interlocked](DotNet/Interlocked.md)
 
 #### Question
 
