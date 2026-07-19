@@ -6,6 +6,8 @@
 
 ```text
 SkillTree/
++-- Architecture/  
+|   +-- DDD.md
 +-- DataBase/
 |   +-- MySql/
 |   |   +-- MySQL.md
@@ -40,7 +42,11 @@ SkillTree/
     +-- 网络模型.md
 ```
 
-## 内容导航
+## 内容导航  
+
+### 软件架构 - Architecture
+
+- [DDD 领域驱动设计](</Architecture/DDD.md>)
 
 ### 数据库 - DataBase
 
