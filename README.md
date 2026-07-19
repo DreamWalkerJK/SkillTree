@@ -7,7 +7,9 @@
 ```text
 SkillTree/
 +-- Architecture/  
-|   +-- DDD.md
+|   +-- DDD.md  
++-- Component/  
+|   +-- Helm Chart.md  
 +-- DataBase/
 |   +-- MySql/
 |   |   +-- MySQL.md
@@ -46,7 +48,11 @@ SkillTree/
 
 ### 软件架构 - Architecture
 
-- [DDD 领域驱动设计](</Architecture/DDD.md>)
+- [DDD 领域驱动设计](</Architecture/DDD.md>)  
+
+### 云原生组件 - Component  
+
+- [Helm Chart](</Component/Helm Chart.md)  
 
 ### 数据库 - DataBase
 
