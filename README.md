@@ -1,4 +1,4 @@
-# <center>技能树</center>  
+# 
 
 开发者技能相关。
 
@@ -10,6 +10,7 @@ SkillTree/
 |   +-- DDD.md  
 +-- Component/  
 |   +-- Helm Chart.md  
+|   +-- kafka配置外部地址.md  
 +-- DataBase/
 |   +-- MySql/
 |   |   +-- MySQL.md
@@ -44,15 +45,16 @@ SkillTree/
     +-- 网络模型.md
 ```
 
-## 内容导航  
+## 内容导航
 
 ### 软件架构 - Architecture
 
-- [DDD 领域驱动设计](</Architecture/DDD.md>)  
+- [DDD 领域驱动设计](/Architecture/DDD.md)
 
-### 云原生组件 - Component  
+### 云原生组件 - Component
 
 - [Helm Chart](</Component/Helm Chart.md)  
+- [kafka配置外部地址](</Component/kafka配置外部地址.md>)  
 
 ### 数据库 - DataBase
 
@@ -88,15 +90,15 @@ SkillTree/
 
 ### .NET
 
-- [ChangeTracker.TrackGraph](DotNet/ChangeTracker.TrackGraph.md)  
-- [DistinctBy 性能](DotNet/DistinctBy性能.md)  
+- [ChangeTracker.TrackGraph](DotNet/ChangeTracker.TrackGraph.md)
+- [DistinctBy 性能](DotNet/DistinctBy性能.md)
 - [ExecutionContext 和 SynchronizationContext](DotNet/ExecutionContext和SynchronizationContext.md)
-- [EndpointFilter](DotNet/EndpointFilter.md)  
+- [EndpointFilter](DotNet/EndpointFilter.md)
 - [Interlocked](DotNet/Interlocked.md)
 
 #### Question
 
-- [多线程并发访问DbContext](/DotNet/Question/多线程并发访问DbContext.md)  
+- [多线程并发访问DbContext](/DotNet/Question/多线程并发访问DbContext.md)
 - [多线程并发访问 HashSet](/DotNet/Question/多线程并发访问Hashset.md)
 
 ### 通用代码技能 - GeneralCodingSkills
