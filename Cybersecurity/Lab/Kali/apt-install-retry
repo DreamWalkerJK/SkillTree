@@ -1,0 +1,55 @@
+#!/bin/sh
+set -eu
+
+write_sources() {
+    mirror=${1%/}
+    printf '%s\n' \
+        'Types: deb' \
+        "URIs: ${mirror}/" \
+        'Suites: kali-rolling' \
+        'Components: main contrib non-free non-free-firmware' \
+        'Signed-By: /usr/share/keyrings/kali-archive-keyring.gpg' \
+        > /etc/apt/sources.list.d/kali.sources
+}
+
+round=1
+while [ "${round}" -le "${APT_INSTALL_ROUNDS:-2}" ]; do
+    for mirror in \
+        "${KALI_MIRROR:-https://mirror.nju.edu.cn/kali/}" \
+        "${KALI_FALLBACK_MIRROR:-https://mirrors.ustc.edu.cn/kali/}" \
+        "${KALI_SECOND_FALLBACK_MIRROR:-https://mirrors.tuna.tsinghua.edu.cn/kali/}" \
+        "${KALI_TERTIARY_MIRROR:-https://mirrors.aliyun.com/kali/}"
+    do
+        echo "APT round ${round}: trying ${mirror}"
+        write_sources "${mirror}"
+
+        if ! apt-get \
+            -o Acquire::Retries="${APT_RETRIES:-5}" \
+            -o Acquire::http::Timeout="${APT_TIMEOUT:-120}" \
+            -o Acquire::https::Timeout="${APT_TIMEOUT:-120}" \
+            -o APT::Update::Error-Mode=any \
+            update
+        then
+            echo "APT index update failed on ${mirror}; switching mirror" >&2
+            continue
+        fi
+
+        if apt-get \
+            -o Acquire::Retries="${APT_RETRIES:-5}" \
+            -o Acquire::http::Timeout="${APT_TIMEOUT:-120}" \
+            -o Acquire::https::Timeout="${APT_TIMEOUT:-120}" \
+            -o Binary::apt::APT::Keep-Downloaded-Packages=true \
+            install -y --no-install-recommends "$@"
+        then
+            exit 0
+        fi
+
+        echo "APT package download failed on ${mirror}; preserving cache and switching mirror" >&2
+        sleep 5
+    done
+
+    round=$((round + 1))
+done
+
+echo "APT installation failed after all configured mirror attempts" >&2
+exit 1

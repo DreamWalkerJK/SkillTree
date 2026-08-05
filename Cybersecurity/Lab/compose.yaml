@@ -1,0 +1,51 @@
+services:
+  kali:
+    build:
+      context: ./Kali
+      network: host
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./share:/share
+    networks:
+      lab_net:
+        ipv4_address: 172.30.50.2
+      wan_net:
+        gw_priority: 1
+
+    # 抓包或部分底层网络工具需要时再打开。
+    # 不建议直接使用 privileged: true。
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+
+  target:
+    build:
+      context: ./Target
+    cap_add:
+      - NET_ADMIN
+    command:
+      - /bin/sh
+      - -c
+      - ip route del default || true; exec apachectl -D FOREGROUND
+    networks:
+      lab_net:
+        ipv4_address: 172.30.50.10
+      host_access_net: {}
+    ports:
+      # 只允许 Windows 宿主机访问
+      - "127.0.0.1:8008:80"
+
+networks:
+  lab_net:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.30.50.0/24
+
+  wan_net:
+    driver: bridge
+
+  host_access_net:
+    driver: bridge
