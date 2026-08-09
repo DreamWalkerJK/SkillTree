@@ -52,6 +52,7 @@ SkillTree/
 |   +-- ExecutionContext和SynchronizationContext.md
 |   +-- EndpointFilter.md
 |   +-- Interlocked.md
+|   +-- NET10技术学习指南.md
 |   +-- Roslyn.md
 +-- GeneralCodingSkills/
 |   +-- 正则表达式.md
@@ -110,6 +111,7 @@ SkillTree/
 
 ### .NET
 
+- [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md)
 - [ChangeTracker.TrackGraph](DotNet/ChangeTracker.TrackGraph.md)
 - [DistinctBy 性能](DotNet/DistinctBy性能.md)
 - [ExecutionContext 和 SynchronizationContext](DotNet/ExecutionContext和SynchronizationContext.md)
