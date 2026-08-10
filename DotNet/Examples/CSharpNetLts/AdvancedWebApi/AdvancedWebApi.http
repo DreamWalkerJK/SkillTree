@@ -1,0 +1,19 @@
+@host = http://localhost:5000
+
+GET {{host}}/products/1
+Accept: application/json
+
+###
+
+GET {{host}}/products?take=2
+Accept: application/json
+
+###
+
+GET {{host}}/time
+Accept: application/json
+
+###
+
+GET {{host}}/boom
+Accept: application/problem+json

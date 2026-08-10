@@ -44,10 +44,13 @@ SkillTree/
 +-- DesignPrinciples/
 |   +-- SOLID.md
 +-- DotNet/
+|   +-- Examples/
+|   |   +-- CSharpNetLts/
 |   +-- Question/
 |   |   +-- 多线程并发访问DbContext.md
 |   |   +-- 多线程并发访问Hashset.md
 |   +-- ChangeTracker.TrackGraph.md
+|   +-- CSharp和NET-LTS中高阶指南.md
 |   +-- DistinctBy性能.md
 |   +-- ExecutionContext和SynchronizationContext.md
 |   +-- EndpointFilter.md
@@ -111,6 +114,7 @@ SkillTree/
 
 ### .NET
 
+- [C# 和 .NET LTS 中高阶指南（.NET 10 → .NET 8）](DotNet/CSharp和NET-LTS中高阶指南.md)
 - [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md)
 - [ChangeTracker.TrackGraph](DotNet/ChangeTracker.TrackGraph.md)
 - [DistinctBy 性能](DotNet/DistinctBy性能.md)
