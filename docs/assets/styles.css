@@ -15,7 +15,23 @@
   --sidebar-nav-link-font-weight--active: 650;
   --code-inline-background: #eef2ff;
   --code-inline-color: #3730a3;
-  --code-theme-background: #0f172a;
+  --code-inline-border-color: #c7d2fe;
+  --code-theme-background: #f6f8fa;
+  --code-theme-text: #24292f;
+  --code-theme-comment: #59636e;
+  --code-theme-punctuation: #57606a;
+  --code-theme-tag: #0550ae;
+  --code-theme-selector: #0a3069;
+  --code-theme-operator: #cf222e;
+  --code-theme-keyword: #cf222e;
+  --code-theme-function: #8250df;
+  --code-theme-variable: #953800;
+  --code-theme-selection: #b6d7ff;
+  --code-block-border-color: #d0d7de;
+  --code-copy-background: #eaeef2;
+  --code-copy-border-color: #d0d7de;
+  --code-copy-color: #24292f;
+  --search-placeholder-color: #64748b;
   --blockquote-border-color: #3b82f6;
   --blockquote-background: #eff6ff;
   --table-row-even-background: #f8fafc;
@@ -35,7 +51,23 @@ html[data-theme="dark"] {
   --sidebar-nav-link-color--active: #58a6ff;
   --code-inline-background: #161b22;
   --code-inline-color: #a5d6ff;
+  --code-inline-border-color: #30363d;
   --code-theme-background: #161b22;
+  --code-theme-text: #e6edf3;
+  --code-theme-comment: #8b949e;
+  --code-theme-punctuation: #c9d1d9;
+  --code-theme-tag: #79c0ff;
+  --code-theme-selector: #a5d6ff;
+  --code-theme-operator: #ff7b72;
+  --code-theme-keyword: #ff7b72;
+  --code-theme-function: #d2a8ff;
+  --code-theme-variable: #ffa657;
+  --code-theme-selection: #264f78;
+  --code-block-border-color: #30363d;
+  --code-copy-background: #30363d;
+  --code-copy-border-color: #484f58;
+  --code-copy-color: #f0f6fc;
+  --search-placeholder-color: #8b949e;
   --blockquote-background: #161b22;
   --blockquote-color: #b1bac4;
   --table-head-background: #161b22;
@@ -148,6 +180,11 @@ html[data-theme="dark"] .theme-toggle {
   padding: 0.65rem 0.75rem !important;
 }
 
+.search input::placeholder {
+  color: var(--search-placeholder-color) !important;
+  opacity: 1;
+}
+
 .markdown-section {
   color: var(--base-color, #334155);
 }
@@ -165,12 +202,102 @@ html[data-theme="dark"] .theme-toggle {
 }
 
 .markdown-section pre {
-  border: 1px solid #273449;
+  background: var(--code-theme-background);
+  border: 1px solid var(--code-block-border-color);
   border-radius: 0.7rem;
+  box-shadow: 0 1px 2px rgba(31, 35, 40, 0.04);
+  color: var(--code-theme-text);
+}
+
+.markdown-section pre[data-lang]::after {
+  color: var(--code-theme-comment);
+  opacity: 0.85;
+  right: 4.9rem;
+}
+
+.markdown-section pre[data-lang] code {
+  background: transparent;
+  color: var(--code-theme-text);
 }
 
 .markdown-section code {
   font-family: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.markdown-section code:not([class*="lang-"]):not([class*="language-"]) {
+  border: 1px solid var(--code-inline-border-color);
+}
+
+.markdown-section .token.class-name,
+.markdown-section .token.namespace {
+  color: var(--code-theme-function);
+}
+
+.markdown-section .token.annotation,
+.markdown-section .token.builtin,
+.markdown-section .token.constant,
+.markdown-section .token.property,
+.markdown-section .token.symbol {
+  color: var(--code-theme-tag);
+}
+
+.markdown-section .token.boolean,
+.markdown-section .token.number {
+  color: var(--code-theme-tag);
+}
+
+.markdown-section .token.char,
+.markdown-section .token.inserted,
+.markdown-section .token.string {
+  color: var(--code-theme-selector);
+}
+
+.markdown-section .token.deleted,
+.markdown-section .token.directive,
+.markdown-section .token.important,
+.markdown-section .token.keyword {
+  color: var(--code-theme-keyword);
+}
+
+.markdown-section .token.function,
+.markdown-section .token.method {
+  color: var(--code-theme-function);
+}
+
+.markdown-section .token.regex,
+.markdown-section .token.variable {
+  color: var(--code-theme-variable);
+}
+
+.markdown-section .token.operator {
+  color: var(--code-theme-operator);
+}
+
+.markdown-section .docsify-copy-code-button {
+  background: var(--code-copy-background);
+  border: 1px solid var(--code-copy-border-color);
+  border-radius: 0 0.65rem 0 0.5rem;
+  color: var(--code-copy-color);
+  font-size: 0.78rem;
+  font-weight: 650;
+  opacity: 0.78;
+  padding: 0.48rem 0.68rem;
+}
+
+.markdown-section .docsify-copy-code-button:focus,
+.markdown-section pre:hover .docsify-copy-code-button {
+  opacity: 1;
+}
+
+.markdown-section .docsify-copy-code-button .error,
+.markdown-section .docsify-copy-code-button .success {
+  background: var(--code-copy-background);
+  border: 1px solid var(--code-copy-border-color);
+  color: var(--code-copy-color);
+}
+
+html[data-theme="dark"] .markdown-section pre {
+  box-shadow: none;
 }
 
 .hero-panel {
