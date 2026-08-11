@@ -1,200 +1,95 @@
-# <center>SkillTree</center>
+<h1 align="center">SkillTree</h1>
 
-## 开发者技能树
+<p align="center">
+  面向软件开发者的结构化技术知识库：从计算机科学基础到生产系统工程。
+</p>
 
-```mermaid
-flowchart LR
-    ROOT(("Developer"))
+<p align="center">
+  <a href="https://dreamwalkerjk.github.io/SkillTree/"><strong>在线文档</strong></a>
+  ·
+  <a href="https://github.com/DreamWalkerJK/SkillTree">GitHub 仓库</a>
+  ·
+  <a href="https://github.com/DreamWalkerJK">作者主页</a>
+</p>
 
-    ROOT --> FUND["计算机基础"]
-    FUND --> ALG["算法"]
-    FUND --> MATH["数学"]
-    FUND --> NET["计算机网络"]
-    FUND --> OS["操作系统"]
+> [!TIP]
+> 推荐通过 [SkillTree 在线文档](https://dreamwalkerjk.github.io/SkillTree/) 阅读：支持侧边栏导航、全文搜索、深浅主题、代码高亮、数学公式以及上一篇/下一篇。
 
-    ROOT --> DEV["软件开发"]
-    DEV --> DOTNET["C# / .NET"]
-    DEV --> PRINCIPLE["设计原则"]
-    DEV --> PATTERN["设计模式"]
-    DEV --> GENERAL["通用编码技能"]
-    DEV --> DB["数据库"]
-    DB --> MYSQL["MySQL"]
-    DB --> PG["PostgreSQL"]
-    DB --> SQLSERVER["SQL Server"]
+## 项目定位
 
-    ROOT --> ARCH["架构"]
-    ARCH --> DDD["DDD"]
+SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运行示例。内容强调概念边界、工程取舍、实现细节与参考资料，而不是只记录零散的 API 用法。
 
-    ROOT --> CloudNative["云原生"]
-    CloudNative --> K8S["Kubernetes"]
-    K8S --> Helm["Helm"]
+当前内容主要覆盖：
 
-    ROOT --> Component["组件"]
-    Component --> Kafka["Kafka"]
+- C#、.NET、ASP.NET Core、EF Core、并发与性能
+- 软件架构、领域驱动设计、设计原则与设计模式
+- 算法、数学、计算机网络与操作系统
+- MySQL、PostgreSQL、SQL Server 与查询优化
+- Kubernetes、Helm、Kafka 等云原生与工程组件
+- Kali、Metasploit 与可复现的网络安全实验环境
 
-    ROOT --> SECURITY["网络安全"]
-    SECURITY --> Kali["Kali"]
-```
+## 知识领域
 
-## 目录结构
+| 领域 | 代表内容 |
+| --- | --- |
+| .NET / C# | [C# 与 .NET LTS 中高阶指南](DotNet/CSharp和NET-LTS中高阶指南.md) · [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md) · [Roslyn](DotNet/Roslyn.md) |
+| 架构与设计 | [领域驱动设计 DDD](Architecture/DDD.md) · [SOLID](DesignPrinciples/SOLID.md) · [设计模式](DesignPattern/设计模式.md) |
+| 算法与数学 | [旅行商问题 TSP](Algorithm/图与网络/旅行商问题TSP.md) · [非对称旅行商问题 ATSP](Algorithm/图与网络/非对称旅行商问题ATSP.md) · [生日悖论](Mathematics/生日悖论.md) |
+| 数据库 | [MySQL](DataBase/MySql/MySQL.md) · [SQL Server 执行计划](<DataBase/SQL Server/SQL Server执行计划.md>) · [CTE 与 View](DataBase/CTE和View.md) |
+| 云原生与组件 | [Helm Chart](<Component/Helm Chart.md>) · [Kafka 外部地址配置](Component/kafka配置外部地址.md) |
+| 网络安全 | [Kali Linux](Cybersecurity/Tools/Kali.md) · [msfconsole](Cybersecurity/Tools/msfconsole.md) · [Docker 实验环境](Cybersecurity/Lab/notice.md) |
+| 计算机基础 | [网络模型](Network/网络模型.md) · [Windows 基础命令](OperatingSystem/Windows/基础命令.md) · [正则表达式](GeneralCodingSkills/正则表达式.md) |
+
+## 推荐阅读
+
+1. [C# 和 .NET LTS 中高阶语法与用法指南（.NET 10 → .NET 8）](DotNet/CSharp和NET-LTS中高阶指南.md)
+2. [领域驱动设计（Domain-Driven Design, DDD）](Architecture/DDD.md)
+3. [旅行商问题（Traveling Salesman Problem, TSP）](Algorithm/图与网络/旅行商问题TSP.md)
+4. [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
+5. [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
+
+## 仓库结构
 
 ```text
 SkillTree/
-+-- Algorithm/
-|   +-- 图与网络/
-|       +-- 旅行商问题TSP.md
-|       +-- 非对称旅行商问题ATSP.md
-+-- Architecture/
-|   +-- DDD.md
-+-- Component/
-|   +-- Helm Chart.md
-|   +-- kafka配置外部地址.md
-+-- Cybersecurity/
-|   +-- Lab/
-|   |   +-- Kali/
-|   |   |   +-- Dockerfile
-|   |   |   +-- apt-install-retry
-|   |   +-- Target/
-|   |   |   +-- Dockerfile
-|   |   +-- compose.yaml
-|   |   +-- notice.md
-|   +-- Tools/
-|       +-- Kali.md
-|       +-- msfconsole.md
-+-- DataBase/
-|   +-- MySql/
-|   |   +-- MySQL.md
-|   |   +-- LeetCode.sql
-|   |   +-- 优化.sql
-|   |   +-- 并行查询.sql
-|   |   +-- 数据库慢查询.sql
-|   |   +-- 评估数据体量&单表数据量过大处理方式.sql
-|   +-- PostgreSQL/
-|   |   +-- pssql.md
-|   |   +-- pssql学习.txt
-|   +-- SQL Server/
-|   |   +-- SQL Server执行计划.md
-|   |   +-- SQLServer.md
-|   |   +-- 常用.sql
-|   +-- CTE和View.md
-+-- DesignPattern/
-|   +-- 设计模式.md
-+-- DesignPrinciples/
-|   +-- SOLID.md
-+-- DotNet/
-|   +-- Examples/
-|   |   +-- CSharpNetLts/
-|   +-- Question/
-|   |   +-- 多线程并发访问DbContext.md
-|   |   +-- 多线程并发访问Hashset.md
-|   +-- ChangeTracker.TrackGraph.md
-|   +-- CSharp和NET-LTS中高阶指南.md
-|   +-- DistinctBy性能.md
-|   +-- ExecutionContext和SynchronizationContext.md
-|   +-- EndpointFilter.md
-|   +-- Interlocked.md
-|   +-- NET10技术学习指南.md
-|   +-- Roslyn.md
-+-- GeneralCodingSkills/
-|   +-- 正则表达式.md
-+-- Mathematics/
-|   +-- 生日悖论.md
-+-- Network/
-    +-- 网络模型.md  
-+-- OperatingSystem/
-|   +-- Linux/
-|   +-- Windows/
-|       +-- 基础命令.md
+├── Algorithm/             # 算法与组合优化
+├── Architecture/          # 软件架构与 DDD
+├── Component/             # Helm、Kafka 等组件
+├── Cybersecurity/         # 安全工具与实验环境
+├── DataBase/              # MySQL、PostgreSQL、SQL Server
+├── DesignPattern/         # 设计模式
+├── DesignPrinciples/      # 设计原则
+├── DotNet/                # C#、.NET、ASP.NET Core、EF Core
+├── GeneralCodingSkills/   # 通用编码能力
+├── Mathematics/           # 数学与概率
+├── Network/               # 计算机网络
+├── OperatingSystem/       # 操作系统
+└── docs/                  # GitHub Pages 网站外壳与导航
 ```
 
-## 内容导航
+## 在线文档与本地预览
 
-### 算法 - Algorithm
+GitHub Pages 发布源为 `main` 分支的 `/docs` 目录：
 
-#### 图与网络
+- 在线地址：<https://dreamwalkerjk.github.io/SkillTree/>
+- Pages 外壳位于 `docs/`
+- 文章仍保留在原有知识目录中，网站会从 `main` 分支读取 Markdown
 
-- [旅行商问题TSP](Algorithm/图与网络/旅行商问题TSP.md)
-- [非对称旅行商问题ATSP](Algorithm/图与网络/非对称旅行商问题ATSP.md)
+本地预览无需安装依赖：
 
-### 软件架构 - Architecture
+```powershell
+python -m http.server 8000
+```
 
-- [DDD 领域驱动设计](Architecture/DDD.md)
+然后访问 <http://localhost:8000/docs/>。本地模式会直接读取当前工作区中的文章，便于在推送前检查导航和排版。
 
-### 云原生组件 - Component
+## 内容维护
 
-- [Helm Chart](<Component/Helm Chart.md>)
-- [kafka配置外部地址](Component/kafka配置外部地址.md)
+新增文章时：
 
-### 网络安全 - Cybersecurity
+1. 将 Markdown 放入对应的知识领域目录。
+2. 在 `docs/_sidebar.md` 中添加导航项。
+3. 如属于核心主题，可同步更新本 README 的“知识领域”或“推荐阅读”。
+4. 推送到 `main` 后等待 GitHub Pages 完成部署。
 
-- [Kali Linux](Cybersecurity/Tools/Kali.md)
-- [msfconsole](Cybersecurity/Tools/msfconsole.md)
-- [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
-
-### 数据库 - DataBase
-
-- [SQL Server 执行计划](<DataBase/SQL Server/SQL Server执行计划.md>)
-- [CTE和View](DataBase/CTE和View.md)
-
-#### MySql
-
-- [MySQL 笔记](DataBase/MySql/MySQL.md)
-- [LeetCode SQL](DataBase/MySql/LeetCode.sql)
-- [优化脚本](DataBase/MySql/优化.sql)
-- [并行查询](DataBase/MySql/并行查询.sql)
-- [数据库慢查询](DataBase/MySql/数据库慢查询.sql)
-- [评估数据体量与单表数据量过大处理方式](DataBase/MySql/评估数据体量&单表数据量过大处理方式.sql)
-
-#### PostgreSQL
-
-- [PostgreSQL 笔记](DataBase/PostgreSQL/pssql.md)
-- [PostgreSQL 学习记录](DataBase/PostgreSQL/pssql学习.txt)
-
-#### SQL Server
-
-- [SQL Server 笔记](<DataBase/SQL Server/SQLServer.md>)
-- [SQL Server 常用脚本](<DataBase/SQL Server/常用.sql>)
-
-### 设计模式 - DesignPattern
-
-- [设计模式](DesignPattern/设计模式.md)
-
-### 设计原则 - DesignPrinciples
-
-- [SOLID](DesignPrinciples/SOLID.md)
-
-### .NET
-
-- [C# 和 .NET LTS 中高阶指南（.NET 10 → .NET 8）](DotNet/CSharp和NET-LTS中高阶指南.md)
-- [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md)
-- [ChangeTracker.TrackGraph](DotNet/ChangeTracker.TrackGraph.md)
-- [DistinctBy 性能](DotNet/DistinctBy性能.md)
-- [ExecutionContext 和 SynchronizationContext](DotNet/ExecutionContext和SynchronizationContext.md)
-- [EndpointFilter](DotNet/EndpointFilter.md)
-- [Interlocked](DotNet/Interlocked.md)
-- [Roslyn](DotNet/Roslyn.md)
-
-#### Question
-
-- [多线程并发访问 DbContext](DotNet/Question/多线程并发访问DbContext.md)
-- [多线程并发访问 HashSet](DotNet/Question/多线程并发访问Hashset.md)
-
-### 通用代码技能 - GeneralCodingSkills
-
-- [正则表达式](GeneralCodingSkills/正则表达式.md)
-
-### 数学 - Mathematics
-
-- [生日悖论](Mathematics/生日悖论.md)
-
-### 计算机网络 - Network
-
-- [网络模型](Network/网络模型.md)  
-
-### 操作系统 - OperatingSystem  
-
-#### Linux  
-
-#### Windows  
-
-- [基础命令](OperatingSystem/Windows/基础命令.md)    
+SQL、文本和项目文件可以加入侧边栏，并通过 GitHub 源码视图打开；Markdown 文章则直接在文档站内阅读。
