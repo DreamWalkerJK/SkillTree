@@ -265,6 +265,8 @@ body,
 }
 
 .site-toolbar {
+  --toolbar-control-height: 2.45rem;
+
   align-items: center;
   display: flex;
   gap: 0.7rem;
@@ -286,6 +288,7 @@ body,
   box-shadow: none;
   display: block;
   flex: 0 1 auto;
+  height: var(--toolbar-control-height);
   left: auto;
   margin-left: 0;
   margin-right: 0;
@@ -309,8 +312,10 @@ body,
   border: 1px solid var(--border-color);
   border-radius: 0.58rem;
   box-shadow: 0 7px 20px rgba(31, 45, 61, 0.08);
+  box-sizing: border-box;
   display: inline-flex;
   gap: 0.08rem;
+  height: var(--toolbar-control-height, 2.45rem);
   max-width: 100%;
   overflow-x: auto;
   padding: 0.16rem;
@@ -354,7 +359,7 @@ html[data-theme="dark"] .app-nav > ul {
   cursor: pointer;
   display: flex;
   font-size: 1rem;
-  height: 2.45rem;
+  height: var(--toolbar-control-height, 2.45rem);
   justify-content: center;
   position: static;
   width: 2.45rem;
