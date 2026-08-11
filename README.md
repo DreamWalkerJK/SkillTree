@@ -197,4 +197,4 @@ SkillTree/
 
 #### Windows  
 
-- [基础命令](/OperatingSystem/Windows/基础命令.md)    
+- [基础命令](OperatingSystem/Windows/基础命令.md)    
