@@ -1,6 +1,40 @@
 # <center>SkillTree</center>
 
-开发者技能相关。
+## 开发者技能树
+
+```mermaid
+flowchart LR
+    ROOT(("Developer"))
+
+    ROOT --> FUND["计算机基础"]
+    FUND --> ALG["算法"]
+    FUND --> MATH["数学"]
+    FUND --> NET["计算机网络"]
+    FUND --> OS["操作系统"]
+
+    ROOT --> DEV["软件开发"]
+    DEV --> DOTNET["C# / .NET"]
+    DEV --> PRINCIPLE["设计原则"]
+    DEV --> PATTERN["设计模式"]
+    DEV --> GENERAL["通用编码技能"]
+    DEV --> DB["数据库"]
+    DB --> MYSQL["MySQL"]
+    DB --> PG["PostgreSQL"]
+    DB --> SQLSERVER["SQL Server"]
+
+    ROOT --> ARCH["架构"]
+    ARCH --> DDD["DDD"]
+
+    ROOT --> CloudNative["云原生"]
+    CloudNative --> K8S["Kubernetes"]
+    K8S --> Helm["Helm"]
+
+    ROOT --> Component["组件"]
+    Component --> Kafka["Kafka"]
+
+    ROOT --> SECURITY["网络安全"]
+    SECURITY --> Kali["Kali"]
+```
 
 ## 目录结构
 
@@ -79,8 +113,8 @@ SkillTree/
 
 #### 图与网络
 
-- [旅行商问题TSP](/Algorithm/图与网络/旅行商问题TSP.md)
-- [非对称旅行商问题ATSP](/Algorithm/图与网络/非对称旅行商问题ATSP.md)
+- [旅行商问题TSP](Algorithm/图与网络/旅行商问题TSP.md)
+- [非对称旅行商问题ATSP](Algorithm/图与网络/非对称旅行商问题ATSP.md)
 
 ### 软件架构 - Architecture
 
