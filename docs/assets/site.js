@@ -1,23 +1,42 @@
 (function () {
   const themeKey = "skilltree-theme";
   const root = document.documentElement;
+  const button = document.getElementById("theme-toggle");
+
+  function updateThemeUI(theme) {
+    const dark = theme === "dark";
+    const meta = document.querySelector('meta[name="theme-color"]');
+    const icon = button && button.querySelector("span");
+
+    if (meta) {
+      meta.setAttribute("content", dark ? "#0b111a" : "#f3f6fa");
+    }
+
+    if (button) {
+      const label = dark ? "切换到浅色主题" : "切换到深色主题";
+      button.setAttribute("aria-label", label);
+      button.setAttribute("aria-pressed", String(dark));
+      button.setAttribute("title", label);
+    }
+
+    if (icon) {
+      icon.textContent = dark ? "☀" : "☾";
+    }
+  }
 
   function setTheme(theme) {
     root.dataset.theme = theme;
     localStorage.setItem(themeKey, theme);
-
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-      meta.setAttribute("content", theme === "dark" ? "#0d1117" : "#f8fafc");
-    }
+    updateThemeUI(theme);
   }
 
-  const button = document.getElementById("theme-toggle");
   if (button) {
     button.addEventListener("click", function () {
       setTheme(root.dataset.theme === "dark" ? "light" : "dark");
     });
   }
+
+  updateThemeUI(root.dataset.theme || "light");
 
   function isSourcePath(path) {
     return /(?:\.(?:cs|csproj|slnx|sql|txt|ps1|sh|ya?ml|json|xml)|\/(?:Dockerfile|apt-install-retry))$/i.test(
