@@ -88,12 +88,31 @@
     });
 
     hook.doneEach(function () {
-      if (typeof window.renderMathInElement !== "function") {
+      const content = document.querySelector(".markdown-section");
+      if (!content) {
         return;
       }
 
-      const content = document.querySelector(".markdown-section");
-      if (!content) {
+      content.querySelectorAll("table").forEach(function (table) {
+        const parent = table.parentElement;
+        if (
+          !parent ||
+          parent.classList.contains("table-scroll") ||
+          parent.classList.contains("table-wrapper")
+        ) {
+          return;
+        }
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "table-scroll";
+        wrapper.setAttribute("role", "region");
+        wrapper.setAttribute("aria-label", "数据表，可横向滚动");
+        wrapper.setAttribute("tabindex", "0");
+        parent.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      });
+
+      if (typeof window.renderMathInElement !== "function") {
         return;
       }
 

@@ -391,33 +391,52 @@ html[data-theme="dark"] .sidebar {
   width: 2rem;
 }
 
-.search {
-  border-bottom: 1px solid var(--sidebar-border-color) !important;
-  margin: 0 -25px 0.55rem !important;
-  padding: 0.35rem 25px 1rem !important;
+.sidebar .search {
+  background: transparent !important;
+  border: 0 !important;
+  margin: 0.25rem 0 0.9rem !important;
+  padding: 0 !important;
 }
 
-.search input {
-  background: var(--surface-raised) !important;
-  border: 1px solid var(--border-color-strong) !important;
-  border-radius: 0.68rem !important;
-  box-shadow: inset 0 1px 2px rgba(31, 45, 61, 0.035);
+.sidebar .search .input-wrap {
+  align-items: center;
+  background: var(--surface-soft);
+  border: 1px solid var(--border-color-strong);
+  border-radius: 0.6rem;
+  box-shadow: inset 0 1px 2px rgba(31, 45, 61, 0.03);
+  margin: 0 !important;
+  overflow: hidden;
+  transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.sidebar .search .input-wrap:focus-within {
+  background: var(--surface-raised);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.sidebar .search input[type="search"] {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   color: var(--text-primary) !important;
   font-size: 0.9rem !important;
   padding: 0.68rem 0.78rem !important;
 }
 
-.search input:focus {
-  border-color: var(--accent-color) !important;
+.sidebar .search input[type="search"]:focus {
+  outline: 0;
 }
 
-.search input::placeholder {
+.sidebar .search input[type="search"]::placeholder {
   color: var(--search-placeholder-color) !important;
   opacity: 1;
 }
 
-.search .clear-button {
+.sidebar .search .clear-button {
   color: var(--text-muted) !important;
+  padding: 0 0.7rem !important;
 }
 
 .search .matching-post {
@@ -793,25 +812,37 @@ html[data-theme="dark"] .markdown-section pre[data-lang] {
   color: var(--code-copy-color);
 }
 
+.markdown-section .table-scroll,
 .markdown-section .table-wrapper {
+  background: var(--surface-raised);
   border: 1px solid var(--table-cell-border-color);
   border-radius: 0.75rem;
   margin: 1.25rem 0;
-  overflow: auto;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: var(--border-color-strong) transparent;
+}
+
+.markdown-section .table-scroll:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .markdown-section table {
-  border: 1px solid var(--table-cell-border-color);
-  border-radius: 0.75rem;
+  border: 0;
+  border-collapse: separate;
+  border-radius: 0;
   border-spacing: 0;
-  display: block;
-  margin: 1.25rem 0;
-  max-width: 100%;
-  min-width: 0;
-  overflow-x: auto;
+  display: table;
+  margin: 0;
+  min-width: max(100%, 680px);
+  table-layout: auto;
   width: 100%;
 }
 
+.markdown-section .table-scroll table,
 .markdown-section .table-wrapper table {
   border: 0;
   border-radius: 0;
@@ -831,7 +862,7 @@ html[data-theme="dark"] .markdown-section pre[data-lang] {
 .markdown-section th,
 .markdown-section td {
   border-color: var(--table-cell-border-color);
-  padding: 0.72rem 0.82rem;
+  padding: 0.68rem 0.82rem;
   vertical-align: top;
 }
 
