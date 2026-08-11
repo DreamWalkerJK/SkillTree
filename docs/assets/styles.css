@@ -245,6 +245,7 @@ body {
 body,
 .sidebar,
 .markdown-section,
+.site-toolbar,
 .app-nav,
 .theme-toggle,
 .domain-card,
@@ -263,25 +264,42 @@ body,
   background: var(--selection-color);
 }
 
-nav.app-nav {
+.site-toolbar {
+  align-items: center;
+  display: flex;
+  gap: 0.7rem;
+  max-width: calc(100vw - var(--sidebar-width) - 2.3rem);
+  position: fixed;
+  right: max(
+    1.15rem,
+    calc((100vw - var(--sidebar-width) - var(--content-max-width)) / 2 + 1rem)
+  );
+  top: 1rem;
+  z-index: 1000;
+}
+
+.site-toolbar nav.app-nav {
   backdrop-filter: none;
   background: transparent;
   border: 0;
   border-radius: 0;
   box-shadow: none;
   display: block;
+  flex: 0 1 auto;
   left: auto;
   margin-left: 0;
   margin-right: 0;
-  max-width: calc(100vw - 6.25rem);
+  max-width: calc(100vw - var(--sidebar-width) - 6.25rem);
   padding: 0;
-  top: 1rem;
+  position: static;
+  right: auto;
+  text-align: left;
+  top: auto;
   width: max-content;
 }
 
-.app-nav,
-.app-nav.no-badge {
-  right: 4.75rem;
+.site-toolbar .app-nav.no-badge {
+  right: auto;
 }
 
 .app-nav > ul {
@@ -338,11 +356,8 @@ html[data-theme="dark"] .app-nav > ul {
   font-size: 1rem;
   height: 2.45rem;
   justify-content: center;
-  position: fixed;
-  right: 1.15rem;
-  top: 1rem;
+  position: static;
   width: 2.45rem;
-  z-index: 1000;
 }
 
 .theme-toggle:hover {
@@ -564,10 +579,6 @@ html[data-theme="dark"] .sidebar {
   margin: 1.25rem auto 3rem;
   min-height: calc(100vh - 6rem);
   padding: 3.4rem clamp(2rem, 4.5vw, 4.5rem) 4rem;
-}
-
-body .app-nav:not(:empty) ~ main .markdown-section {
-  padding-top: 3.4rem;
 }
 
 .markdown-section > :first-child {
@@ -1175,6 +1186,10 @@ body .docsify-pagination-container {
 }
 
 @media (max-width: 768px) {
+  :root {
+    --sidebar-toggle-offset-top: 0.8rem;
+  }
+
   main,
   .content,
   .markdown-section {
@@ -1182,19 +1197,19 @@ body .docsify-pagination-container {
     min-width: 0;
   }
 
-  .app-nav {
-    left: auto;
-    max-width: calc(100vw - 7.2rem);
-    right: 3.8rem;
+  .site-toolbar {
+    gap: 0.55rem;
+    max-width: calc(100vw - 4.2rem);
+    right: 0.7rem;
+    top: 0.7rem;
   }
 
-  .app-nav.no-badge {
-    right: 3.8rem;
+  .site-toolbar nav.app-nav {
+    max-width: calc(100vw - 7.2rem);
   }
 
   .theme-toggle {
-    right: 0.7rem;
-    top: 0.7rem;
+    flex: 0 0 2.45rem;
   }
 
   .markdown-section {
@@ -1205,10 +1220,6 @@ body .docsify-pagination-container {
     margin: 0;
     min-height: 100vh;
     padding: 4.4rem 1.15rem 2.75rem;
-  }
-
-  body .app-nav:not(:empty) ~ main .markdown-section {
-    padding-top: 4.4rem;
   }
 
   .markdown-section h1 {
@@ -1260,6 +1271,7 @@ body .docsify-pagination-container {
 }
 
 @media print {
+  .site-toolbar,
   .app-nav,
   .sidebar,
   .sidebar-toggle,

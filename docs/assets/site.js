@@ -1,7 +1,28 @@
 (function () {
   const themeKey = "skilltree-theme";
   const root = document.documentElement;
+  const toolbar = document.getElementById("site-toolbar");
   const button = document.getElementById("theme-toggle");
+
+  function mountToolbar() {
+    if (!toolbar || !button) {
+      return;
+    }
+
+    const navigation = document.querySelector("nav.app-nav");
+    if (!navigation) {
+      return;
+    }
+
+    if (navigation.parentElement !== toolbar) {
+      toolbar.insertBefore(navigation, button);
+    }
+
+    toolbar.classList.toggle(
+      "has-navigation",
+      navigation.textContent.trim().length > 0
+    );
+  }
 
   function updateThemeUI(theme) {
     const dark = theme === "dark";
@@ -63,6 +84,10 @@
   }
 
   function skillTreePlugin(hook, vm) {
+    hook.mounted(function () {
+      mountToolbar();
+    });
+
     hook.beforeEach(function (content) {
       const routeFile = decodeURIComponent((vm.route && vm.route.file) || "");
       return content.replace(/\]\((<?)([^)\n]+?)(>?)\)/g, function (
@@ -88,6 +113,8 @@
     });
 
     hook.doneEach(function () {
+      mountToolbar();
+
       const content = document.querySelector(".markdown-section");
       if (!content) {
         return;
