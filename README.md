@@ -6,6 +6,10 @@
 
 ```text
 SkillTree/
++-- Algorithm/
+|   +-- 图与网络/
+|       +-- 旅行商问题TSP.md
+|       +-- 非对称旅行商问题ATSP.md
 +-- Architecture/
 |   +-- DDD.md
 +-- Component/
@@ -59,11 +63,20 @@ SkillTree/
 |   +-- Roslyn.md
 +-- GeneralCodingSkills/
 |   +-- 正则表达式.md
++-- Mathematics/
+|   +-- 生日悖论.md
 +-- Network/
     +-- 网络模型.md
 ```
 
-## 内容导航
+## 内容导航  
+
+### 算法 - Algorithm  
+
+#### 图与网络  
+
+- [旅行商问题TSP](/Algorithm/图与网络/旅行商问题TSP.md)  
+- [非对称旅行商问题ATSP](/Algorithm/图与网络/非对称旅行商问题ATSP.md)  
 
 ### 软件架构 - Architecture
 
@@ -131,6 +144,10 @@ SkillTree/
 ### 通用代码技能 - GeneralCodingSkills
 
 - [正则表达式](GeneralCodingSkills/正则表达式.md)
+
+### 数学 - Mathematics
+
+- [生日悖论](Mathematics/生日悖论.md)
 
 ### 计算机网络 - Network
 
