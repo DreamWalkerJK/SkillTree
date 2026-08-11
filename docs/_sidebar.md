@@ -19,6 +19,9 @@
   - [非对称旅行商问题 ATSP](/Algorithm/图与网络/非对称旅行商问题ATSP.md)
   - [生日悖论](/Mathematics/生日悖论.md)
 
+- **密码学**
+  - [生日攻击](/Cryptography/生日攻击.md)
+
 - **架构与设计**
   - [领域驱动设计 DDD](/Architecture/DDD.md)
   - [SOLID 设计原则](/DesignPrinciples/SOLID.md)
