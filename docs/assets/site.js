@@ -83,6 +83,57 @@
     return `https://github.com/DreamWalkerJK/SkillTree/blob/main/${encodedPath}`;
   }
 
+  function protectMath(content) {
+    const blocks = [];
+    const codeFragments = [];
+    const protectedFences = content.replace(
+      /(^|\n)([ \t]*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?\n\2\3(?=\n|$)/g,
+      function (match, lineStart) {
+        const placeholder = `SKILLTREECODE${codeFragments.length}TOKEN`;
+        codeFragments.push(match.slice(lineStart.length));
+        return `${lineStart}${placeholder}`;
+      }
+    );
+    const protectedCode = protectedFences.replace(
+      /(`+)([\s\S]*?)\1/g,
+      function (match) {
+        const placeholder = `SKILLTREECODE${codeFragments.length}TOKEN`;
+        codeFragments.push(match);
+        return placeholder;
+      }
+    );
+    const protectedContent = protectedCode.replace(
+      /(^|[^\\])\$\$([\s\S]*?)\$\$|(^|[^\\])\$([^\n$]+?)\$/g,
+      function (match, blockPrefix, blockMath, inlinePrefix, inlineMath) {
+        const prefix = blockMath !== undefined ? blockPrefix : inlinePrefix;
+        const source = blockMath !== undefined ? blockMath : inlineMath;
+        const displayMode = blockMath !== undefined;
+        const placeholder = `SKILLTREEMATH${blocks.length}TOKEN`;
+
+        blocks.push(
+          window.katex.renderToString(source.trim(), {
+            displayMode: displayMode,
+            throwOnError: false,
+            strict: false,
+            output: "htmlAndMathml"
+          })
+        );
+
+        return `${prefix}${placeholder}`;
+      }
+    );
+
+    return {
+      content: protectedContent.replace(
+        /SKILLTREECODE(\d+)TOKEN/g,
+        function (placeholder, index) {
+          return codeFragments[Number(index)] || placeholder;
+        }
+      ),
+      blocks: blocks
+    };
+  }
+
   function skillTreePlugin(hook, vm) {
     hook.mounted(function () {
       mountToolbar();
@@ -90,7 +141,7 @@
 
     hook.beforeEach(function (content) {
       const routeFile = decodeURIComponent((vm.route && vm.route.file) || "");
-      return content.replace(/\]\((<?)([^)\n]+?)(>?)\)/g, function (
+      const linkedContent = content.replace(/\]\((<?)([^)\n]+?)(>?)\)/g, function (
         fullMatch,
         openingBracket,
         rawTarget
@@ -110,6 +161,27 @@
         const fragment = parts[1] ? `#${parts[1]}` : "";
         return `](${githubSourceUrl(resolvedPath)}${fragment})`;
       });
+
+      if (typeof window.katex !== "object") {
+        return linkedContent;
+      }
+
+      const math = protectMath(linkedContent);
+      vm.config.__skillTreeMath = math.blocks;
+      return math.content;
+    });
+
+    hook.afterEach(function (html) {
+      const blocks = vm.config.__skillTreeMath || [];
+      const restored = html.replace(
+        /SKILLTREEMATH(\d+)TOKEN/g,
+        function (placeholder, index) {
+          return blocks[Number(index)] || placeholder;
+        }
+      );
+
+      vm.config.__skillTreeMath = [];
+      return restored;
     });
 
     hook.doneEach(function () {
@@ -139,20 +211,6 @@
         wrapper.appendChild(table);
       });
 
-      if (typeof window.renderMathInElement !== "function") {
-        return;
-      }
-
-      window.renderMathInElement(content, {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "\\[", right: "\\]", display: true },
-          { left: "\\(", right: "\\)", display: false },
-          { left: "$", right: "$", display: false }
-        ],
-        throwOnError: false,
-        strict: false
-      });
     });
   }
 

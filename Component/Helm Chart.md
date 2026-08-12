@@ -306,7 +306,7 @@ Helm 使用 Go text/template，并提供 Sprig 函数（出于安全原因不包
 
 ### 5.2 作用域、管道和空白
 
-with 和 range 会改变当前点号的作用域；$ 保存根作用域。跨作用域访问 Release 或 Values 时使用 $.Release.Name、$.Values.global。
+with 和 range 会改变当前点号的作用域；`$` 保存根作用域。跨作用域访问 Release 或 Values 时使用 `$.Release.Name`、`$.Values.global`。
 
 ~~~yaml
 metadata:
