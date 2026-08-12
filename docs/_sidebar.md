@@ -17,6 +17,7 @@
 - **算法与数学**
   - [旅行商问题 TSP](/Algorithm/图与网络/旅行商问题TSP.md)
   - [非对称旅行商问题 ATSP](/Algorithm/图与网络/非对称旅行商问题ATSP.md)
+  - [哈希碰撞](/Algorithm/哈希碰撞.md)
   - [生日悖论](/Mathematics/生日悖论.md)
 
 - **密码学**

@@ -35,7 +35,7 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 | --- | --- |
 | .NET / C# | [C# 与 .NET LTS 中高阶指南](DotNet/CSharp和NET-LTS中高阶指南.md) · [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md) · [Roslyn](DotNet/Roslyn.md) |
 | 架构与设计 | [领域驱动设计 DDD](Architecture/DDD.md) · [SOLID](DesignPrinciples/SOLID.md) · [设计模式](DesignPattern/设计模式.md) |
-| 算法与数学 | [旅行商问题 TSP](Algorithm/图与网络/旅行商问题TSP.md) · [非对称旅行商问题 ATSP](Algorithm/图与网络/非对称旅行商问题ATSP.md) · [生日悖论](Mathematics/生日悖论.md) |
+| 算法与数学 | [哈希碰撞](Algorithm/哈希碰撞.md) · [旅行商问题 TSP](Algorithm/图与网络/旅行商问题TSP.md) · [非对称旅行商问题 ATSP](Algorithm/图与网络/非对称旅行商问题ATSP.md) · [生日悖论](Mathematics/生日悖论.md) |
 | 密码学 | [生日攻击](Cryptography/生日攻击.md) · [生日悖论与密码学中的生日界](Mathematics/生日悖论.md) |
 | 数据库 | [MySQL](DataBase/MySql/MySQL.md) · [SQL Server 执行计划](<DataBase/SQL Server/SQL Server执行计划.md>) · [CTE 与 View](DataBase/CTE和View.md) |
 | 云原生与组件 | [Helm Chart](<Component/Helm Chart.md>) · [Kafka 外部地址配置](Component/kafka配置外部地址.md) |
@@ -55,7 +55,7 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 
 ```text
 SkillTree/
-├── Algorithm/             # 算法与组合优化
+├── Algorithm/             # 算法、数据结构与组合优化
 ├── Architecture/          # 软件架构与 DDD
 ├── Component/             # Helm、Kafka 等组件
 ├── Cryptography/          # 密码学、哈希函数与碰撞安全
