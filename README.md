@@ -33,7 +33,7 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 
 | 领域 | 代表内容 |
 | --- | --- |
-| .NET / C# | [C# 与 .NET LTS 中高阶指南](DotNet/CSharp和NET-LTS中高阶指南.md) · [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md) · [Roslyn](DotNet/Roslyn.md) |
+| .NET / C# | [C# 与 .NET LTS 中高阶指南](DotNet/CSharp和NET-LTS中高阶指南.md) · [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md) · [async Task 与 Task.FromResult](DotNet/AsyncTask与Task.FromResult.md) · [Roslyn](DotNet/Roslyn.md) |
 | 架构与设计 | [领域驱动设计 DDD](Architecture/DDD.md) · [SOLID](DesignPrinciples/SOLID.md) · [设计模式](DesignPattern/设计模式.md) |
 | 算法与数学 | [哈希碰撞](Algorithm/哈希碰撞.md) · [旅行商问题 TSP](Algorithm/图与网络/旅行商问题TSP.md) · [非对称旅行商问题 ATSP](Algorithm/图与网络/非对称旅行商问题ATSP.md) · [生日悖论](Mathematics/生日悖论.md) |
 | 密码学 | [生日攻击](Cryptography/生日攻击.md) · [生日悖论与密码学中的生日界](Mathematics/生日悖论.md) |

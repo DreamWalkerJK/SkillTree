@@ -5,6 +5,8 @@
   - [.NET 10 技术学习指南](/DotNet/NET10技术学习指南.md)
   - [ChangeTracker.TrackGraph](/DotNet/ChangeTracker.TrackGraph.md)
   - [DistinctBy 性能](/DotNet/DistinctBy性能.md)
+  - [async Task 与 Task.FromResult](/DotNet/AsyncTask与Task.FromResult.md)
+    - [伴随示例](/DotNet/Examples/AsyncTaskComparison/README.md)
   - [ExecutionContext 与 SynchronizationContext](/DotNet/ExecutionContext和SynchronizationContext.md)
   - [EndpointFilter](/DotNet/EndpointFilter.md)
   - [Interlocked](/DotNet/Interlocked.md)

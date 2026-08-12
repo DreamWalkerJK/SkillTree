@@ -28,3 +28,7 @@ dotnet run --project .\AdvancedWebApi\AdvancedWebApi.csproj --urls http://localh
 ```
 
 随后可使用 `AdvancedWebApi/AdvancedWebApi.http` 或任意 HTTP 客户端验证端点。
+
+## 其他 .NET 伴随示例
+
+- [`async Task<T>` 与 `Task.FromResult`](../AsyncTaskComparison/README.md)：演示完成任务、真实异步等待以及异常出现时机。
