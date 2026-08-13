@@ -25,7 +25,7 @@
   <a class="domain-card" href="#/Architecture/DDD">
     <span class="domain-index">02</span>
     <h3>Architecture</h3>
-    <p>领域驱动设计、架构边界、设计原则与模式。</p>
+    <p>领域驱动设计、状态机、架构边界、设计原则与模式。</p>
   </a>
   <a class="domain-card" href="#/Algorithm/图与网络/旅行商问题TSP">
     <span class="domain-index">03</span>
@@ -53,6 +53,7 @@
 
 - [C# 和 .NET LTS 中高阶语法与用法指南](DotNet/CSharp和NET-LTS中高阶指南.md)
 - [领域驱动设计（Domain-Driven Design）](Architecture/DDD.md)
+- [状态机：形式化模型、执行语义与工程实践](Architecture/状态机.md)
 - [旅行商问题（Traveling Salesman Problem）](Algorithm/图与网络/旅行商问题TSP.md)
 - [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
 - [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)

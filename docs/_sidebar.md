@@ -27,6 +27,7 @@
 
 - **架构与设计**
   - [领域驱动设计 DDD](/Architecture/DDD.md)
+  - [状态机：形式化模型与工程实践](/Architecture/状态机.md)
   - [SOLID 设计原则](/DesignPrinciples/SOLID.md)
   - [设计模式](/DesignPattern/设计模式.md)
 
