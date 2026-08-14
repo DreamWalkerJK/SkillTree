@@ -23,6 +23,7 @@
   - [生日悖论](/Mathematics/生日悖论.md)
 
 - **密码学**
+  - [SHA-256](/Cryptography/SHA-256.md)
   - [生日攻击](/Cryptography/生日攻击.md)
 
 - **架构与设计**

@@ -47,6 +47,11 @@
     <h3>Cybersecurity</h3>
     <p>Kali、Metasploit 与可复现的安全实验环境。</p>
   </a>
+  <a class="domain-card" href="#/Cryptography/SHA-256">
+    <span class="domain-index">07</span>
+    <h3>Cryptography</h3>
+    <p>SHA-256、生日界、碰撞安全、认证构造与工程边界。</p>
+  </a>
 </div>
 
 ## 推荐入口
@@ -55,7 +60,9 @@
 - [领域驱动设计（Domain-Driven Design）](Architecture/DDD.md)
 - [状态机：形式化模型、执行语义与工程实践](Architecture/状态机.md)
 - [旅行商问题（Traveling Salesman Problem）](Algorithm/图与网络/旅行商问题TSP.md)
+- [SHA-256：标准流程、压缩函数、安全性质与工程实践](Cryptography/SHA-256.md)
 - [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
+- [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)
 - [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
 
 > 使用左侧导航浏览完整目录，或使用顶部搜索框检索标题与正文。站点内容直接来自仓库 `main` 分支，提交新笔记后无需重复维护网页副本。
