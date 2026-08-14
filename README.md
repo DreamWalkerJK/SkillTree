@@ -23,7 +23,7 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 
 - C#、.NET、ASP.NET Core、EF Core、并发与性能
 - 软件架构、领域驱动设计、状态机、设计原则与设计模式
-- 算法、数学、计算机网络与操作系统
+- 算法、数学、计算机网络、Linux/Windows 与系统运维
 - 密码学、哈希函数、碰撞安全与攻击模型
 - MySQL、PostgreSQL、SQL Server 与查询优化
 - Kubernetes、Helm、Kafka 等云原生与工程组件
@@ -40,7 +40,7 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 | 数据库 | [MySQL](DataBase/MySql/MySQL.md) · [SQL Server 执行计划](<DataBase/SQL Server/SQL Server执行计划.md>) · [CTE 与 View](DataBase/CTE和View.md) |
 | 云原生与组件 | [Helm Chart](<Component/Helm Chart.md>) · [Kafka 外部地址配置](Component/kafka配置外部地址.md) |
 | 网络安全 | [Kali Linux](Cybersecurity/Tools/Kali.md) · [msfconsole](Cybersecurity/Tools/msfconsole.md) · [Docker 实验环境](Cybersecurity/Lab/notice.md) |
-| 计算机基础 | [网络模型](Network/网络模型.md) · [Windows 基础命令](OperatingSystem/Windows/基础命令.md) · [正则表达式](GeneralCodingSkills/正则表达式.md) |
+| 计算机基础 | [网络模型](Network/网络模型.md) · [Linux 常用命令与运维手册](OperatingSystem/Linux/操作命令.md) · [Windows 基础命令](OperatingSystem/Windows/基础命令.md) · [正则表达式](GeneralCodingSkills/正则表达式.md) |
 
 ## 推荐阅读
 
@@ -50,7 +50,8 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 4. [旅行商问题（Traveling Salesman Problem, TSP）](Algorithm/图与网络/旅行商问题TSP.md)
 5. [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
 6. [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)
-7. [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
+7. [Linux 常用命令与运维手册](OperatingSystem/Linux/操作命令.md)
+8. [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
 
 ## 仓库结构
 
@@ -68,7 +69,7 @@ SkillTree/
 ├── GeneralCodingSkills/   # 通用编码能力
 ├── Mathematics/           # 数学与概率
 ├── Network/               # 计算机网络
-├── OperatingSystem/       # 操作系统
+├── OperatingSystem/       # Linux、Windows 与系统运维
 └── docs/                  # GitHub Pages 网站外壳与导航
 ```
 

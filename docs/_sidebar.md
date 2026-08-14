@@ -59,5 +59,6 @@
 
 - **计算机基础**
   - [网络模型](/Network/网络模型.md)
+  - [Linux 常用命令与运维手册](/OperatingSystem/Linux/操作命令.md)
   - [Windows 基础命令](/OperatingSystem/Windows/基础命令.md)
   - [正则表达式](/GeneralCodingSkills/正则表达式.md)
