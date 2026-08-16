@@ -47,10 +47,10 @@
     <h3>Cybersecurity</h3>
     <p>Kali、Metasploit 与可复现的安全实验环境。</p>
   </a>
-  <a class="domain-card" href="#/Cryptography/SHA-256">
+  <a class="domain-card" href="#/Cryptography/Kerckhoffs原则">
     <span class="domain-index">07</span>
     <h3>Cryptography</h3>
-    <p>SHA-256、生日界、碰撞安全、认证构造与工程边界。</p>
+    <p>开放设计、密钥保密、哈希安全、攻击模型与工程边界。</p>
   </a>
 </div>
 
@@ -60,6 +60,7 @@
 - [领域驱动设计（Domain-Driven Design）](Architecture/DDD.md)
 - [状态机：形式化模型、执行语义与工程实践](Architecture/状态机.md)
 - [旅行商问题（Traveling Salesman Problem）](Algorithm/图与网络/旅行商问题TSP.md)
+- [Kerckhoffs 原则：开放设计、密钥保密与现代安全工程](Cryptography/Kerckhoffs原则.md)
 - [SHA-256：标准流程、压缩函数、安全性质与工程实践](Cryptography/SHA-256.md)
 - [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
 - [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)

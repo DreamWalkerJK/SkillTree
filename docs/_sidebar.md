@@ -23,6 +23,7 @@
   - [生日悖论](/Mathematics/生日悖论.md)
 
 - **密码学**
+  - [Kerckhoffs 原则](/Cryptography/Kerckhoffs原则.md)
   - [SHA-256](/Cryptography/SHA-256.md)
   - [生日攻击](/Cryptography/生日攻击.md)
 
