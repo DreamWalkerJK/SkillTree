@@ -53,6 +53,7 @@
 - **云原生与组件**
   - [Helm Chart](</Component/Helm Chart.md>)
   - [Kafka 外部地址配置](/Component/kafka配置外部地址.md)
+  - [Nginx](/Component/Nginx.md)
 
 - **网络安全**
   - [Kali Linux](/Cybersecurity/Tools/Kali.md)

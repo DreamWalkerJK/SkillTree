@@ -61,7 +61,7 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 SkillTree/
 ├── Algorithm/             # 算法、数据结构与组合优化
 ├── Architecture/          # 软件架构、DDD 与状态机
-├── Component/             # Helm、Kafka 等组件
+├── Component/             # Helm、Kafka、Nginx 等组件
 ├── Cryptography/          # 密码学原理、算法、攻击模型与工程安全
 ├── Cybersecurity/         # 安全工具与实验环境
 ├── DataBase/              # MySQL、PostgreSQL、SQL Server
