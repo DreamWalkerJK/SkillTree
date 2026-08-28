@@ -8,7 +8,7 @@
       name="description"
       content="SkillTree：面向开发者的结构化技术知识库，涵盖 .NET、架构、算法、密码学、数据库、云原生与网络安全。"
     />
-    <meta name="theme-color" content="#f3f6fa" />
+    <meta name="theme-color" content="#f4f7fb" />
     <title>SkillTree · Developer Knowledge Base</title>
     <link
       rel="icon"
@@ -25,7 +25,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
     />
-    <link rel="stylesheet" href="./assets/styles.css?v=20260811-7" />
+    <link rel="stylesheet" href="./assets/styles.css?v=20260828-1" />
 
     <script>
       (function () {
@@ -38,6 +38,16 @@
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#app">跳到正文</a>
+    <div
+      id="reading-progress"
+      class="reading-progress"
+      role="progressbar"
+      aria-label="页面阅读进度"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+    ></div>
     <header id="site-toolbar" class="site-toolbar" aria-label="站点工具栏">
       <button
         id="theme-toggle"
@@ -46,7 +56,7 @@
         aria-label="切换深浅主题"
         title="切换深浅主题"
       >
-        <span aria-hidden="true">◐</span>
+        <span class="theme-icon" aria-hidden="true">☾</span>
       </button>
     </header>
 
@@ -56,6 +66,17 @@
         <span>正在加载 SkillTree...</span>
       </div>
     </div>
+
+    <button
+      id="scroll-top"
+      class="scroll-top"
+      type="button"
+      aria-label="返回顶部"
+      title="返回顶部"
+      hidden
+    >
+      <span aria-hidden="true">↑</span>
+    </button>
 
     <script>
       const localPreview = ["localhost", "127.0.0.1"].includes(
@@ -106,7 +127,7 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
-    <script src="./assets/site.js?v=20260812-2"></script>
+    <script src="./assets/site.js?v=20260828-1"></script>
     <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/docsify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/plugins/search.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2/dist/docsify-copy-code.min.js"></script>

@@ -3,6 +3,15 @@
   const root = document.documentElement;
   const toolbar = document.getElementById("site-toolbar");
   const button = document.getElementById("theme-toggle");
+  const progress = document.getElementById("reading-progress");
+  const scrollTopButton = document.getElementById("scroll-top");
+
+  const themeIcons = {
+    light:
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.2 15.5A8.5 8.5 0 0 1 8.5 3.8 8.5 8.5 0 1 0 20.2 15.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    dark:
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2.1M12 19.9V22M4.93 4.93l1.48 1.48M17.59 17.59l1.48 1.48M2 12h2.1M19.9 12H22M4.93 19.07l1.48-1.48M17.59 6.41l1.48-1.48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+  };
 
   function mountToolbar() {
     if (!toolbar || !button) {
@@ -30,7 +39,7 @@
     const icon = button && button.querySelector("span");
 
     if (meta) {
-      meta.setAttribute("content", dark ? "#0b111a" : "#f3f6fa");
+      meta.setAttribute("content", dark ? "#080d17" : "#f4f7fb");
     }
 
     if (button) {
@@ -41,7 +50,7 @@
     }
 
     if (icon) {
-      icon.textContent = dark ? "☀" : "☾";
+      icon.innerHTML = dark ? themeIcons.dark : themeIcons.light;
     }
   }
 
@@ -51,13 +60,98 @@
     updateThemeUI(theme);
   }
 
+  let scrollFrame = 0;
+
+  function updateScrollChrome() {
+    const documentElement = document.documentElement;
+    const scrollableHeight = Math.max(
+      documentElement.scrollHeight - window.innerHeight,
+      0
+    );
+    const progressValue = scrollableHeight
+      ? Math.min(Math.max(window.scrollY / scrollableHeight, 0), 1)
+      : 0;
+    const percentage = Math.round(progressValue * 100);
+
+    if (progress) {
+      progress.style.setProperty("--reading-progress", String(progressValue));
+      progress.setAttribute("aria-valuenow", String(percentage));
+    }
+
+    root.classList.toggle("is-scrolled", window.scrollY > 10);
+
+    if (scrollTopButton) {
+      scrollTopButton.hidden = window.scrollY < 420;
+    }
+  }
+
+  function scheduleScrollChromeUpdate() {
+    if (scrollFrame) {
+      return;
+    }
+
+    scrollFrame = window.requestAnimationFrame(function () {
+      scrollFrame = 0;
+      updateScrollChrome();
+    });
+  }
+
+  function focusSearch() {
+    const input = document.querySelector(
+      '.sidebar .search input[type="search"], .search input[type="search"]'
+    );
+    if (!input) {
+      return;
+    }
+
+    input.focus({ preventScroll: true });
+    input.select();
+  }
+
   if (button) {
     button.addEventListener("click", function () {
       setTheme(root.dataset.theme === "dark" ? "light" : "dark");
     });
   }
 
+  if (scrollTopButton) {
+    scrollTopButton.addEventListener("click", function () {
+      window.scrollTo({
+        top: 0,
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth"
+      });
+    });
+  }
+
+  window.addEventListener("scroll", scheduleScrollChromeUpdate, {
+    passive: true
+  });
+  window.addEventListener("resize", scheduleScrollChromeUpdate);
+  document.addEventListener("keydown", function (event) {
+    const target = event.target;
+    const isEditing =
+      target &&
+      (target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable);
+
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      focusSearch();
+      return;
+    }
+
+    if (event.key === "/" && !isEditing && !event.altKey && !event.shiftKey) {
+      event.preventDefault();
+      focusSearch();
+    }
+  });
+
   updateThemeUI(root.dataset.theme || "light");
+  updateScrollChrome();
 
   function isSourcePath(path) {
     return /(?:\.(?:cs|csproj|slnx|sql|txt|ps1|sh|ya?ml|json|xml)|\/(?:Dockerfile|apt-install-retry))$/i.test(
@@ -192,6 +286,11 @@
         return;
       }
 
+      content.classList.remove("content-ready");
+      window.requestAnimationFrame(function () {
+        content.classList.add("content-ready");
+      });
+
       content.querySelectorAll("table").forEach(function (table) {
         const parent = table.parentElement;
         if (
@@ -210,6 +309,15 @@
         parent.insertBefore(wrapper, table);
         wrapper.appendChild(table);
       });
+
+      content.querySelectorAll('a[href^="http"]:not([target="_blank"])').forEach(
+        function (link) {
+          link.setAttribute("target", "_blank");
+          link.setAttribute("rel", "noopener noreferrer");
+        }
+      );
+
+      scheduleScrollChromeUpdate();
 
     });
   }
