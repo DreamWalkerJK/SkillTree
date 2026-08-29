@@ -27,19 +27,19 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 - 密码学原理、开放设计、哈希函数、碰撞安全与攻击模型
 - MySQL、PostgreSQL、SQL Server 与查询优化
 - Kubernetes、Helm、Kafka 等云原生与工程组件
-- Kali、Metasploit 与可复现的网络安全实验环境
+- 哈希洪水、DDoS、Kali、Metasploit 与可复现的网络安全实验环境
 
 ## 知识领域
 
 | 领域 | 代表内容 |
 | --- | --- |
-| .NET / C# | [C# 与 .NET LTS 中高阶指南](DotNet/CSharp和NET-LTS中高阶指南.md) · [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md) · [async Task 与 Task.FromResult](DotNet/AsyncTask与Task.FromResult.md) · [Roslyn](DotNet/Roslyn.md) |
+| .NET / C# | [C# 与 .NET LTS 中高阶指南](DotNet/CSharp和NET-LTS中高阶指南.md) · [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md) · [async Task 与 Task.FromResult](DotNet/AsyncTask与Task.FromResult.md) · [Roslyn](DotNet/Roslyn.md) · [object.GetHashCode()](DotNet/object.GetHashCode().md) |
 | 架构与设计 | [领域驱动设计 DDD](Architecture/DDD.md) · [状态机](Architecture/状态机.md) · [SOLID](DesignPrinciples/SOLID.md) · [设计模式](DesignPattern/设计模式.md) |
 | 算法与数学 | [哈希碰撞](Algorithm/哈希碰撞.md) · [旅行商问题 TSP](Algorithm/图与网络/旅行商问题TSP.md) · [非对称旅行商问题 ATSP](Algorithm/图与网络/非对称旅行商问题ATSP.md) · [生日悖论](Mathematics/生日悖论.md) |
 | 密码学 | [Kerckhoffs 原则：开放设计、密钥保密与现代安全工程](Cryptography/Kerckhoffs原则.md) · [SHA-256：标准流程、压缩函数、安全性质与工程实践](Cryptography/SHA-256.md) · [生日攻击](Cryptography/生日攻击.md) · [生日悖论与密码学中的生日界](Mathematics/生日悖论.md) |
 | 数据库 | [MySQL](DataBase/MySql/MySQL.md) · [SQL Server 执行计划](<DataBase/SQL Server/SQL Server执行计划.md>) · [CTE 与 View](DataBase/CTE和View.md) |
 | 云原生与组件 | [Helm Chart](<Component/Helm Chart.md>) · [Kafka 外部地址配置](Component/kafka配置外部地址.md) |
-| 网络安全 | [Kali Linux](Cybersecurity/Tools/Kali.md) · [msfconsole](Cybersecurity/Tools/msfconsole.md) · [Docker 实验环境](Cybersecurity/Lab/notice.md) |
+| 网络安全 | [哈希洪水攻击](Cybersecurity/哈希洪水攻击.md) · [分布式拒绝服务攻击](Cybersecurity/分布式拒绝服务攻击.md) · [Kali Linux](Cybersecurity/Tools/Kali.md) · [msfconsole](Cybersecurity/Tools/msfconsole.md) · [Docker 实验环境](Cybersecurity/Lab/notice.md) |
 | 计算机基础 | [网络模型](Network/网络模型.md) · [Linux 常用命令与运维手册](OperatingSystem/Linux/操作命令.md) · [Windows 基础命令](OperatingSystem/Windows/基础命令.md) · [正则表达式](GeneralCodingSkills/正则表达式.md) |
 
 ## 推荐阅读
@@ -54,6 +54,8 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 8. [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)
 9. [Linux 常用命令与运维手册](OperatingSystem/Linux/操作命令.md)
 10. [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
+11. [哈希洪水攻击：原理、风险与防御](Cybersecurity/哈希洪水攻击.md)
+12. [分布式拒绝服务攻击](Cybersecurity/分布式拒绝服务攻击.md)
 
 ## 仓库结构
 
@@ -63,7 +65,7 @@ SkillTree/
 ├── Architecture/          # 软件架构、DDD 与状态机
 ├── Component/             # Helm、Kafka、Nginx 等组件
 ├── Cryptography/          # 密码学原理、算法、攻击模型与工程安全
-├── Cybersecurity/         # 安全工具与实验环境
+├── Cybersecurity/         # 安全原理、工具与实验环境
 ├── DataBase/              # MySQL、PostgreSQL、SQL Server
 ├── DesignPattern/         # 设计模式
 ├── DesignPrinciples/      # 设计原则
