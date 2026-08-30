@@ -54,7 +54,7 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 8. [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)
 9. [Linux 常用命令与运维手册](OperatingSystem/Linux/操作命令.md)
 10. [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
-11. [哈希洪水攻击：原理、风险与防御](Cybersecurity/哈希洪水攻击.md)
+11. [哈希洪水攻击](Cybersecurity/哈希洪水攻击.md)
 12. [分布式拒绝服务攻击](Cybersecurity/分布式拒绝服务攻击.md)
 
 ## 仓库结构

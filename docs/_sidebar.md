@@ -57,7 +57,7 @@
   - [Nginx](/Component/Nginx.md)
 
 - **网络安全**
-  - [哈希洪水攻击：原理、风险与防御](/Cybersecurity/哈希洪水攻击.md)
+  - [哈希洪水攻击](/Cybersecurity/哈希洪水攻击.md)
   - [分布式拒绝服务攻击](/Cybersecurity/分布式拒绝服务攻击.md)
   - [Kali Linux](/Cybersecurity/Tools/Kali.md)
   - [msfconsole](/Cybersecurity/Tools/msfconsole.md)

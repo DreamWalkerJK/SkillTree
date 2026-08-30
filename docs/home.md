@@ -127,7 +127,7 @@
 - [SHA-256：标准流程、压缩函数、安全性质与工程实践](Cryptography/SHA-256.md)
 - [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
 - [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)
-- [哈希洪水攻击：原理、风险与防御](Cybersecurity/哈希洪水攻击.md)
+- [哈希洪水攻击](Cybersecurity/哈希洪水攻击.md)
 - [分布式拒绝服务攻击](Cybersecurity/分布式拒绝服务攻击.md)
 - [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
 
