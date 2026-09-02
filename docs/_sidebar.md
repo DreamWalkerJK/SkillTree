@@ -58,7 +58,7 @@
 
 - **网络安全**
   - [哈希洪水攻击](/Cybersecurity/哈希洪水攻击.md)
-  - [分布式拒绝服务攻击](/Cybersecurity/分布式拒绝服务攻击.md)
+  - [DDoS：原理、检测、缓解与应急响应](/Cybersecurity/分布式拒绝服务攻击.md)
   - [Kali Linux](/Cybersecurity/Tools/Kali.md)
   - [msfconsole](/Cybersecurity/Tools/msfconsole.md)
   - [Kali + Ubuntu Docker 实验环境](/Cybersecurity/Lab/notice.md)

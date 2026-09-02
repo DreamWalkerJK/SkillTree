@@ -58,7 +58,7 @@
     <div class="domain-copy">
       <span class="domain-index">02 / DOMAIN</span>
       <h3>Architecture</h3>
-      <p>领域驱动设计、状态机、架构边界、设计原则与模式。</p>
+      <p>领域驱动设计、状态机、架构分层、设计原则与模式。</p>
     </div>
     <span class="domain-arrow" aria-hidden="true">↗</span>
   </a>
@@ -94,7 +94,7 @@
     <div class="domain-copy">
       <span class="domain-index">06 / DOMAIN</span>
       <h3>Cybersecurity</h3>
-      <p>哈希洪水、DDoS、Kali、Metasploit 与可复现的安全实验环境。</p>
+      <p>哈希洪水、DDoS 原理、防护与应急响应、Kali、Metasploit 与可复现的安全实验环境。</p>
     </div>
     <span class="domain-arrow" aria-hidden="true">↗</span>
   </a>
@@ -103,7 +103,7 @@
     <div class="domain-copy">
       <span class="domain-index">07 / DOMAIN</span>
       <h3>Cryptography</h3>
-      <p>开放设计、密钥保密、哈希安全、攻击模型与工程边界。</p>
+      <p>开放设计、密钥保密、哈希安全、攻击模型与工程实践。</p>
     </div>
     <span class="domain-arrow" aria-hidden="true">↗</span>
   </a>
@@ -128,7 +128,7 @@
 - [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
 - [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)
 - [哈希洪水攻击](Cybersecurity/哈希洪水攻击.md)
-- [分布式拒绝服务攻击](Cybersecurity/分布式拒绝服务攻击.md)
+- [DDoS：原理、检测、缓解与应急响应](Cybersecurity/分布式拒绝服务攻击.md)
 - [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
 
 </div>
