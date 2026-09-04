@@ -1,11 +1,11 @@
 # C# 与 .NET LTS 伴随示例
 
-这些项目对应 `DotNet/CSharp和NET-LTS中高阶指南.md`，只覆盖当前两代 LTS：
+这些项目对应 [`DotNet/CSharp和NET-LTS中高阶指南.md`](../../CSharp和NET-LTS中高阶指南.md)，只覆盖当前两代 LTS：
 
 - `Net10Features`：C# 14 与 .NET 10。
 - `Net8Features`：C# 12 与 .NET 8。
-- `AdvancedPatterns`：以 .NET 8 为最低基线的泛型、Span、异步流、Channel 和可观测性示例。
-- `AdvancedWebApi`：以 .NET 8 为最低基线的 Typed Results、Problem Details、异常处理、Options、Keyed DI 和 JSON 源生成示例；可直接升级到 `net10.0`。
+- `AdvancedPatterns`：最低支持 .NET 8，包含泛型、Span、异步流、Channel 和可观测性示例。
+- `AdvancedWebApi`：最低支持 .NET 8，包含 Typed Results、Problem Details、异常处理、Options、Keyed DI 和 JSON 源生成示例；可直接升级到 `net10.0`。
 
 构建全部项目：
 

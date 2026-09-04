@@ -1,6 +1,6 @@
 # Helm Chart
 
-> 本文面向需要开发、评审、发布和运维 Helm Chart 的 Kubernetes 使用者。示例以 Chart API 的 apiVersion: v2 为基线，适用于 Helm 3 及 Helm 4；实际命令和可用 API 以本地 helm version 以及目标集群版本为准。
+> 本文面向需要开发、评审、发布和运维 Helm Chart 的 Kubernetes 使用者。示例使用 Chart API 的 `apiVersion: v2`，适用于 Helm 3 及 Helm 4；实际命令和可用 API 以本地 `helm version` 以及目标集群版本为准。
 
 ## 1. Helm Chart 的定位
 

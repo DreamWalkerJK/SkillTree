@@ -33,9 +33,9 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 
 | 领域 | 代表内容 |
 | --- | --- |
-| .NET / C# | [C# 与 .NET LTS 中高阶指南](DotNet/CSharp和NET-LTS中高阶指南.md) · [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md) · [async Task 与 Task.FromResult](DotNet/AsyncTask与Task.FromResult.md) · [Roslyn](DotNet/Roslyn.md) · [object.GetHashCode()](DotNet/object.GetHashCode().md) |
-| 架构与设计 | [领域驱动设计 DDD](Architecture/DDD.md) · [状态机](Architecture/状态机.md) · [SOLID](DesignPrinciples/SOLID.md) · [设计模式](DesignPattern/设计模式.md) |
-| 算法与数学 | [哈希碰撞](Algorithm/哈希碰撞.md) · [旅行商问题 TSP](Algorithm/图与网络/旅行商问题TSP.md) · [非对称旅行商问题 ATSP](Algorithm/图与网络/非对称旅行商问题ATSP.md) · [生日悖论](Mathematics/生日悖论.md) |
+| .NET / C# | [CSharp和.NET Core 的高阶用法](DotNet/CSharp和NET-LTS中高阶指南.md) · [C#/.NET 专题目录](DotNet/CSharp专题/README.md) · [.NET 10 技术学习指南](DotNet/NET10技术学习指南.md) · [Roslyn](DotNet/Roslyn.md) · [object.GetHashCode()](<DotNet/object.GetHashCode().md>) |
+| 架构与设计 | [领域驱动设计 DDD](Architecture/DDD.md) · [状态机](Architecture/状态机.md) · [.NET 体系结构专题目录](Architecture/DotNet/README.md) · [SOLID](DesignPrinciples/SOLID.md) · [设计模式](DesignPattern/设计模式.md) |
+| 算法与数学 | [算法目录](Algorithm/README.md) · [基础数据结构目录](Algorithm/数据结构/README.md) · [图论算法目录](Algorithm/图论/README.md) · [动态规划](Algorithm/动态规划.md) · [哈希碰撞](Algorithm/哈希碰撞.md) · [旅行商问题 TSP](Algorithm/图与网络/旅行商问题TSP.md) · [生日悖论](Mathematics/生日悖论.md) |
 | 密码学 | [Kerckhoffs 原则：开放设计、密钥保密与现代安全工程](Cryptography/Kerckhoffs原则.md) · [SHA-256：标准流程、压缩函数、安全性质与工程实践](Cryptography/SHA-256.md) · [生日攻击](Cryptography/生日攻击.md) · [生日悖论与密码学中的生日界](Mathematics/生日悖论.md) |
 | 数据库 | [MySQL](DataBase/MySql/MySQL.md) · [SQL Server 执行计划](<DataBase/SQL Server/SQL Server执行计划.md>) · [CTE 与 View](DataBase/CTE和View.md) |
 | 云原生与组件 | [Helm Chart](<Component/Helm Chart.md>) · [Kafka 外部地址配置](Component/kafka配置外部地址.md) |
@@ -44,32 +44,32 @@ SkillTree 用于沉淀开发过程中的系统化知识、问题分析和可运�
 
 ## 推荐阅读
 
-1. [C# 和 .NET LTS 中高阶语法与用法指南（.NET 10 → .NET 8）](DotNet/CSharp和NET-LTS中高阶指南.md)
-2. [领域驱动设计（Domain-Driven Design, DDD）](Architecture/DDD.md)
-3. [状态机：形式化模型、执行语义与工程实践](Architecture/状态机.md)
-4. [旅行商问题（Traveling Salesman Problem, TSP）](Algorithm/图与网络/旅行商问题TSP.md)
-5. [Kerckhoffs 原则：开放设计、密钥保密与现代安全工程](Cryptography/Kerckhoffs原则.md)
-6. [SHA-256：标准流程、压缩函数、安全性质与工程实践](Cryptography/SHA-256.md)
-7. [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
-8. [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)
-9. [Linux 常用命令与运维手册](OperatingSystem/Linux/操作命令.md)
-10. [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
-11. [哈希洪水攻击](Cybersecurity/哈希洪水攻击.md)
-12. [DDoS：原理、检测、缓解与应急响应](Cybersecurity/分布式拒绝服务攻击.md)
+1. [CSharp和.NET Core 的高阶用法](DotNet/CSharp和NET-LTS中高阶指南.md)
+2. [C#/.NET 专题目录](DotNet/CSharp专题/README.md)
+3. [基础数据结构目录](Algorithm/数据结构/README.md)
+4. [图论算法目录](Algorithm/图论/README.md)
+5. [.NET 微服务：容器化应用程序体系结构](Architecture/DotNet/NET微服务-容器化应用程序体系结构.md)
+6. [构建适用于 Azure 的云原生 .NET 应用](Architecture/DotNet/构建适用于Azure的云原生.NET应用.md)
+7. [领域驱动设计（Domain-Driven Design, DDD）](Architecture/DDD.md)
+8. [状态机：形式化模型、执行语义与工程实践](Architecture/状态机.md)
+9. [旅行商问题（Traveling Salesman Problem, TSP）](Algorithm/图与网络/旅行商问题TSP.md)
+10. [Kerckhoffs 原则：开放设计、密钥保密与现代安全工程](Cryptography/Kerckhoffs原则.md)
+11. [SHA-256：标准流程、压缩函数、安全性质与工程实践](Cryptography/SHA-256.md)
+12. [Linux 常用命令与运维手册](OperatingSystem/Linux/操作命令.md)
 
 ## 仓库结构
 
 ```text
 SkillTree/
 ├── Algorithm/             # 算法、数据结构与组合优化
-├── Architecture/          # 软件架构、DDD 与状态机
+├── Architecture/          # 软件架构、DDD、状态机与 .NET 体系结构
 ├── Component/             # Helm、Kafka、Nginx 等组件
 ├── Cryptography/          # 密码学原理、算法、攻击模型与工程安全
 ├── Cybersecurity/         # 安全原理、工具与实验环境
 ├── DataBase/              # MySQL、PostgreSQL、SQL Server
 ├── DesignPattern/         # 设计模式
 ├── DesignPrinciples/      # 设计原则
-├── DotNet/                # C#、.NET、ASP.NET Core、EF Core
+├── DotNet/                # C#、.NET、ASP.NET Core、EF Core 与专题文章
 ├── GeneralCodingSkills/   # 通用编码能力
 ├── Mathematics/           # 数学与概率
 ├── Network/               # 计算机网络

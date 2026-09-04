@@ -30,7 +30,7 @@
 </div>
 
 <div class="metrics" aria-label="知识库概览">
-  <div><span class="metric-icon" aria-hidden="true">◫</span><strong>30+</strong><span>技术笔记</span></div>
+  <div><span class="metric-icon" aria-hidden="true">◫</span><strong>70+</strong><span>技术笔记</span></div>
   <div><span class="metric-icon" aria-hidden="true">◈</span><strong>7</strong><span>知识领域</span></div>
   <div><span class="metric-icon" aria-hidden="true">↗</span><strong>∞</strong><span>持续演进</span></div>
 </div>
@@ -62,7 +62,7 @@
     </div>
     <span class="domain-arrow" aria-hidden="true">↗</span>
   </a>
-  <a class="domain-card" href="#/Algorithm/图与网络/旅行商问题TSP">
+  <a class="domain-card" href="#/Algorithm/README">
     <span class="domain-icon" aria-hidden="true">∑</span>
     <div class="domain-copy">
       <span class="domain-index">03 / DOMAIN</span>
@@ -114,12 +114,19 @@
     <span class="section-kicker">CURATED STARTING POINTS</span>
     <h2>推荐入口</h2>
   </div>
-  <span class="section-count">精选 11 篇</span>
+  <span class="section-count">精选 18 篇</span>
 </div>
 
 <div class="reading-list">
 
-- [C# 和 .NET LTS 中高阶语法与用法指南](DotNet/CSharp和NET-LTS中高阶指南.md)
+- [CSharp和.NET Core 的高阶用法](DotNet/CSharp和NET-LTS中高阶指南.md)
+- [C#/.NET 专题目录](DotNet/CSharp专题/README.md)
+- [基础数据结构目录](Algorithm/数据结构/README.md)
+- [图论算法目录](Algorithm/图论/README.md)
+- [.NET 微服务：容器化应用程序体系结构](Architecture/DotNet/NET微服务-容器化应用程序体系结构.md)
+- [构建适用于 Azure 的云原生 .NET 应用](Architecture/DotNet/构建适用于Azure的云原生.NET应用.md)
+- [使用 ASP.NET Core 和 Azure 构建新式 Web 应用程序](Architecture/DotNet/使用ASP.NETCore和Azure构建新式Web应用程序.md)
+- [使用 .NET MAUI 的企业应用程序模式](Architecture/DotNet/使用.NETMAUI的企业应用程序模式.md)
 - [领域驱动设计（Domain-Driven Design）](Architecture/DDD.md)
 - [状态机：形式化模型、执行语义与工程实践](Architecture/状态机.md)
 - [旅行商问题（Traveling Salesman Problem）](Algorithm/图与网络/旅行商问题TSP.md)

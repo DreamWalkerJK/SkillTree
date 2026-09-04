@@ -2,7 +2,7 @@
 
 > 本文以 [Monica](https://github.com/Tairitsua/Monica) 最新 `dev` 分支为样本，记录其中已经落地的 .NET 10 技术、架构实现和工程约束。本地审计目录为 `D:\Documents\Code\FIPS\MoLibrary`；目录名保留 `MoLibrary`，项目、框架和 NuGet 品牌统一称为 Monica。
 >
-> 审计基线为提交 `e709de09cf40628a1e3f5468687ae3d709201c76`，提交时间 2026-08-08，项目版本 `1.0.0-rc.12`。审计时，该提交与 GitHub 默认分支 `dev` 一致，本地对应的远程跟踪引用为 `origin/dev`。
+> 本次审计针对提交 `e709de09cf40628a1e3f5468687ae3d709201c76`，提交时间为 2026-08-08，项目版本为 `1.0.0-rc.12`。审计时，该提交与 GitHub 默认分支 `dev` 一致，本地对应的远程跟踪引用为 `origin/dev`。
 
 ## 目录
 
@@ -66,7 +66,7 @@ Monica 由平台 API、第三方包和自定义框架共同组成。三者的兼
 
 ## 2. Monica 技术全景
 
-### 2.1 项目基线
+### 2.1 项目版本与状态
 
 本节统计基于 2026-08-09 对本地仓库和 GitHub 默认分支的交叉检查。公共构建配置位于 `Directory.Build.props`：
 
@@ -79,7 +79,7 @@ Monica 由平台 API、第三方包和自定义框架共同组成。三者的兼
 - 使用 `.slnx` 解决方案格式：`Monica.slnx`。
 - NuGet 包启用 Source Link、符号包和包级 README。
 
-`1.0.0-rc.12` 仍是 release candidate，在 `1.0.0` 稳定版之前允许出现破坏性调整。当前 `dev` 相比 `v1.0.0-rc.12` 标签后的额外提交只更新 Agent Skill 索引投影，产品项目源码仍对应 rc.12 基线。
+`1.0.0-rc.12` 仍是 release candidate，在 `1.0.0` 稳定版之前允许出现破坏性调整。当前 `dev` 相比 `v1.0.0-rc.12` 标签后的额外提交只更新 Agent Skill 索引投影，产品项目源码仍对应 rc.12 状态。
 
 仓库共有 78 个受 Git 跟踪的 `.csproj`：47 个产品、模板或生成器项目，23 个测试项目，7 个示例项目和 1 个 Benchmark 项目。其中 17 个使用 Razor SDK，3 个使用 Web SDK，其余以普通类库为主。
 
