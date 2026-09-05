@@ -39,7 +39,7 @@
     const icon = button && button.querySelector("span");
 
     if (meta) {
-      meta.setAttribute("content", dark ? "#080d17" : "#f4f7fb");
+      meta.setAttribute("content", dark ? "#050d15" : "#eef3f6");
     }
 
     if (button) {
