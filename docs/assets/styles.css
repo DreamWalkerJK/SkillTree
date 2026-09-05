@@ -2682,3 +2682,42 @@ html[data-theme="dark"] { --focus-outline: #7eefff; --text-muted: #a7c1ce; --sea
 button, a, .sidebar-toggle { touch-action: manipulation; }
 .scroll-top[hidden] { display: none !important; }
 @media (max-width: 980px) { .hero-panel { grid-template-columns: 1fr; } .hero-visual { max-width: 30rem; margin-inline: auto; width: 100%; } .domain-grid { grid-template-columns: 1fr 1fr; } }
+/* Hero compatibility and visual harmony pass */
+.hero-panel h1 span {
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  color: #7eefff !important;
+  -webkit-text-fill-color: #7eefff !important;
+  display: inline;
+}
+.hero-panel h1 { text-wrap: balance; }
+.hero-panel p { color: #c2d5dd; max-width: 38rem; }
+.hero-panel .button-secondary {
+  background: rgba(17, 48, 65, .78);
+  border-color: rgba(126, 239, 255, .42);
+  color: #e6fbff !important;
+}
+.hero-panel .button-secondary:hover {
+  background: rgba(25, 67, 84, .92);
+  border-color: #7eefff;
+}
+.hero-visual .visual-node {
+  background: rgba(17, 42, 57, .94);
+  border-color: rgba(126, 239, 255, .44);
+  box-shadow: 0 14px 28px rgba(1, 15, 24, .32), inset 0 0 0 1px rgba(255,255,255,.04);
+  color: #e9fbff;
+}
+.hero-visual .visual-node small { color: #9fc5d0; }
+.hero-visual .visual-node-core { color: #03131c; }
+.hero-visual .visual-node-core small { color: rgba(3,19,28,.72); }
+.hero-meta { color: #b4cbd4; }
+.hero-meta i { color: #7eefff; }
+@media (max-width: 980px) {
+  .hero-panel { min-height: 0; }
+  .hero-panel h1 { font-size: clamp(3.2rem, 9vw, 5rem); }
+}
+@media (max-width: 768px) {
+  .hero-panel h1 { font-size: clamp(2.9rem, 15vw, 4.2rem); }
+}
