@@ -3061,3 +3061,17 @@ html[data-theme="dark"] {
   .markdown-section > .table-scroll,
   .markdown-section > .table-wrapper { width: 100%; }
 }
+/* Sidebar subtitle alignment */
+.sidebar > h1::after {
+  display: block;
+  font-size: .54rem;
+  letter-spacing: .055em;
+  line-height: 1.2;
+  margin: .55rem auto 1.25rem;
+  max-width: none;
+  text-align: center;
+  white-space: nowrap;
+}
+@media (max-width: 340px) {
+  .sidebar > h1::after { font-size: .48rem; letter-spacing: .025em; }
+}

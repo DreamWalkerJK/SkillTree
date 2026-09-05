@@ -1,5 +1,3 @@
-- [首页](/)
-
 - **.NET / C#**
   - [CSharp和.NET Core 的高阶用法](/DotNet/CSharp和NET-LTS中高阶指南.md)
   - [C# / .NET 专题目录](/DotNet/CSharp专题/README.md)
