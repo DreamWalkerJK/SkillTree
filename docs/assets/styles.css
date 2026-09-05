@@ -3106,3 +3106,36 @@ html[data-theme="dark"] {
 @media (min-width: 1600px) {
   .markdown-section { max-width: 1840px !important; }
 }
+/* Final article width override for every Docsify markdown page */
+.markdown-section,
+.markdown-section > *,
+.markdown-section p,
+.markdown-section ul,
+.markdown-section ol,
+.markdown-section dl,
+.markdown-section blockquote,
+.markdown-section details,
+.markdown-section pre,
+.markdown-section .table-scroll,
+.markdown-section .table-wrapper {
+  max-width: none !important;
+}
+.markdown-section > p,
+.markdown-section > ul,
+.markdown-section > ol,
+.markdown-section > dl,
+.markdown-section > blockquote,
+.markdown-section > details,
+.markdown-section > pre,
+.markdown-section > .table-scroll,
+.markdown-section > .table-wrapper {
+  width: 100% !important;
+}
+.markdown-section p,
+.markdown-section li {
+  width: auto;
+}
+.markdown-section > p,
+.markdown-section > ul,
+.markdown-section > ol,
+.markdown-section > dl { width: 100% !important; }
