@@ -2947,3 +2947,117 @@ html[data-theme="dark"] .markdown-section {
 @media (max-width: 768px) {
   .theme-toggle { flex: 0 0 auto; min-width: 4.2rem; }
 }
+/* Reading surfaces and navigation refinement */
+:root {
+  --sidebar-background: #f1f7f8;
+  --sidebar-surface: #f8fbfc;
+  --sidebar-border-color: #c4d9df;
+  --sidebar-nav-link-color: #4a626f;
+  --sidebar-nav-link-color--active: #006f83;
+  --sidebar-heading-color: #087f94;
+  --sidebar-rule-color: #c4d9df;
+  --sidebar-search-background: #ffffff;
+  --sidebar-search-border: #c4d9df;
+  --sidebar-search-text: #173441;
+  --sidebar-search-placeholder: #6a818c;
+  --sidebar-active-surface: #dff3f5;
+}
+html[data-theme="dark"] {
+  --sidebar-background: #081722;
+  --sidebar-surface: #0d202e;
+  --sidebar-border-color: #214354;
+  --sidebar-nav-link-color: #abc4ce;
+  --sidebar-nav-link-color--active: #89f2ff;
+  --sidebar-heading-color: #7eefff;
+  --sidebar-rule-color: #214354;
+  --sidebar-search-background: #102a38;
+  --sidebar-search-border: #2c596a;
+  --sidebar-search-text: #effaff;
+  --sidebar-search-placeholder: #9ab5c0;
+  --sidebar-active-surface: #123b49;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, var(--sidebar-background), var(--sidebar-surface)) !important;
+  border-right: 1px solid var(--sidebar-border-color) !important;
+}
+.sidebar > h1 {
+  padding-inline: 1rem;
+}
+.sidebar > h1 a { letter-spacing: -.025em; }
+.sidebar > h1::after {
+  color: var(--text-muted) !important;
+  letter-spacing: .12em;
+}
+.sidebar .search .input-wrap {
+  background: var(--sidebar-search-background) !important;
+  border: 1px solid var(--sidebar-search-border);
+  box-shadow: 0 8px 20px rgba(18, 62, 76, .06) !important;
+}
+.sidebar .search .input-wrap:focus-within {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 3px var(--focus-ring), 0 8px 20px rgba(18, 62, 76, .08) !important;
+}
+.sidebar .search input[type="search"] { color: var(--sidebar-search-text) !important; }
+.sidebar .search input[type="search"]::placeholder { color: var(--sidebar-search-placeholder) !important; }
+.sidebar-nav > ul > li > strong,
+.sidebar-nav > ul > li > p > strong {
+  color: var(--sidebar-heading-color) !important;
+  font-size: .68rem;
+  letter-spacing: .16em;
+}
+.sidebar-nav > ul > li > strong::before,
+.sidebar-nav > ul > li > p > strong::before {
+  background: linear-gradient(180deg, #00b7cf, #4e7eea) !important;
+  width: 4px;
+}
+.sidebar-nav > ul > li > strong::after,
+.sidebar-nav > ul > li > p > strong::after { background: var(--sidebar-rule-color) !important; }
+.sidebar-nav li a {
+  border: 1px solid transparent;
+  color: var(--sidebar-nav-link-color) !important;
+  margin: .16rem .45rem;
+  padding: .48rem .7rem;
+}
+.sidebar-nav li a:hover {
+  background: color-mix(in srgb, var(--sidebar-active-surface) 70%, transparent) !important;
+  border-color: color-mix(in srgb, var(--accent-color) 28%, transparent);
+  box-shadow: none !important;
+  color: var(--sidebar-nav-link-color--active) !important;
+}
+.sidebar-nav li.active > a {
+  background: var(--sidebar-active-surface) !important;
+  border-color: color-mix(in srgb, var(--accent-color) 34%, transparent);
+  box-shadow: inset 3px 0 var(--accent-color), 0 6px 16px rgba(13, 98, 116, .08) !important;
+  color: var(--sidebar-nav-link-color--active) !important;
+  font-weight: 700;
+}
+.sidebar-nav li ul li a { padding-left: 1.05rem; }
+
+/* Keep notices, code, tables, and wide media aligned to one content track. */
+.markdown-section > blockquote,
+.markdown-section > pre,
+.markdown-section > .table-scroll,
+.markdown-section > .table-wrapper,
+.markdown-section > table,
+.markdown-section > img,
+.markdown-section > figure {
+  width: 100%;
+  max-width: none;
+}
+.markdown-section > blockquote {
+  margin-left: 0;
+  margin-right: 0;
+}
+.markdown-section > blockquote p { max-width: none; }
+.markdown-section > pre,
+.markdown-section > .table-scroll,
+.markdown-section > .table-wrapper { overflow-x: auto; }
+
+@media (max-width: 768px) {
+  .sidebar-nav li a { margin-inline: .2rem; }
+  .markdown-section > blockquote,
+  .markdown-section > pre,
+  .markdown-section > .table-scroll,
+  .markdown-section > .table-wrapper { width: 100%; }
+}
