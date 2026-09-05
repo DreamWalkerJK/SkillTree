@@ -3075,3 +3075,34 @@ html[data-theme="dark"] {
 @media (max-width: 340px) {
   .sidebar > h1::after { font-size: .48rem; letter-spacing: .025em; }
 }
+/* Full-width article text track */
+.markdown-section > p,
+.markdown-section > ul,
+.markdown-section > ol,
+.markdown-section > dl,
+.markdown-section > details {
+  width: 100% !important;
+  max-width: none !important;
+}
+.markdown-section > p,
+.markdown-section > li,
+.markdown-section > ul li,
+.markdown-section > ol li {
+  text-wrap: pretty;
+}
+.markdown-section > blockquote,
+.markdown-section > pre,
+.markdown-section > .table-scroll,
+.markdown-section > .table-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+}
+.markdown-section > blockquote p,
+.markdown-section > blockquote ul,
+.markdown-section > blockquote ol {
+  width: 100%;
+  max-width: none !important;
+}
+@media (min-width: 1600px) {
+  .markdown-section { max-width: 1840px !important; }
+}
