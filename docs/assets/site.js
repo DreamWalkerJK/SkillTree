@@ -56,7 +56,11 @@
 
   function setTheme(theme) {
     root.dataset.theme = theme;
-    localStorage.setItem(themeKey, theme);
+    try {
+      localStorage.setItem(themeKey, theme);
+    } catch (error) {
+      // Private browsing or blocked storage should not break theme switching.
+    }
     updateThemeUI(theme);
   }
 
@@ -104,6 +108,12 @@
       return;
     }
 
+    const sidebar = document.querySelector(".sidebar");
+    if (sidebar && window.innerWidth <= 768 && document.body.classList.contains("close")) {
+      const toggle = document.querySelector(".sidebar-toggle");
+      if (toggle) toggle.click();
+    }
+
     input.focus({ preventScroll: true });
     input.select();
   }
@@ -111,6 +121,19 @@
   if (button) {
     button.addEventListener("click", function () {
       setTheme(root.dataset.theme === "dark" ? "light" : "dark");
+    });
+  }
+
+  const skipLink = document.querySelector(".skip-link");
+  if (skipLink) {
+    skipLink.addEventListener("click", function (event) {
+      event.preventDefault();
+      const content = document.querySelector(".markdown-section");
+      if (content) {
+        content.setAttribute("tabindex", "-1");
+        content.focus({ preventScroll: true });
+        content.scrollIntoView({ block: "start" });
+      }
     });
   }
 
@@ -138,7 +161,7 @@
         target.tagName === "SELECT" ||
         target.isContentEditable);
 
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+    if (!isEditing && (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
       event.preventDefault();
       focusSearch();
       return;
@@ -285,6 +308,18 @@
       if (!content) {
         return;
       }
+
+      content.setAttribute("role", "main");
+      content.setAttribute("id", "main-content");
+
+      const searchInput = document.querySelector('.search input[type="search"]');
+      if (searchInput) {
+        searchInput.setAttribute("aria-label", "搜索知识库");
+        searchInput.setAttribute("name", "search");
+        searchInput.setAttribute("autocomplete", "off");
+      }
+      const searchResults = document.querySelector(".search .results-panel");
+      if (searchResults) searchResults.setAttribute("aria-live", "polite");
 
       content.classList.remove("content-ready");
       window.requestAnimationFrame(function () {

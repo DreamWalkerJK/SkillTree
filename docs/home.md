@@ -1,146 +1,40 @@
-<div class="hero-panel">
+﻿<div class="hero-panel">
   <div class="hero-copy">
     <div class="hero-kicker"><span class="kicker-mark" aria-hidden="true"></span> DEVELOPER KNOWLEDGE SYSTEM</div>
     <h1>Skill<span>Tree</span></h1>
-    <p>面向软件开发者的结构化技术知识库。从计算机科学基础到生产系统工程，将分散的学习记录组织为可检索、可演进的知识网络。</p>
+    <p>把零散的工程经验，整理成可以检索、复盘和持续演进的知识路径。从 .NET 与架构，到算法、数据、云原生和安全，每一篇笔记都服务于真实的系统设计与交付。</p>
     <div class="hero-actions">
-      <a class="button button-primary" href="#/DotNet/CSharp和NET-LTS中高阶指南">开始阅读 <span aria-hidden="true">→</span></a>
-      <a class="button button-secondary" href="https://github.com/DreamWalkerJK/SkillTree" target="_blank" rel="noopener">查看源码 <span aria-hidden="true">↗</span></a>
+      <a class="button button-primary" href="#/DotNet/CSharp和NET-LTS中高阶指南">从 .NET 开始 <span aria-hidden="true">↗</span></a>
+      <a class="button button-secondary" href="https://github.com/DreamWalkerJK/SkillTree" target="_blank" rel="noopener noreferrer">查看源码 <span aria-hidden="true">↗</span></a>
     </div>
-    <div class="hero-meta" aria-label="知识库特征">
-      <span><i aria-hidden="true">⌘</i> 系统化整理</span>
-      <span><i aria-hidden="true">⌁</i> 持续更新</span>
-      <span><i aria-hidden="true">↗</i> 开放共享</span>
-    </div>
+    <div class="hero-meta" aria-label="知识库特征"><span><i aria-hidden="true">◉</i> 结构化整理</span><span><i aria-hidden="true">◉</i> 持续更新</span><span><i aria-hidden="true">↗</i> 开放共享</span></div>
   </div>
-
-  <div class="hero-visual" aria-hidden="true">
-    <div class="visual-halo visual-halo-one"></div>
-    <div class="visual-halo visual-halo-two"></div>
-    <div class="visual-line visual-line-one"></div>
-    <div class="visual-line visual-line-two"></div>
-    <div class="visual-line visual-line-three"></div>
+  <div class="hero-visual" aria-label="SkillTree 知识领域关系图" role="img">
+    <div class="visual-halo visual-halo-one"></div><div class="visual-halo visual-halo-two"></div>
+    <div class="visual-line visual-line-one"></div><div class="visual-line visual-line-two"></div><div class="visual-line visual-line-three"></div>
     <div class="visual-node visual-node-core"><span>ST</span><small>KNOWLEDGE</small></div>
-    <div class="visual-node visual-node-one"><span>.NET</span><small>01</small></div>
-    <div class="visual-node visual-node-two"><span>DDD</span><small>02</small></div>
-    <div class="visual-node visual-node-three"><span>SQL</span><small>04</small></div>
-    <div class="visual-spark visual-spark-one"></div>
-    <div class="visual-spark visual-spark-two"></div>
+    <div class="visual-node visual-node-one"><span>.NET</span><small>01</small></div><div class="visual-node visual-node-two"><span>DDD</span><small>02</small></div><div class="visual-node visual-node-three"><span>SQL</span><small>04</small></div>
+    <div class="visual-spark visual-spark-one"></div><div class="visual-spark visual-spark-two"></div>
   </div>
 </div>
 
-<div class="metrics" aria-label="知识库概览">
-  <div><span class="metric-icon" aria-hidden="true">◫</span><strong>70+</strong><span>技术笔记</span></div>
-  <div><span class="metric-icon" aria-hidden="true">◈</span><strong>7</strong><span>知识领域</span></div>
-  <div><span class="metric-icon" aria-hidden="true">↗</span><strong>∞</strong><span>持续演进</span></div>
-</div>
+<div class="metrics" aria-label="知识库概览"><div><span class="metric-icon" aria-hidden="true">◌</span><strong>80+</strong><span>技术笔记</span></div><div><span class="metric-icon" aria-hidden="true">◌</span><strong>8</strong><span>知识领域</span></div><div><span class="metric-icon" aria-hidden="true">↗</span><strong>∞</strong><span>持续演进</span></div></div>
 
-<div class="section-heading">
-  <div class="section-heading-copy">
-    <span class="section-kicker">EXPLORE THE SYSTEM</span>
-    <h2>知识领域</h2>
-  </div>
-  <span class="section-count">07 个领域</span>
-</div>
+<div class="section-heading"><div class="section-heading-copy"><span class="section-kicker">EXPLORE THE SYSTEM</span><h2>知识领域</h2></div><span class="section-count">08 个领域</span></div>
 
 <div class="domain-grid">
-  <a class="domain-card" href="#/DotNet/CSharp和NET-LTS中高阶指南">
-    <span class="domain-icon" aria-hidden="true">C#</span>
-    <div class="domain-copy">
-      <span class="domain-index">01 / DOMAIN</span>
-      <h3>.NET / C#</h3>
-      <p>语言特性、运行时、ASP.NET Core、EF Core、并发与性能。</p>
-    </div>
-    <span class="domain-arrow" aria-hidden="true">↗</span>
-  </a>
-  <a class="domain-card" href="#/Architecture/DDD">
-    <span class="domain-icon" aria-hidden="true">DDD</span>
-    <div class="domain-copy">
-      <span class="domain-index">02 / DOMAIN</span>
-      <h3>Architecture</h3>
-      <p>领域驱动设计、状态机、架构分层、设计原则与模式。</p>
-    </div>
-    <span class="domain-arrow" aria-hidden="true">↗</span>
-  </a>
-  <a class="domain-card" href="#/Algorithm/README">
-    <span class="domain-icon" aria-hidden="true">∑</span>
-    <div class="domain-copy">
-      <span class="domain-index">03 / DOMAIN</span>
-      <h3>Algorithms</h3>
-      <p>图与网络、组合优化、数学模型与复杂度分析。</p>
-    </div>
-    <span class="domain-arrow" aria-hidden="true">↗</span>
-  </a>
-  <a class="domain-card" href="#/DataBase/MySql/MySQL">
-    <span class="domain-icon" aria-hidden="true">DB</span>
-    <div class="domain-copy">
-      <span class="domain-index">04 / DOMAIN</span>
-      <h3>Databases</h3>
-      <p>MySQL、PostgreSQL、SQL Server、查询与性能优化。</p>
-    </div>
-    <span class="domain-arrow" aria-hidden="true">↗</span>
-  </a>
-  <a class="domain-card" href="#/Component/Helm%20Chart">
-    <span class="domain-icon" aria-hidden="true">OPS</span>
-    <div class="domain-copy">
-      <span class="domain-index">05 / DOMAIN</span>
-      <h3>Cloud Native</h3>
-      <p>Kubernetes 生态、Helm、Kafka 与工程组件。</p>
-    </div>
-    <span class="domain-arrow" aria-hidden="true">↗</span>
-  </a>
-  <a class="domain-card" href="#/Cybersecurity/Tools/Kali">
-    <span class="domain-icon" aria-hidden="true">SEC</span>
-    <div class="domain-copy">
-      <span class="domain-index">06 / DOMAIN</span>
-      <h3>Cybersecurity</h3>
-      <p>哈希洪水、DDoS 原理、防护与应急响应、Kali、Metasploit 与可复现的安全实验环境。</p>
-    </div>
-    <span class="domain-arrow" aria-hidden="true">↗</span>
-  </a>
-  <a class="domain-card" href="#/Cryptography/Kerckhoffs原则">
-    <span class="domain-icon" aria-hidden="true">KEY</span>
-    <div class="domain-copy">
-      <span class="domain-index">07 / DOMAIN</span>
-      <h3>Cryptography</h3>
-      <p>开放设计、密钥保密、哈希安全、攻击模型与工程实践。</p>
-    </div>
-    <span class="domain-arrow" aria-hidden="true">↗</span>
-  </a>
+  <a class="domain-card" href="#/DotNet/CSharp和NET-LTS中高阶指南"><span class="domain-icon" aria-hidden="true">C#</span><div class="domain-copy"><span class="domain-index">01 / DOMAIN</span><h3>.NET / C#</h3><p>语言特性、运行时、ASP.NET Core、EF Core、并发与性能。</p></div><span class="domain-arrow" aria-hidden="true">↗</span></a>
+  <a class="domain-card" href="#/Architecture/DDD"><span class="domain-icon" aria-hidden="true">DDD</span><div class="domain-copy"><span class="domain-index">02 / DOMAIN</span><h3>Architecture</h3><p>领域驱动设计、状态机、分层架构、设计原则与模式。</p></div><span class="domain-arrow" aria-hidden="true">↗</span></a>
+  <a class="domain-card" href="#/Algorithm/README"><span class="domain-icon" aria-hidden="true">∑</span><div class="domain-copy"><span class="domain-index">03 / DOMAIN</span><h3>Algorithms</h3><p>数据结构、图论、组合优化、数学模型与复杂度分析。</p></div><span class="domain-arrow" aria-hidden="true">↗</span></a>
+  <a class="domain-card" href="#/DataBase/MySql/MySQL"><span class="domain-icon" aria-hidden="true">DB</span><div class="domain-copy"><span class="domain-index">04 / DOMAIN</span><h3>Databases</h3><p>MySQL、PostgreSQL、SQL Server、查询与性能优化。</p></div><span class="domain-arrow" aria-hidden="true">↗</span></a>
+  <a class="domain-card" href="#/Component/Helm%20Chart"><span class="domain-icon" aria-hidden="true">OPS</span><div class="domain-copy"><span class="domain-index">05 / DOMAIN</span><h3>Cloud Native</h3><p>Kubernetes、Helm、Kafka 与工程组件的落地实践。</p></div><span class="domain-arrow" aria-hidden="true">↗</span></a>
+  <a class="domain-card" href="#/Cybersecurity/Tools/Kali"><span class="domain-icon" aria-hidden="true">SEC</span><div class="domain-copy"><span class="domain-index">06 / DOMAIN</span><h3>Cybersecurity</h3><p>哈希洪水、DDoS 原理、防护响应与隔离实验环境。</p></div><span class="domain-arrow" aria-hidden="true">↗</span></a>
+  <a class="domain-card" href="#/Cryptography/Kerckhoffs原则"><span class="domain-icon" aria-hidden="true">KEY</span><div class="domain-copy"><span class="domain-index">07 / DOMAIN</span><h3>Cryptography</h3><p>开放设计、密钥保密、哈希安全与工程实现。</p></div><span class="domain-arrow" aria-hidden="true">↗</span></a>
+  <a class="domain-card" href="#/Network/网络模型"><span class="domain-icon" aria-hidden="true">SYS</span><div class="domain-copy"><span class="domain-index">08 / DOMAIN</span><h3>Systems</h3><p>网络模型、Linux、Windows 与通用编码技能。</p></div><span class="domain-arrow" aria-hidden="true">↗</span></a>
 </div>
 
-<div class="section-heading section-heading-recommended">
-  <div class="section-heading-copy">
-    <span class="section-kicker">CURATED STARTING POINTS</span>
-    <h2>推荐入口</h2>
-  </div>
-  <span class="section-count">精选 18 篇</span>
-</div>
-
-<div class="reading-list">
-
-- [CSharp和.NET Core 的高阶用法](DotNet/CSharp和NET-LTS中高阶指南.md)
-- [C#/.NET 专题目录](DotNet/CSharp专题/README.md)
-- [基础数据结构目录](Algorithm/数据结构/README.md)
-- [图论算法目录](Algorithm/图论/README.md)
-- [.NET 微服务：容器化应用程序体系结构](Architecture/DotNet/NET微服务-容器化应用程序体系结构.md)
-- [构建适用于 Azure 的云原生 .NET 应用](Architecture/DotNet/构建适用于Azure的云原生.NET应用.md)
-- [使用 ASP.NET Core 和 Azure 构建新式 Web 应用程序](Architecture/DotNet/使用ASP.NETCore和Azure构建新式Web应用程序.md)
-- [使用 .NET MAUI 的企业应用程序模式](Architecture/DotNet/使用.NETMAUI的企业应用程序模式.md)
-- [领域驱动设计（Domain-Driven Design）](Architecture/DDD.md)
-- [状态机：形式化模型、执行语义与工程实践](Architecture/状态机.md)
-- [旅行商问题（Traveling Salesman Problem）](Algorithm/图与网络/旅行商问题TSP.md)
-- [Kerckhoffs 原则：开放设计、密钥保密与现代安全工程](Cryptography/Kerckhoffs原则.md)
-- [SHA-256：标准流程、压缩函数、安全性质与工程实践](Cryptography/SHA-256.md)
-- [生日悖论与密码学中的生日界](Mathematics/生日悖论.md)
-- [生日攻击：模型、复杂度与工程防御](Cryptography/生日攻击.md)
-- [哈希洪水攻击](Cybersecurity/哈希洪水攻击.md)
-- [DDoS：原理、检测、缓解与应急响应](Cybersecurity/分布式拒绝服务攻击.md)
-- [Kali + Ubuntu 靶机 Docker 实验环境](Cybersecurity/Lab/notice.md)
-
-</div>
-
-<div class="home-note">
-  <span class="home-note-mark" aria-hidden="true">i</span>
-  <p>使用左侧导航浏览完整目录，或使用搜索框检索标题与正文。站点内容直接来自仓库 <code>main</code> 分支，提交新笔记后无需重复维护网页副本。</p>
-</div>
+<div class="section-heading section-heading-recommended"><div class="section-heading-copy"><span class="section-kicker">CURATED STARTING POINTS</span><h2>推荐入口</h2></div><span class="section-count">精选 12 篇</span></div>
+<div class="reading-list"><ul>
+<li><a href="#/DotNet/CSharp和NET-LTS中高阶指南">C# 与 .NET Core 的高阶用法</a></li><li><a href="#/DotNet/CSharp专题/README">C# / .NET 专题目录</a></li><li><a href="#/Algorithm/数据结构/README">基础数据结构目录</a></li><li><a href="#/Algorithm/图论/README">图论算法目录</a></li><li><a href="#/Architecture/DDD">领域驱动设计（DDD）</a></li><li><a href="#/Architecture/状态机">状态机：形式化模型与工程实践</a></li><li><a href="#/DataBase/MySql/MySQL">MySQL 笔记与优化</a></li><li><a href="#/Cryptography/SHA-256">SHA-256：标准流程与工程实践</a></li><li><a href="#/Cybersecurity/Tools/Kali">Kali Linux 工具链</a></li><li><a href="#/Component/Helm%20Chart">Helm Chart 实践</a></li><li><a href="#/Network/网络模型">网络模型</a></li><li><a href="#/OperatingSystem/Linux/操作命令">Linux 常用命令</a></li>
+</ul></div>
+<div class="home-note"><span class="home-note-mark" aria-hidden="true">i</span><p>使用左侧导航浏览完整目录，或按 <kbd>⌘ K</kbd> / <kbd>Ctrl K</kbd> 打开搜索。内容直接来自仓库 <code>main</code> 分支，提交新的 Markdown 后无需重复维护网页副本。</p></div>
