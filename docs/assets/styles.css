@@ -3139,3 +3139,36 @@ html[data-theme="dark"] {
 .markdown-section > ul,
 .markdown-section > ol,
 .markdown-section > dl { width: 100% !important; }
+/* Definitive markdown content track: remove legacy Docsify text caps */
+.markdown-section > p,
+.markdown-section > ul,
+.markdown-section > ol,
+.markdown-section > dl,
+.markdown-section > blockquote,
+.markdown-section > pre,
+.markdown-section > details,
+.markdown-section > .table-scroll,
+.markdown-section > .table-wrapper {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  inline-size: 100% !important;
+  max-inline-size: none !important;
+}
+.markdown-section > p,
+.markdown-section > ul,
+.markdown-section > ol,
+.markdown-section > dl,
+.markdown-section > blockquote {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.markdown-section > p *,
+.markdown-section > ul *,
+.markdown-section > ol *,
+.markdown-section > blockquote * {
+  max-width: none !important;
+}
+.markdown-section > blockquote p { width: 100% !important; }
+.markdown-section > pre pre,
+.markdown-section > pre code { max-width: none !important; }
