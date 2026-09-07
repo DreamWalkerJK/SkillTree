@@ -3172,3 +3172,47 @@ html[data-theme="dark"] {
 .markdown-section > blockquote p { width: 100% !important; }
 .markdown-section > pre pre,
 .markdown-section > pre code { max-width: none !important; }
+
+/* Keep prose on the same readable track as notices and code blocks. Docsify's
+   default theme caps direct paragraphs at 78ch; reset that cap and disable
+   pretty wrapping, which can make short paragraphs look artificially narrow. */
+.markdown-section > p,
+.markdown-section > ul,
+.markdown-section > ol,
+.markdown-section > dl,
+.markdown-section > details {
+  box-sizing: border-box !important;
+  display: block !important;
+  inline-size: 100% !important;
+  max-inline-size: none !important;
+  text-wrap: wrap !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+
+.markdown-section > p,
+.markdown-section > ul,
+.markdown-section > ol,
+.markdown-section > dl,
+.markdown-section > details,
+.markdown-section > blockquote,
+.markdown-section > pre,
+.markdown-section > .table-scroll,
+.markdown-section > .table-wrapper {
+  margin-inline-start: 0 !important;
+  margin-inline-end: 0 !important;
+}
+
+/* Desktop reading track: reclaim horizontal space while preserving the spacious card. */
+@media (min-width: 1200px) {
+  .markdown-section {
+    padding-inline: clamp(1.25rem, 2.4vw, 3rem) !important;
+  }
+}
+
+.markdown-section blockquote p,
+.markdown-section blockquote li {
+  text-wrap: wrap !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
