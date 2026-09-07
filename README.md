@@ -1,7 +1,7 @@
-# SkillTree · 极夜知识中枢
+# <center>SkillTree · 知识中枢</center>
 
 <div align="center">
-<img src="docs/assets/brand-banner.svg" alt="SkillTree · 极夜知识中枢" width="100%" />
+<img src="docs/assets/brand-banner.svg" alt="SkillTree · 知识中枢" width="100%" />
 
 **把零散的工程经验，整理成可以检索、验证和持续演进的知识路径。**
 
