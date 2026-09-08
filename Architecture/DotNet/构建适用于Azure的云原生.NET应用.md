@@ -123,6 +123,7 @@ public sealed class InvoiceWorker(
     {
         await using var processor = bus.CreateProcessor("invoices", new()
         {
+            AutoCompleteMessages = false,
             MaxConcurrentCalls = 8,
             PrefetchCount = 32,
             MaxAutoLockRenewalDuration = TimeSpan.FromMinutes(5)
@@ -288,7 +289,10 @@ builder.Services.AddAuthentication()
     });
 builder.Services.AddAuthorization(options =>
     options.AddPolicy("orders.write", p =>
-        p.RequireClaim("scp", "orders.write")));
+        p.RequireAuthenticatedUser().RequireAssertion(context =>
+            context.User.FindAll("scp").Any(claim =>
+                claim.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Contains("orders.write", StringComparer.Ordinal)))));
 ```
 
 服务间使用 Managed Identity 获取 Azure 资源令牌；为每个身份授予最小 RBAC 角色。网络层使用私有终结点、VNet 集成和 NSG，公开入口只保留 Front Door/API Management。对输入做长度、格式和业务权限校验，审计高风险操作；日志和追踪中禁止令牌、密码和完整个人信息。
@@ -302,7 +306,91 @@ builder.Services.AddAuthorization(options =>
 5. 在预生产执行负载、故障注入和滚动升级，观察恢复时间和数据一致性。
 6. 定期演练区域故障、数据库 PITR、密钥轮换和消息重放，记录实际 RPO/RTO。
 
-## 11. 版本提示与官方参考
+## 11. 根据积压计算消费者容量
+
+队列深度只能说明有多少工作尚未领取，最老消息的等待时间更接近用户感受到的延迟。发布器停止发送时，队列深度甚至会下降，因此还要同时观察 Outbox 积压、消息进入速率、处理成功速率和死信数量。
+
+用平均处理时间做一次粗略估算：若每秒进入 50 条消息，每条平均处理 0.4 秒，系统至少需要约 20 个同时执行的处理位置。每个副本并行处理 8 条，以 70% 的目标利用率留出波动余量，副本数约为 `ceil(50 × 0.4 / (8 × 0.7)) = 4`。这不是容量承诺：长尾任务、锁竞争、外部 API 限额和数据库连接池都可能改变结果，应通过负载测试修正。
+
+扩容上限还要服从下游容量。例如数据库允许该工作负载最多使用 80 个连接，20 个副本各并行 8 条且每条长期持有连接，就可能产生 160 个并发请求。此时只增加副本会把排队位置从消息代理转移到数据库，吞吐不一定增加。可以减少消费者并行度、缩短事务、批量写入，或按租户/业务优先级建立独立队列。
+
+### 11.1 记录真正有解释力的处理指标
+
+以下代码使用 **.NET 8/10 的 `System.Diagnostics.Metrics` 和 `TimeProvider`**，测量一次处理尝试的时间和结果。`TimeProvider` 在 .NET 8 引入，便于在测试中控制时间；`Meter` 指标 API 在 .NET 6 引入。
+
+```csharp
+using System.Diagnostics.Metrics;
+
+public sealed class ProcessingMetrics(TimeProvider clock)
+{
+    public const string MeterName = "FieldOps.Worker";
+    private static readonly Meter Meter = new(MeterName, "1.0.0");
+    private static readonly Histogram<double> Duration =
+        Meter.CreateHistogram<double>("work.attempt.duration", "s");
+    private static readonly Counter<long> Attempts =
+        Meter.CreateCounter<long>("work.attempts");
+
+    public async Task MeasureAsync(
+        Func<CancellationToken, Task> action, CancellationToken ct)
+    {
+        long started = clock.GetTimestamp();
+        string outcome = "failure";
+        try
+        {
+            await action(ct);
+            outcome = "success";
+        }
+        catch (OperationCanceledException) when (ct.IsCancellationRequested)
+        {
+            outcome = "canceled";
+            throw;
+        }
+        finally
+        {
+            var tag = new KeyValuePair<string, object?>("outcome", outcome);
+            Duration.Record(clock.GetElapsedTime(started).TotalSeconds, tag);
+            Attempts.Add(1, tag);
+        }
+    }
+}
+```
+
+在启动代码中注册 `TimeProvider.System` 和 `ProcessingMetrics`，并在 OpenTelemetry 指标配置中调用 `AddMeter(ProcessingMetrics.MeterName)`。还需配置实际的指标导出器；只注册采集库不会自动把数据送到 Azure Monitor。不要把订单 ID、完整 URL 或用户 ID 当作指标标签，否则时间序列数量会随业务数据持续增长。业务 ID 放入经过脱敏的日志或采样追踪，指标标签使用少量固定类别。
+
+上述成功数表示“处理尝试成功”，可能包括 Inbox 命中的重复投递，不等于新增发票数。业务指标应在事务提交后按实际变化记录；需要财务准确性的统计仍应从业务账表生成，不能用可能丢失或重复采集的遥测代替。
+
+### 11.2 扩容和停机应遵循同一套处理约定
+
+容器收到停止通知后，消费者应先停止领取新消息，再等待在途事务结束。已提交业务但未确认的消息可以重新投递；未提交的事务应回滚。不要为了让停止更快，在业务完成之前确认消息。
+
+ASP.NET Core/Generic Host 可以配置优雅停机等待时间，以下为 **.NET 8/10** 启动片段：
+
+```csharp
+builder.Services.Configure<HostOptions>(options =>
+{
+    options.ShutdownTimeout = TimeSpan.FromSeconds(45);
+});
+```
+
+该设置只控制主机愿意等待多久，平台的终止宽限时间必须比它更长，并留出网络连接关闭的时间。若业务经常超过该期限，应把任务拆成可恢复步骤，而不是无限延长停机。消息锁失效后不能继续假设自己独占处理权；处理状态需要数据库条件更新或 Inbox 约束保护。
+
+Service Bus 的预取也会消耗消息锁时间。处理很慢时，将 `PrefetchCount` 设置得过大，会使消息还在本地缓冲区就接近锁过期。根据最大处理时间、并行数和锁续期行为做实测，不要仅以减少网络请求为目标增大预取。
+
+## 12. 把区域恢复写成可执行演练
+
+先给数据分类：数据库事务记录、尚未发布的 Outbox、消息代理里的待处理消息、Blob 对象和配置密钥具有不同复制方式，不能用一个“跨区域复制已打开”结论代表全部数据已经安全。RPO 是可接受的数据丢失时间，RTO 是恢复服务所需时间；目标应对应具体业务，例如“订单不丢失”和“报表允许落后 15 分钟”可以采用不同方案。
+
+一次预生产演练可按以下顺序执行：
+
+1. 在写入测试订单时记录最后成功业务号和数据库恢复点，停止主区域的测试入口。
+2. 在恢复区域还原数据库，确认应用身份能访问数据库、Key Vault 和 Blob；避免临时使用管理员密码掩盖权限配置缺失。
+3. 核对消息产品当前选用的复制功能究竟复制实体配置还是消息数据，并检查未发布 Outbox 是否随数据库恢复。不能假设仅有命名空间别名切换就恢复所有消息。
+4. 先让消费者按受控速率恢复，验证 Inbox 去重与库存/账目不变量，再逐步开放请求入口。
+5. 对比恢复后的业务号、文件引用和补偿记录，分别记录数据缺口、恢复耗时及人工步骤。
+
+不要在故障尚未排除时让两个区域同时接受同一业务键的写入。决定谁可以写入需要明确的主写区域切换和旧区域隔离方案；DNS 已切换不代表旧连接已经终止。演练报告应保留还原点、镜像版本、配置版本和验证结果，下一次发布才能判断恢复步骤是否仍然有效。
+
+## 13. 版本提示与官方参考
 
 - .NET 8（2023-11，LTS）：容器、Generic Host、HTTP 弹性库生态和 Blazor Web App 的稳定版本，可用于生产环境。
 - .NET 9（2024-11，STS）：运行时、容器和云原生工具改进。

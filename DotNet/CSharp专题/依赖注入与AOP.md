@@ -87,3 +87,68 @@ DispatchProxy（.NET Standard 2.0）可拦截虚拟接口调用，但反射和�
 - AOP 切面只处理横切关注点，不改变业务返回语义。
 - 日志、指标和追踪应使用 OpenTelemetry 语义，避免切面吞掉异常。
 - 用源生成器生成 DI 注册可减少反射；在 NativeAOT 发布中优先编译期方案。
+
+## 生命周期与作用域
+
+Singleton 不能直接保存请求级的 Scoped 服务。后台服务是 Singleton，处理一次消息时应通过 `IServiceScopeFactory` 创建作用域，并在工作单元结束时释放数据库上下文等资源。
+
+~~~csharp
+public sealed class InvoiceWorker(
+    IServiceScopeFactory scopes,
+    ChannelReader<Guid> reader) : BackgroundService
+{
+    protected override async Task ExecuteAsync(CancellationToken token)
+    {
+        await foreach (var id in reader.ReadAllAsync(token))
+        {
+            await using AsyncServiceScope scope =
+                scopes.CreateAsyncScope();
+            var handler = scope.ServiceProvider
+                .GetRequiredService<IInvoiceHandler>();
+            await handler.HandleAsync(id, token);
+        }
+    }
+}
+~~~
+
+AOP 适合记录耗时、授权和事务边界。切面必须保留取消和异常语义，不能把业务异常转换成成功结果；对于需要调试的系统，还应把 trace id 贯穿切面日志和下游调用。
+
+## 工程示例：装饰器实现审计
+
+装饰器是最容易调试的 AOP 形式之一。它把横切逻辑写成普通类，依赖关系可以在注册处直接看到，也不依赖运行时代理。
+
+~~~csharp
+public interface IInvoiceHandler
+{
+    Task HandleAsync(Guid invoiceId, CancellationToken token);
+}
+
+public sealed class InvoiceHandler : IInvoiceHandler
+{
+    public Task HandleAsync(Guid invoiceId, CancellationToken token)
+        => Task.CompletedTask;
+}
+
+public sealed class AuditingHandler(
+    IInvoiceHandler inner,
+    ILogger<AuditingHandler> logger) : IInvoiceHandler
+{
+    public async Task HandleAsync(Guid invoiceId, CancellationToken token)
+    {
+        var started = Stopwatch.GetTimestamp();
+        try
+        {
+            await inner.HandleAsync(invoiceId, token);
+            logger.LogInformation("Invoice {InvoiceId} handled in {ElapsedMs} ms",
+                invoiceId, Stopwatch.GetElapsedTime(started).TotalMilliseconds);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Invoice {InvoiceId} failed", invoiceId);
+            throw;
+        }
+    }
+}
+~~~
+
+切面日志只记录稳定字段和耗时，不能记录完整请求体、令牌或连接字符串。多个装饰器的顺序会改变语义，例如事务应包住真正的业务调用，重试应位于能够判断幂等性的边界。

@@ -105,3 +105,44 @@ public static List<int> Reconstruct(int from, int to, int[,] next)
 4. 发现负权环后仍把所有距离当成有效最短距离；涉及负环的点对应视为无定义。
 5. 无向图忘记写入对称位置；有向图误用对称更新会改变问题。
 
+## 6. 负环影响范围与安全加法
+
+`dist[v,v] < 0` 只能说明顶点 `v` 位于某个负权环上。若 `i` 能到达 `v` 且 `v` 能到达 `j`，则 `i` 到 `j` 的最短路没有有限下界；其他不经过该环的点对仍可能有正常答案。需要报告这类点对时，可以在算法结束后再做一次可达性传播：
+
+```csharp
+public static bool[,] IsUndefinedByNegativeCycle(long[,] dist)
+{
+    int n = dist.GetLength(0);
+    var result = new bool[n, n];
+    for (int k = 0; k < n; k++)
+    {
+        if (dist[k, k] >= 0) continue;
+        for (int i = 0; i < n; i++)
+        {
+            if (dist[i, k] == FloydWarshall.Inf) continue;
+            for (int j = 0; j < n; j++)
+                if (dist[k, j] != FloydWarshall.Inf)
+                    result[i, j] = true;
+        }
+    }
+    return result;
+}
+```
+
+`Inf` 必须小于 `long.MaxValue`，并且在相加前判断两个操作数是否为 `Inf`。如果业务允许接近 `long.MaxValue` 的合法路径，还要用 checked 加法或先比较 `left > Inf - right`，否则有限路径也可能被误判为不可达。
+
+## 7. 运行检查
+
+```csharp
+var distances = FloydWarshall.Compute(3,
+    new[] { (0, 1, 2L), (1, 2, -1L), (2, 1, -2L) });
+var undefined = FloydWarshall.IsUndefinedByNegativeCycle(distances);
+if (!undefined[0, 2] || distances[1, 1] >= 0)
+    throw new InvalidOperationException("负环传播检查失败");
+
+var finite = FloydWarshall.Compute(3,
+    new[] { (0, 1, 5L), (1, 2, 2L) });
+if (finite[0, 2] != 7 || finite[2, 0] != FloydWarshall.Inf)
+    throw new InvalidOperationException("不可达和最短距离检查失败");
+Console.WriteLine("Floyd-Warshall 检查通过");
+```

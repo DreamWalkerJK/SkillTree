@@ -211,6 +211,76 @@ public sealed class OutboxPublisher(IServiceScopeFactory scopeFactory,
 
 跨服务业务流程使用 Saga。编排式 Saga 由一个协调器按顺序调用服务；协作式 Saga 由各服务监听事件。每一步定义补偿动作，例如“扣库存成功、支付失败”时释放库存。补偿不是数据库回滚，必须记录状态、重试次数和人工介入入口。
 
+### 4.3 从一次故障理解重复投递
+
+假设发布器已经把事件交给消息代理，随后在保存 `PublishedAt` 前进程退出。数据库仍认为事件未发送，下一次扫描必然再次发送。先更新 `PublishedAt` 再发送也不成立：两步之间崩溃会永久丢失事件。Outbox 保证可恢复的发送记录，并不提供跨数据库和消息代理的“恰好一次”事务。
+
+消费者通常增加 Inbox 表，以 `(ConsumerName, MessageId)` 为唯一键。处理订单事件时，业务更新、Inbox 记录和消费者自己产生的 Outbox 事件写入同一个本地事务。下例为 **.NET 10 / EF Core 10** 应用层片段；`InventoryDbContext` 和实体由业务项目提供。
+
+```csharp
+using Microsoft.EntityFrameworkCore;
+
+public sealed record StockReserved(Guid MessageId, Guid ReservationId);
+
+public sealed class ReservationConsumer(InventoryDbContext db)
+{
+    public async Task HandleAsync(StockReserved message, CancellationToken ct)
+    {
+        const string consumer = "reservation-projection-v1";
+        await using var transaction = await db.Database.BeginTransactionAsync(ct);
+
+        if (await db.Inbox.AnyAsync(
+                x => x.ConsumerName == consumer && x.MessageId == message.MessageId,
+                ct))
+        {
+            await transaction.CommitAsync(ct);
+            return;
+        }
+
+        var reservation = await db.Reservations.SingleAsync(
+            x => x.Id == message.ReservationId, ct);
+        reservation.Confirmed = true;
+        db.Inbox.Add(new InboxRecord
+        {
+            ConsumerName = consumer,
+            MessageId = message.MessageId,
+            ProcessedAt = DateTimeOffset.UtcNow
+        });
+
+        await db.SaveChangesAsync(ct);
+        await transaction.CommitAsync(ct);
+        // 消息确认由外层适配器在本方法成功返回后执行。
+    }
+}
+```
+
+`AnyAsync` 只是减少无效工作，不能代替唯一约束：两个消费者可能同时读到“尚未处理”。并发重复会由数据库唯一约束拒绝，整个事务回滚；外层必须识别该数据库提供程序的唯一键冲突，并使用新的 `DbContext` 检查 Inbox 是否已存在。不能把所有 `DbUpdateException` 都解释为重复消息，因为外键错误、连接故障也会抛出同类异常。示例事务中只允许数据库操作，不能在事务提交前调用不可撤销的外部扣款接口。
+
+| 故障发生位置 | 恢复后动作 | 必须保持的结果 |
+| --- | --- | --- |
+| 业务与 Outbox 提交前 | 调用方使用原幂等键重试 | 不出现只有业务记录、没有事件的半次提交 |
+| 消息已发布、发送标记未提交 | 发布器重发原 `MessageId` | 消费者只产生一次业务效果 |
+| 消费事务提交后、消息确认前 | 消息代理重新投递 | Inbox 命中后直接确认 |
+| 消费事务进行到一半 | 事务回滚后重试 | 不保留部分库存更新 |
+
+多副本发布器还需要领取机制。可以在数据库中原子地领取一批记录，写入领取者和租约到期时间，或使用数据库支持的跳过锁定行查询。租约过期后其他实例可以接管，因此去重仍然不可省略。记录 `AttemptCount`、`NextAttemptAt`、最近错误和最早未发布时间，便于区分瞬态故障与长期无法序列化的事件。
+
+### 4.4 事件顺序与业务状态机
+
+事件到达顺序不一定等于发生顺序。同一订单的 `OrderPaid` 可能先于 `OrderCreated` 到达读模型。为每个订单分配递增版本，并按订单 ID 分区，可减少乱序；消费者仍要定义版本跳跃的行为。
+
+- 如果事件携带完整快照，可以在新版本大于当前版本时更新，忽略旧快照。
+- 如果事件只是增量，如“库存减 2”，跳过缺失版本会丢失业务变化，应暂存后续事件并补取缺失事件。
+- 如果消费者需从头重建投影，去重记录应以投影代次区分；直接沿用旧 Inbox 会把重放误认为重复消息。
+
+第三节的同步库存预留仅用于说明 HTTP 调用。真实下单流程还要回答“库存已预留、订单保存失败怎么办”。一种方案是先以订单 ID 创建待处理订单，再发起可重试的预留命令；预留记录设置有效期，过期或订单取消时释放。付款、取消和超时释放都通过条件更新校验当前状态，避免付款成功后又被超时任务释放库存。
+
+### 4.5 验证一致性，而不只是检查响应码
+
+集成测试应连接真实关系数据库与消息代理，并在已知步骤注入失败：在事务提交前抛异常、在发送成功后中止发布器、在消费者提交后跳过消息确认。每个测试使用固定消息 ID，再重复投递两次，检查业务表的数量、金额或库存，而不是只断言处理程序没有抛异常。
+
+对于 Saga，再加入补偿重复、补偿失败和晚到成功响应三个用例。例如付款已经取消后才收到支付成功回执，不能静默改回已付款；应产生退款任务或转入人工处理。测试最终状态的同时，保留步骤记录，以便解释某一订单为何进入该状态。
+
 ## 5. 容器镜像
 
 `Dockerfile` 使用多阶段构建，运行阶段只保留 ASP.NET Core Runtime。下面示例对应 .NET 10；将两个基础镜像标签同时改为 `8.0` 即可用于 .NET 8 LTS。

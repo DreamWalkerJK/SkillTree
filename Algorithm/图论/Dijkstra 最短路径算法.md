@@ -118,3 +118,42 @@ Console.WriteLine(string.Join(" -> ", result.BuildPath(3))); // 0 -> 2 -> 1 -> 3
 3. 用 `int.MaxValue + weight` 计算不可达点，造成溢出；先判断是否为无穷或使用安全加法。
 4. 无向边只加入一个方向，得到的是有向图结果。
 5. 用 `0` 表示不可达，无法区分真实的零成本路径；应使用 `long.MaxValue` 或单独的可达标记。
+
+## 6. 输入校验与测试
+
+生产代码通常在建图阶段校验顶点编号、边权范围和邻接表是否为空，而不是等到搜索过程中才发现问题。若边权来自数据库或 JSON，建议先转换为 `long`，再对负值和溢出做明确处理。`PriorityQueue` 的优先级只保证队列顺序，不会替调用方检测重复边或无效顶点。
+
+下面的检查覆盖零权边、不可达顶点、路径恢复和负权输入：
+
+```csharp
+static void AssertEqual<T>(T expected, T actual, string name)
+{
+    if (!EqualityComparer<T>.Default.Equals(expected, actual))
+        throw new InvalidOperationException($"{name}: 期望 {expected}，实际 {actual}");
+}
+
+var graph = new List<IReadOnlyList<WeightedEdge>>
+{
+    new[] { new WeightedEdge(1, 0), new WeightedEdge(2, 4) },
+    new[] { new WeightedEdge(2, 2) },
+    Array.Empty<WeightedEdge>(),
+    Array.Empty<WeightedEdge>()
+};
+var check = Dijkstra.ShortestPaths(graph, 0);
+AssertEqual(2L, check.Distance[2], "零权边路径");
+AssertEqual(long.MaxValue, check.Distance[3], "不可达顶点");
+AssertEqual("0 -> 1 -> 2", string.Join(" -> ", check.BuildPath(2)), "路径恢复");
+
+try
+{
+    Dijkstra.ShortestPaths(
+        new[] { (IReadOnlyList<WeightedEdge>)new[] { new WeightedEdge(0, -1L) } }, 0);
+    throw new InvalidOperationException("负权边没有被拒绝");
+}
+catch (ArgumentException)
+{
+    Console.WriteLine("Dijkstra 输入检查通过");
+}
+```
+
+如果需要处理动态增加的边，不要在搜索过程中修改邻接表；先构造新的快照再运行算法。这样可以避免枚举集合时的并发修改，也能让一次请求看到一致的图。

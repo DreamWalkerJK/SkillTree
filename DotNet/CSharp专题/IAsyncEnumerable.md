@@ -83,3 +83,34 @@ await producer;
 ## 与 ASP.NET Core 配合
 
 Minimal API 可以直接返回 IAsyncEnumerable<T>，框架按 JSON 数组流式写出；客户端断开连接时 HttpContext.RequestAborted 应传入迭代器。不要在迭代器中捕获并吞掉取消异常，否则服务器会继续占用资源。
+
+## 工程示例：分页流与背压
+
+分页接口不要先把全部页合并成一个列表。迭代器可以在消费方请求下一项时才访问下一页，并把取消令牌传给 HTTP 调用。
+
+~~~csharp
+static async IAsyncEnumerable<Product> ReadPagesAsync(
+    HttpClient client,
+    [System.Runtime.CompilerServices.EnumeratorCancellation]
+    CancellationToken token = default)
+{
+    for (var page = 1; ; page++)
+    {
+        var response = await client.GetFromJsonAsync<Page<Product>>(
+            $"products?page={page}", token);
+        if (response is null || response.Items.Count == 0)
+            yield break;
+
+        foreach (var item in response.Items)
+            yield return item;
+
+        if (!response.HasNext)
+            yield break;
+    }
+}
+
+public sealed record Page<T>(IReadOnlyList<T> Items, bool HasNext);
+public sealed record Product(int Id, string Name);
+~~~
+
+异步流不是自动的限流器。下游处理速度低于生产速度时，调用方应在消费循环中控制并发，或使用有界 `Channel<T>`；需要重试时按页或按项目设计幂等键，避免重复写入。

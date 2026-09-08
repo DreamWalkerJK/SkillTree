@@ -83,3 +83,27 @@ var custom = serverRows.Where(row => IsSpecial(row.Amount));
 - 分页要有稳定排序；大表优先基于键的 seek 分页而非深 OFFSET。
 - 检查生成 SQL 和数据库执行计划；Benchmark 只在真实数据规模下有意义。
 - 同一个 IQueryable 不要在多个终结操作中重复枚举，必要时物化一次。
+
+## 工程示例：区分本地 LINQ 与数据库查询
+
+先在数据库中筛选和投影，再将有限结果带回内存完成展示聚合。`AsEnumerable()` 会改变执行位置，调用前应确认结果集大小。
+
+~~~csharp
+var query = db.Orders
+    .Where(o => o.CreatedAt >= from && o.CreatedAt < to)
+    .GroupBy(o => o.CustomerId)
+    .Select(g => new CustomerTotal(
+        g.Key,
+        g.Sum(o => o.Amount),
+        g.Count()));
+
+var totals = await query
+    .OrderByDescending(x => x.Amount)
+    .Take(100)
+    .AsNoTracking()
+    .ToListAsync(cancellationToken);
+
+public sealed record CustomerTotal(Guid CustomerId, decimal Amount, int Count);
+~~~
+
+不同数据库提供程序对日期函数、字符串操作和分组投影的翻译能力不同。上线前应检查生成 SQL、索引使用和参数化情况；不要为了复用一个 C# 方法而强行把不可翻译逻辑放进 `IQueryable`。

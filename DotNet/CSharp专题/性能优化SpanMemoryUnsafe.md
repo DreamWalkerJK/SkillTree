@@ -83,3 +83,25 @@ static int ReadInt32(ReadOnlySpan<byte> bytes)
 - 避免 LINQ 在极热循环中的迭代器和闭包分配；用 Span 或手写循环前先测量。
 - 控制泛型和代码膨胀；关注 Tiered JIT、PGO 和 ReadyToRun 的发布取舍。
 - 服务器应用使用 Server GC；低延迟服务评估 SustainedLowLatency，并监控暂停时间。
+
+## 工程示例：无分配解析固定格式
+
+对于稳定格式的短文本，可以使用 `ReadOnlySpan<char>` 直接切片。切片不复制底层字符串，但返回的数值和错误信息仍应由调用方明确处理。
+
+~~~csharp
+static bool TryParsePoint(
+    ReadOnlySpan<char> text, out int x, out int y)
+{
+    var separator = text.IndexOf(',');
+    if (separator <= 0 || separator == text.Length - 1)
+    {
+        x = y = 0;
+        return false;
+    }
+
+    return int.TryParse(text[..separator], out x)
+        && int.TryParse(text[(separator + 1)..], out y);
+}
+~~~
+
+Span 只解决切片和临时分配问题，不能代替算法优化。优化前后应比较吞吐、P95/P99 延迟、分配字节数和 GC 次数；如果输入很少或路径不热，普通字符串代码通常更容易维护。

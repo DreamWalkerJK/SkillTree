@@ -92,3 +92,37 @@ public sealed class DisjointSetUnion
 4. `total += weight` 使用 `int` 导致总权重溢出；示例使用 `long` 和 `checked`。
 5. 并查集没有路径压缩/按大小合并，大量边时性能明显下降。
 
+## 5. 正确性、森林结果与第二小生成树
+
+Kruskal 每次选择当前尚未成环的最轻边。设已经选择的边构成森林，若某条候选边连接了两个不同连通分量，把它加入后不会形成环；对任意一棵包含该边的生成树，如果这条边不在树中，沿树中两端之间的路径必然存在一条不轻于候选边的边，替换后仍是生成树且权值不增加。这就是割性质，按权值递增反复应用即可得到最小生成树。
+
+```csharp
+public static (long Weight, IReadOnlyList<UndirectedEdge> Edges, int Components)
+    BuildMinimumSpanningForest(int vertexCount, IEnumerable<UndirectedEdge> input)
+{
+    ArgumentNullException.ThrowIfNull(input);
+    if (vertexCount < 0) throw new ArgumentOutOfRangeException(nameof(vertexCount));
+
+    var edges = input.OrderBy(e => e.Weight).ThenBy(e => e.From).ThenBy(e => e.To).ToArray();
+    var dsu = new DisjointSetUnion(vertexCount);
+    var chosen = new List<UndirectedEdge>(Math.Max(0, vertexCount - 1));
+    long total = 0;
+    foreach (var edge in edges)
+    {
+        if ((uint)edge.From >= (uint)vertexCount || (uint)edge.To >= (uint)vertexCount)
+            throw new ArgumentException("边的顶点编号超出范围。", nameof(input));
+        if (edge.From == edge.To) continue;
+        if (!dsu.Union(edge.From, edge.To)) continue;
+        chosen.Add(edge);
+        total = checked(total + edge.Weight);
+    }
+
+    return (total, chosen, vertexCount - chosen.Count);
+}
+```
+
+无向图不连通时，结果是最小生成森林，而不是一棵生成树；`Components` 可用于明确判断输入是否连通。重复边和负权边不需要特殊处理，只要排序使用 `long` 累加并在并查集合并前校验顶点编号即可。空图的森林权值为 0，顶点数为 0 时不要访问数组下标。
+
+求第二小生成树不能简单地把 MST 中任意一条边替换掉。常见做法是枚举一条不在 MST 中的边 `(u,v,w)`，在 MST 的 `u-v` 路径上删除一条最大权边；候选权值为 `mstWeight + w - maxOnPath(u,v)`。需要用 LCA 或倍增维护路径最大值，复杂度可做到 `O((V+E) log V)`。若题目要求“严格更大”的第二小权值，候选值等于 MST 权值时必须跳过；若只要求另一棵不同的最小生成树，则等权替换也应保留。
+
+建议至少测试以下情况：只有一个顶点、包含自环、重复权值边、负权边、孤立顶点、完全不连通图，以及总权值接近 `long.MaxValue` 的输入。测试应同时检查所选边数、连通分量数和总权值，不能只检查边集文本顺序，因为等权 MST 的边集可能不唯一。

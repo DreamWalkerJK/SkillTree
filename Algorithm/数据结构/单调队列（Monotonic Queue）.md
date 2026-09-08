@@ -92,3 +92,47 @@ public static long MinJumpCost(ReadOnlySpan<int> cost, int maxJump)
 3. 最大值队列的比较方向写反；应保持值递减，最小值则保持值递增。
 4. `tail` 不回收或环形下标处理错误，长数组会越界；固定窗口可用容量 `k`，一般场景使用真正的环形队列。
 5. 把单调队列当作优先队列使用。单调队列只适用于窗口边界按顺序移动的场景。
+
+## 4. 前缀和与最短子数组
+
+给定可能包含负数的数组，求和至少为 `target` 的最短连续子数组。令 `prefix[i]` 表示前 `i` 个元素的和。对当前下标 `i`：
+
+- 如果 `prefix[i] - prefix[队首] >= target`，队首对应的区间已经满足条件，应持续弹出并更新最短长度；
+- 如果新前缀和不小于队尾前缀和，队尾永远不会成为最优起点，应弹出；
+- 剩余下标保持前缀和递增。
+
+```csharp
+public static int ShortestSubarrayAtLeast(
+    ReadOnlySpan<int> values, long target)
+{
+    if (values.Length == 0) return 0;
+    long[] prefix = new long[values.Length + 1];
+    for (int i = 0; i < values.Length; i++)
+        prefix[i + 1] = checked(prefix[i] + values[i]);
+
+    int[] deque = new int[prefix.Length];
+    int head = 0, tail = 0;
+    int answer = int.MaxValue;
+    for (int i = 0; i < prefix.Length; i++)
+    {
+        while (head < tail && prefix[i] - prefix[deque[head]] >= target)
+        {
+            answer = Math.Min(answer, i - deque[head++]);
+        }
+        while (head < tail && prefix[i] <= prefix[deque[tail - 1]])
+            tail--;
+        deque[tail++] = i;
+    }
+    return answer == int.MaxValue ? 0 : answer;
+}
+
+Console.WriteLine(ShortestSubarrayAtLeast([2, -1, 2], 3)); // 3
+Console.WriteLine(ShortestSubarrayAtLeast([1, 2, 3], 4));  // 2
+Console.WriteLine(ShortestSubarrayAtLeast([-1, -2], 1));   // 0
+```
+
+前缀和使用 `long`，避免 `int` 累加溢出。返回 `0` 表示不存在满足条件的区间；如果业务需要区分“空输入”和“无解”，应改为返回 `int?`。总时间和额外空间均为 `O(n)`。
+
+## 5. 与优先队列的选择
+
+优先队列允许任意顺序插入和删除全局最小（或最大）元素，通常为 `O(log n)`；单调队列依赖窗口左端只向右移动，并主动丢弃不可能成为答案的元素，单次操作摊销 `O(1)`。任务调度、全局最小堆和 Dijkstra 应使用优先队列；固定窗口、前缀和区间优化才适合单调队列。选择错误会导致结果错误，或在本可线性的算法中引入不必要的对数开销。

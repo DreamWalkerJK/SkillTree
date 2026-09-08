@@ -28,7 +28,7 @@ Web Forms 把页面生命周期、服务器控件和 ViewState 作为主要抽�
 - **Static**：服务器生成 HTML 后结束请求，适合内容页和搜索引擎索引。
 - **Interactive Server**：浏览器通过 SignalR 与服务器保持连接，首屏小、可直接访问服务器资源，但连接数和网络延迟会影响体验。
 - **Interactive WebAssembly**：组件在浏览器运行，服务器只提供 API；首次下载较大，适合离线或高交互场景。
-- **Interactive Auto**：先使用服务器交互快速响应，客户端资源下载完成后切换到 WebAssembly。切换期间必须保证两端行为一致。
+- **Interactive Auto**：首次通常使用服务器交互，后台下载 WebAssembly 资源；后续访问具备客户端资源时可采用 WebAssembly。已运行的组件不会在下载完成后连同内存状态自动搬到浏览器，两端都必须实现所需服务和授权行为。
 
 典型部署拓扑如下：
 
@@ -44,7 +44,7 @@ Blazor Web App（ASP.NET Core 10）
 Azure SQL / Redis / Blob Storage / 外部 API
 ```
 
-如果使用 Interactive Server，负载均衡器需要支持 WebSocket，并配置粘性会话或共享 Data Protection 密钥。更大规模的应用可采用 Azure SignalR Service，把连接管理移出应用实例。WebAssembly 模式应将 API 和静态资源分别部署，并为 API 设置 CORS 和令牌验证。
+如果使用 Interactive Server，负载均衡器需要支持 WebSocket，并按托管方式配置会话亲和性。共享 Data Protection 密钥解决 Cookie 解密问题，不能代替会话亲和性，也不会共享组件电路的内存。更大规模的应用可采用 Azure SignalR Service，并按 Blazor 要求配置服务器粘性。WebAssembly 模式允许 API 与静态资源分别部署；只有跨源调用时才需要相应的 CORS 配置，API 始终需要独立认证和授权。
 
 ## 3. 创建项目和配置渲染模式
 
@@ -182,7 +182,7 @@ public sealed class CustomerModel
 ## 5. 从 Web Forms 迁移的分阶段方案
 
 1. **建立 API 契约**：把现有页面背后的业务操作抽成 ASP.NET Core API 或应用服务，先用集成测试固定行为。
-2. **共享认证**：将 Forms Authentication 迁移到 OpenID Connect/Microsoft Entra ID。迁移期间可在 ASP.NET Core 中验证旧 Cookie，但不要把旧 Cookie 暴露给 WebAssembly。
+2. **共享认证**：将 Forms Authentication 迁移到 OpenID Connect/Microsoft Entra ID。传统 `System.Web` Forms Authentication 票据不能直接当作 ASP.NET Core 身份 Cookie。可先让旧站点采用兼容的 OWIN Cookie 方案并配置共享密钥，或让新旧站点分别接入同一身份提供方实现单点登录；不要在浏览器代码中读取认证 Cookie。
 3. **外壳先行**：创建 Blazor Web App，保留旧 Web Forms 站点，通过反向代理按路径逐步切换。
 4. **页面按业务迁移**：先迁移无状态查询页，再迁移包含复杂表单和后台作业的页面。每次迁移都删除旧页面的入口和重复授权规则。
 5. **替换控件库**：Web Forms 控件的服务器事件改为组件参数和回调；JavaScript 插件通过 `IJSRuntime` 封装在一个服务中，不要在各组件直接拼接脚本。
@@ -245,7 +245,95 @@ builder.Services.AddMicrosoftIdentityWebAppAuthentication(
 - 对 WebAssembly 模式执行真实浏览器测试，不能只在服务器端渲染快照上通过。
 - 迁移项目应保留旧页面与新组件的契约测试，比较关键业务操作的结果和审计记录。
 
-## 10. 版本与官方参考
+## 10. 把页面生命周期改写为组件生命周期
+
+Web Forms 的一次 PostBack 会重新创建页面对象，`IsPostBack` 常用于决定是否绑定数据。Blazor 路由组件则可能被复用：从 `/orders/1` 导航到 `/orders/2`，同一组件类型只收到新参数，并不必然重新执行初始化。依赖路由参数的查询应放在 `OnParametersSetAsync`，不能简单搬到 `OnInitializedAsync`。
+
+| 原页面中的动作 | 推荐位置 | 原因 |
+| --- | --- | --- |
+| 初始化与参数无关的选项 | `OnInitialized{Async}` | 每个组件实例初始化一次；预渲染和交互是不同实例 |
+| 根据订单 ID 加载详情 | `OnParametersSetAsync` | 参数改变时重新运行 |
+| 首次建立图表、访问 DOM | `OnAfterRenderAsync` 的 `firstRender` 分支 | 预渲染时没有可交互的浏览器 DOM |
+| 响应按钮点击 | 返回 `Task` 的事件处理程序 | 框架可以等待操作并处理异常 |
+| 解除订阅、取消查询 | `IDisposable` / `IAsyncDisposable` | 离开页面后不能继续保留事件订阅 |
+
+异步查询还可能乱序完成。用户先打开订单 A，再迅速打开订单 B，A 的慢请求不能覆盖 B 的结果。以下 **.NET 8/10** 组件基类同时使用取消和请求身份检查；取消用于节省资源，身份检查处理底层服务忽略取消的情况。
+
+```csharp
+using Microsoft.AspNetCore.Components;
+
+public abstract class OrderDetailsBase : ComponentBase, IDisposable
+{
+    [Parameter] public Guid OrderId { get; set; }
+    [Inject] public IOrderReader Reader { get; set; } = default!;
+
+    protected OrderDetails? Details { get; private set; }
+    protected string? Error { get; private set; }
+    protected bool Loading { get; private set; }
+
+    private CancellationTokenSource? _pending;
+    private bool _disposed;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _pending?.Cancel();
+        using var request = new CancellationTokenSource();
+        _pending = request;
+        Details = null;
+        Error = null;
+        Loading = true;
+
+        try
+        {
+            var result = await Reader.ReadAsync(OrderId, request.Token);
+            if (!_disposed && ReferenceEquals(_pending, request))
+                Details = result;
+        }
+        catch (OperationCanceledException) when (request.IsCancellationRequested)
+        {
+            // 参数已变化，或组件已离开页面。
+        }
+        catch (HttpRequestException)
+        {
+            if (!_disposed && ReferenceEquals(_pending, request))
+                Error = "订单暂时无法加载，请稍后重试。";
+        }
+        finally
+        {
+            if (ReferenceEquals(_pending, request))
+            {
+                _pending = null;
+                Loading = false;
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        _disposed = true;
+        _pending?.Cancel();
+    }
+}
+
+public interface IOrderReader
+{
+    Task<OrderDetails?> ReadAsync(Guid id, CancellationToken ct);
+}
+
+public sealed record OrderDetails(Guid Id, string Number);
+```
+
+将此基类用于组件时，可用 Razor 的 `@inherits OrderDetailsBase` 访问受保护的显示状态。业务异常应转成可理解的提示，未预料的异常交给集中日志与 `ErrorBoundary`；不要捕获所有异常并假装查询成功。计时器或外部事件触发更新时，需通过 `InvokeAsync` 回到组件调度上下文，再调用 `StateHasChanged`，不能直接从线程池修改界面。
+
+## 11. 断线、重新部署与编辑状态
+
+Interactive Server 的组件字段保存在服务器电路中。短暂断线可能重新连接到保留的电路；进程重启、超过保留期限或连接到无法恢复该电路的实例时，页面必须重新建立状态。Redis 缓存和共享密钥并不会自动保存整个电路。
+
+因此，长表单至少区分三类数据：数据库中已保存的业务记录、尚未提交的编辑草稿、仅用于显示的选中项。业务记录以服务端数据为准；重要草稿可按“用户 ID + 记录 ID”存入服务端草稿表，浏览器只保存草稿引用。草稿恢复后仍要检查授权和记录版本，不能直接覆盖其他人的新修改。
+
+部署时先让新实例就绪，再停止向旧实例分配新连接；已有连接是否能继续以及多久终止，取决于平台的连接排空和停机配置。发布前测试以下情形：打开未保存表单后重启实例、保存响应返回前断网、在两个标签页同时编辑、在慢查询完成前切换路由。验收标准是“不重复提交、不悄悄丢失已确认数据，并能解释如何恢复草稿”，而不只是页面重新显示成功。
+
+## 12. 版本与官方参考
 
 - .NET 8（2023-11，LTS）：Blazor Web App、Static SSR、Interactive Server/WebAssembly/Auto 渲染模式。
 - .NET 9（2024-11，STS）：Blazor 性能、表单和开发体验改进。

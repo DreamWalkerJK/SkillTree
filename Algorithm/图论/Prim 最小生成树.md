@@ -85,3 +85,39 @@ Prim 是静态算法，每次插入或删除边都可能改变整棵树。边频
 4. 优先级使用累计路径值，结果变成 Dijkstra 风格的树。
 5. 负权边并不违反 Prim 的割性质，但若输入语义要求非负，仍应在校验层明确约束；不要将 Prim 与 Dijkstra 的负权限制混为一谈。
 
+## 5. 结果校验与应用
+
+返回的边数应为 `V - Components`，并且每条边的两个端点都属于同一输入图。可以用并查集对结果再次检查是否成环，这在接收外部图数据或修改 Prim 实现时很有价值。
+
+~~~csharp
+static bool IsSpanningForest(
+    int vertexCount,
+    IReadOnlyList<SelectedEdge> edges,
+    int expectedComponents)
+{
+    var dsu = new DisjointSet(vertexCount);
+    foreach (var edge in edges)
+    {
+        if (!dsu.Union(edge.From, edge.To)) return false;
+    }
+    return edges.Count == vertexCount - expectedComponents;
+}
+
+public sealed class DisjointSet(int size)
+{
+    private readonly int[] parent = Enumerable.Range(0, size).ToArray();
+    private readonly byte[] rank = new byte[size];
+    public int Find(int x) => parent[x] == x ? x : parent[x] = Find(parent[x]);
+    public bool Union(int a, int b)
+    {
+        a = Find(a); b = Find(b);
+        if (a == b) return false;
+        if (rank[a] < rank[b]) (a, b) = (b, a);
+        parent[b] = a;
+        if (rank[a] == rank[b]) rank[a]++;
+        return true;
+    }
+}
+~~~
+
+网络布线、道路规划和聚类中的相似度连接都可以使用 MST。若边权表示成本，MST 只保证总成本最小，不保证任意两点之间的路径最短。
