@@ -43,7 +43,7 @@ public Task<Res> GetAsync()
 - `Task.FromResult` 也不保证零分配。从 .NET 6 开始，部分类型和值可能命中运行时的已完成任务缓存；其他结果通常仍需创建新的 `Task<Res>`。
 - `Task.FromResult` 不会把 CPU 密集型或阻塞式代码变成异步，也不会创建线程、切换线程或把工作排入线程池。
 
-除非特别说明，本文的运行时实现与性能结论以 .NET 6+，尤其是当前 LTS 版本 .NET 8 / .NET 10 为范围；.NET Framework 和较早的 .NET Core 在任务缓存与 builder 实现上可能不同。
+本文示例统一使用 .NET 10（`net10.0`）和 C# 14，运行时实现与性能讨论也以 .NET 10 为准。文中仍注明任务缓存等机制最早出现的版本；这不表示示例需要切换到旧版 SDK。.NET Framework 和较早的 .NET Core 在任务缓存与 builder 实现上可能不同。
 
 ## 问题中的两种写法
 

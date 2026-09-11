@@ -2,7 +2,7 @@
 
 Dijkstra 算法在边权非负的有向图或无向图中，计算一个源点到其他顶点的最短距离。它采用“每次确定当前距离最小且尚未确定的顶点”的贪心策略；非负边权保证已经确定的距离不会再被更短路径改写。
 
-**示例环境：C# 12、.NET 8。** `PriorityQueue<TElement,TPriority>` 随 .NET 6 引入，下面代码可直接用于 .NET 8 项目。
+**示例环境：C# 14、.NET 10。** `PriorityQueue<TElement,TPriority>` 随 .NET 6 引入，下面代码可直接用于 .NET 10 项目。
 
 ## 1. 松弛与正确性
 
@@ -157,3 +157,9 @@ catch (ArgumentException)
 ```
 
 如果需要处理动态增加的边，不要在搜索过程中修改邻接表；先构造新的快照再运行算法。这样可以避免枚举集合时的并发修改，也能让一次请求看到一致的图。
+
+## 参考资料
+
+- [Dijkstra — cp-algorithms](https://cp-algorithms.com/graph/dijkstra.html)：给出非负边权条件、松弛证明和前驱恢复方法。
+- [Dijkstra on sparse graphs — cp-algorithms](https://cp-algorithms.com/graph/dijkstra_sparse.html)：讨论堆实现、重复入堆与跳过过期距离。
+- [PriorityQueue<TElement,TPriority> — Microsoft Learn](https://learn.microsoft.com/zh-cn/dotnet/api/system.collections.generic.priorityqueue-2?view=net-10.0)：核查示例使用的 .NET 优先队列接口。

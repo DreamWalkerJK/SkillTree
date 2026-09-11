@@ -2,7 +2,7 @@
 
 广度优先搜索按距离分层访问顶点：先访问源点，再访问距离为 1、2……的顶点。边权全部相同（通常为 1）时，BFS 第一次到达顶点的路径就是最短路径。它也用于网格最短步数、二分图判定和层序处理。
 
-**示例环境：C# 12、.NET 8。** 使用 `Queue<int>`，并在入队时标记访问，避免同一顶点重复入队。
+**示例环境：C# 14、.NET 10。** 使用 `Queue<int>`，并在入队时标记访问，避免同一顶点重复入队。
 
 ## 1. 复杂度
 
@@ -96,7 +96,7 @@ public static bool IsBipartite(IReadOnlyList<IReadOnlyList<int>> graph)
 
 ### 3.3 0-1 BFS
 
-当边权仅为 0 或 1 时，使用双端队列：权重 0 的边从队首加入，权重 1 的边从队尾加入，时间复杂度为 `O(V + E)`。不能把任意正权图直接套用 0-1 BFS。.NET 8 没有名为 `Deque<T>` 的内置集合，教学实现可以使用 `LinkedList<T>`；需要减少节点分配时，再改成环形数组实现的双端队列。
+当边权仅为 0 或 1 时，使用双端队列：权重 0 的边从队首加入，权重 1 的边从队尾加入，时间复杂度为 `O(V + E)`。不能把任意正权图直接套用 0-1 BFS。.NET 10 没有名为 `Deque<T>` 的内置集合，教学实现可以使用 `LinkedList<T>`；需要减少节点分配时，再改成环形数组实现的双端队列。
 
 ## 4. 常见错误
 
@@ -110,7 +110,7 @@ public static bool IsBipartite(IReadOnlyList<IReadOnlyList<int>> graph)
 
 假设园区用一个矩形网格表示，`0` 是可通行位置，`1` 是墙。现在有多个服务点，需要计算每个位置走到最近服务点的最少步数。逐个服务点运行 BFS 会重复访问网格；多源 BFS 则把所有服务点同时设为第 0 层，放进同一个队列。
 
-以下代码适用于 C# 12 / .NET 8，也可以直接用于 .NET 10 项目。距离为 `-1` 表示墙或不可到达的位置，调用方可通过原网格区分两者。四个方向的移动代价相同，不允许斜向移动。
+以下代码适用于 C# 14 / .NET 10。距离为 `-1` 表示墙或不可到达的位置，调用方可通过原网格区分两者。四个方向的移动代价相同，不允许斜向移动。
 
 ```csharp
 using System;
@@ -280,3 +280,9 @@ Console.WriteLine("BFS 检查通过");
 ```
 
 在业务系统中，多源 BFS 可用于地图距离场、最近出口和规则相同的状态转换；0-1 BFS 适合“保持当前状态免费、切换状态花费一次”这类模型。若一次操作可能花费 2 或更多，则需要重新选择算法，例如使用 Dijkstra，不能仅把该权重放到队尾。
+
+## 参考资料
+
+- [Breadth-first search — cp-algorithms](https://cp-algorithms.com/graph/breadth-first-search.html)：分层遍历、无权最短路和路径恢复。
+- [0-1 BFS — cp-algorithms](https://cp-algorithms.com/graph/01_bfs.html)：双端队列处理 0/1 权边。
+- [Queue<T> — Microsoft Learn](https://learn.microsoft.com/zh-cn/dotnet/api/system.collections.generic.queue-1?view=net-10.0)：C# FIFO 容器 API。

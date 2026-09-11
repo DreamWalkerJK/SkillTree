@@ -1,6 +1,6 @@
 # 使用 ASP.NET Core 和 Azure 构建新式 Web 应用程序
 
-本文面向需要在 Azure 上交付现代 Web 应用的团队，覆盖 ASP.NET Core 10 的请求处理、数据访问、身份、安全、可观测性和部署。代码以 **.NET 10、C# 14** 为例，也适用于 **.NET 8 LTS**；.NET 11 在 2026 年 9 月仍是预览阶段，不作为生产依赖。
+本文面向需要在 Azure 上交付现代 Web 应用的团队，覆盖 ASP.NET Core 10 的请求处理、数据访问、身份、安全、可观测性和部署。代码统一使用 **.NET 10、ASP.NET Core 10、C# 14**，目标框架为 `net10.0`，不包含其他运行时或预览版本示例。
 
 > 主要参考：[使用 ASP.NET Core 和 Azure 构建新式 Web 应用程序](https://learn.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/)。
 
@@ -78,7 +78,7 @@ builder.Services.AddAuthorizationBuilder()
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/error");
+    app.UseExceptionHandler(); // 使用 AddProblemDetails，不依赖未定义的 /error 页面。
     app.UseHsts();
 }
 app.UseHttpsRedirection();
@@ -90,6 +90,7 @@ app.UseAuthorization();
 app.MapHealthChecks("/health");
 app.MapControllers();
 app.MapRazorPages();
+app.MapOrderEndpoints(); // 第 3 节中的扩展方法。
 app.Run();
 
 public partial class Program { } // 供 WebApplicationFactory 使用
@@ -148,7 +149,8 @@ public sealed class OrderQuery(AppDbContext db, IDistributedCache cache)
 
         var rows = await db.Orders.AsNoTracking()
             .OrderByDescending(x => x.CreatedAt)
-            .Skip((page - 1) * size)
+            .ThenByDescending(x => x.Id)
+            .Skip(checked((page - 1) * size))
             .Take(size)
             .Select(x => new OrderDto(x.Id, x.Number, x.Status))
             .ToListAsync(ct);
@@ -162,21 +164,37 @@ public sealed class OrderQuery(AppDbContext db, IDistributedCache cache)
 }
 ```
 
+上述缓存键只适合所有调用方均有权读取的同一份订单列表。多租户或按用户授权的系统必须同时在数据库查询和缓存键中包含服务端验证过的租户、用户或权限范围；只按页码缓存会导致不同用户读取彼此的数据。时间戳相同时使用唯一 ID 排序，减少翻页结果不稳定的问题；深分页可进一步改用游标分页。
+
 缓存是性能优化，不是数据源。写入后删除相关键或使用版本化键；设置 TTL 和容量上限，避免缓存雪崩。对需要强一致性的余额、库存等数据直接读数据库，并通过并发令牌或数据库约束防止覆盖更新。
 
 ## 5. 身份、授权和密钥
 
-Azure 应用常使用 Microsoft Entra ID 的 OpenID Connect。Web 应用验证 Cookie，API 验证 Bearer 令牌：
+Azure 应用常使用 Microsoft Entra ID 的 OpenID Connect。Web 页面用 Cookie 维持会话，API 接收 Bearer 令牌。同一宿主支持两者时，用下面注册替换第 2 节的认证和同名授权策略，避免重复注册。代码需要 `Microsoft.Identity.Web` 包：
 
 ```csharp
-builder.Services.AddAuthentication()
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("Entra"),
-        cookieScheme: "Cookies")
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("Entra"),
-        jwtBearerScheme: "Bearer");
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
+
+var authentication = builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+});
+authentication.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("EntraWeb"));
+authentication.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("EntraApi"));
+
+// orders API 明确使用 Bearer；认证失败不应跳转到网页登录表单。
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("orders.read", policy => policy
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .RequireClaim("permission", "orders.read"));
 ```
 
-业务授权应使用策略或资源授权，而不是在页面中判断角色字符串：
+`EntraWeb` 和 `EntraApi` 分别配置实际注册的客户端和 API 信息。`permission` 是本例自定义声明，不能假定所有 Entra 令牌都有它；采用委托权限或应用角色时应验证实际令牌中的 `scp` 或 `roles`。业务授权应使用策略或资源授权，而不是在页面中判断角色字符串：
 
 ```csharp
 public sealed class OrderOwnerHandler :
@@ -207,8 +225,17 @@ app.MapHub<NotificationHub>("/hubs/notifications");
 
 public sealed class NotificationHub : Hub
 {
-    public Task JoinTenant(string tenantId) =>
-        Groups.AddToGroupAsync(Context.ConnectionId, $"tenant:{tenantId}");
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    public Task JoinTenant(string tenantId)
+    {
+        // 示例假设应用已在认证时验证并设置 tenant_id；实际系统按其租户模型授权。
+        string? allowedTenant = Context.User?.FindFirst("tenant_id")?.Value;
+        if (string.IsNullOrWhiteSpace(allowedTenant) ||
+            !string.Equals(tenantId, allowedTenant, StringComparison.Ordinal))
+            throw new HubException("无权订阅该租户的通知。");
+
+        return Groups.AddToGroupAsync(Context.ConnectionId, $"tenant:{allowedTenant}");
+    }
 }
 ```
 
@@ -220,13 +247,14 @@ App Service 适合无状态 Web 应用和中等流量 API。发布前设置目�
 
 ```powershell
 dotnet publish -c Release -f net10.0
+Compress-Archive -Path .\bin\Release\net10.0\publish\* -DestinationPath .\modern-web.zip -Force
 az webapp deploy --resource-group rg-modern-web `
-  --name modern-web-prod --src-path .\bin\Release\net10.0\publish
+  --name modern-web-prod --slot staging --src-path .\modern-web.zip --type zip
 az webapp config set --resource-group rg-modern-web `
-  --name modern-web-prod --generic-configurations '{"healthCheckPath":"/health"}'
+  --name modern-web-prod --slot staging --generic-configurations '{"healthCheckPath":"/health"}'
 ```
 
-将 `staging` 槽位连接到同版本数据库，执行冒烟测试后交换槽位。数据库迁移采用向后兼容的两阶段脚本，避免交换期间旧实例无法读取新结构。为 App Service 设置最小实例数、自动扩展规则、部署槽位和备份策略；诊断日志发送到 Log Analytics，不要依赖实例本地文件。
+先创建 `staging` 槽位并配置 .NET 10 运行时，再执行上面的部署；ZIP 根目录直接包含发布文件，而不是包裹一层 `publish` 文件夹。槽位应使用用于验证的数据和身份，不能在测试期间意外执行生产扣款或消费生产消息。数据库迁移采用向后兼容的两阶段脚本，冒烟测试通过后再交换槽位，旧实例仍需能读取迁移后的结构。诊断日志发送到 Log Analytics，不依赖实例本地文件。
 
 ## 8. 部署到 Azure Container Apps
 
@@ -255,18 +283,23 @@ az containerapp update --name modern-web --resource-group rg-modern-web `
 
 ## 10. 版本与官方参考
 
-- ASP.NET Core 8/.NET 8（2023-11，LTS）：本文部署模型可采用的稳定版本。
+- ASP.NET Core 8/.NET 8（2023-11，LTS）：用于理解既有应用的版本历史；本文项目使用 .NET 10。
 - ASP.NET Core 9/.NET 9（2024-11，STS）：性能和诊断改进。
 - ASP.NET Core 10/.NET 10（2025-11，当前示例）：C# 14 和最新 SDK 工具链。
 - .NET 11（预计 2026-11）：预览版本，需单独验证后再采用。
 
-官方资料：
+### 参考资料
 
-- [ASP.NET Core 文档](https://learn.microsoft.com/zh-cn/aspnet/core/)
+- [使用 ASP.NET Core 和 Azure 构建新式 Web 应用程序](https://learn.microsoft.com/zh-cn/dotnet/architecture/modern-web-apps-azure/)：本文对应的官方电子书，从应用结构、测试到托管部署连贯阅读。
+- [EF Core 高效查询](https://learn.microsoft.com/zh-cn/ef/core/performance/efficient-querying)：检查投影、分页、索引和查询往返次数。
+- [App Service ZIP 部署](https://learn.microsoft.com/zh-cn/azure/app-service/deploy-zip)：说明发布包目录结构和部署方式。
+- [App Service 部署槽位](https://learn.microsoft.com/zh-cn/azure/app-service/deploy-staging-slots)：了解槽位设置、预热、交换和回滚。
+
+- [ASP.NET Core 文档](https://learn.microsoft.com/zh-cn/aspnet/core/?view=aspnetcore-10.0)
 - [.NET Architecture Center](https://learn.microsoft.com/zh-cn/dotnet/architecture/)
 - [Azure Web 应用体系结构](https://learn.microsoft.com/zh-cn/azure/architecture/web-apps/)
 - [Azure Well-Architected Framework：可靠性](https://learn.microsoft.com/zh-cn/azure/well-architected/reliability/)
-- [ASP.NET Core 在 Azure 上的部署](https://learn.microsoft.com/zh-cn/aspnet/core/host-and-deploy/azure-apps)
-- [ASP.NET Core SignalR](https://learn.microsoft.com/zh-cn/aspnet/core/signalr/introduction)
+- [ASP.NET Core 在 Azure 上的部署](https://learn.microsoft.com/zh-cn/aspnet/core/host-and-deploy/azure-apps?view=aspnetcore-10.0)
+- [ASP.NET Core SignalR](https://learn.microsoft.com/zh-cn/aspnet/core/signalr/introduction?view=aspnetcore-10.0)
 - [Azure App Configuration](https://learn.microsoft.com/zh-cn/azure/azure-app-configuration/overview)
 - [Azure Key Vault](https://learn.microsoft.com/zh-cn/azure/key-vault/general/overview)

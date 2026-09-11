@@ -1,8 +1,8 @@
 # Floyd-Warshall 全源最短路径
 
-Floyd-Warshall 算法通过动态规划计算所有顶点对之间的最短路径。它允许负权边，但不能存在负权环。核心状态是：只允许使用编号不超过 `k` 的中间顶点时，`dist[i,j]` 的最短距离。
+Floyd-Warshall 算法通过动态规划计算所有顶点对之间的最短路径。它允许负权边，也能检测负权环；受到负权环影响的点对没有有限的最短距离。核心状态是：只允许使用编号不超过 `k` 的中间顶点时，`dist[i,j]` 的最短距离。
 
-**示例环境：C# 12、.NET 8。** 距离使用 `long`，不可达值用 `long.MaxValue / 4`，避免加法溢出。
+**示例环境：C# 14、.NET 10。** 距离使用 `long`，不可达值用 `long.MaxValue / 4`，并对输入边权和计算结果进行范围检查。
 
 ## 1. 状态转移
 
@@ -29,6 +29,8 @@ public static class FloydWarshall
         IEnumerable<(int From, int To, long Weight)> edges,
         bool directed = true)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(vertexCount);
+        ArgumentNullException.ThrowIfNull(edges);
         var dist = new long[vertexCount, vertexCount];
         for (int i = 0; i < vertexCount; i++)
             for (int j = 0; j < vertexCount; j++)
@@ -37,6 +39,9 @@ public static class FloydWarshall
         foreach (var (from, to, weight) in edges)
         {
             CheckVertex(from, vertexCount); CheckVertex(to, vertexCount);
+            if (weight <= -Inf || weight >= Inf)
+                throw new ArgumentOutOfRangeException(nameof(edges),
+                    "边权必须严格位于 (-Inf, Inf) 内。");
             dist[from, to] = Math.Min(dist[from, to], weight);
             if (!directed) dist[to, from] = Math.Min(dist[to, from], weight);
         }
@@ -48,7 +53,7 @@ public static class FloydWarshall
             for (int j = 0; j < vertexCount; j++)
             {
                 if (dist[k, j] == Inf) continue;
-                long throughK = dist[i, k] + dist[k, j];
+                long throughK = AddFiniteDistances(dist[i, k], dist[k, j]);
                 if (throughK < dist[i, j]) dist[i, j] = throughK;
             }
         }
@@ -62,12 +67,41 @@ public static class FloydWarshall
         return false;
     }
 
+    public static bool[,] IsUndefinedByNegativeCycle(long[,] dist)
+    {
+        int n = dist.GetLength(0);
+        var result = new bool[n, n];
+        for (int k = 0; k < n; k++)
+        {
+            if (dist[k, k] >= 0) continue;
+            for (int i = 0; i < n; i++)
+            {
+                if (dist[i, k] == Inf) continue;
+                for (int j = 0; j < n; j++)
+                    if (dist[k, j] != Inf) result[i, j] = true;
+            }
+        }
+        return result;
+    }
+
+    private static long AddFiniteDistances(long left, long right)
+    {
+        long sum = checked(left + right);
+        if (sum <= -Inf || sum >= Inf)
+            throw new OverflowException("路径计算超过示例支持的距离范围。");
+        return sum;
+    }
+
     private static void CheckVertex(int v, int n)
     {
         if ((uint)v >= (uint)n) throw new ArgumentOutOfRangeException(nameof(v));
     }
 }
+```
 
+将类型保存为 `FloydWarshall.cs` 后，在控制台项目的 `Program.cs` 中调用：
+
+```csharp
 var distances = FloydWarshall.Compute(4,
     new[] { (0, 1, 5L), (0, 3, 10L), (1, 2, 3L), (2, 3, 1L) });
 Console.WriteLine(distances[0, 3]); // 9
@@ -107,29 +141,11 @@ public static List<int> Reconstruct(int from, int to, int[,] next)
 
 ## 6. 负环影响范围与安全加法
 
-`dist[v,v] < 0` 只能说明顶点 `v` 位于某个负权环上。若 `i` 能到达 `v` 且 `v` 能到达 `j`，则 `i` 到 `j` 的最短路没有有限下界；其他不经过该环的点对仍可能有正常答案。需要报告这类点对时，可以在算法结束后再做一次可达性传播：
+`dist[v,v] < 0` 表示存在从 `v` 出发并回到 `v` 的负权闭合游走，即 `v` 能往返某个负权环；它不要求 `v` 本身位于负权简单环上。若 `i` 能到达 `v` 且 `v` 能到达 `j`，则 `i` 到 `j` 的路径权值可以不断降低，没有有限下界。第 3 节的 `FloydWarshall.IsUndefinedByNegativeCycle` 在计算完成后标记这些点对，额外耗时 `O(V³)`；未被标记的点对仍可读取正常答案。
 
-```csharp
-public static bool[,] IsUndefinedByNegativeCycle(long[,] dist)
-{
-    int n = dist.GetLength(0);
-    var result = new bool[n, n];
-    for (int k = 0; k < n; k++)
-    {
-        if (dist[k, k] >= 0) continue;
-        for (int i = 0; i < n; i++)
-        {
-            if (dist[i, k] == FloydWarshall.Inf) continue;
-            for (int j = 0; j < n; j++)
-                if (dist[k, j] != FloydWarshall.Inf)
-                    result[i, j] = true;
-        }
-    }
-    return result;
-}
-```
+仅把 `Inf` 设为 `long.MaxValue / 4` 并不能支持任意 `long` 边权。这个实现要求输入边权和计算过程中出现的所有有限路径和都严格位于 `(-Inf, Inf)`，否则抛出异常，不会截断数据或返回错误的不可达结果。`HasNegativeCycle` 和 `IsUndefinedByNegativeCycle` 接受 `Compute` 正常返回的方阵。负权环在迭代中可能使负值迅速增大，因此即使边权较小，也不能对任意规模的负环图保证不会触发范围异常。
 
-`Inf` 必须小于 `long.MaxValue`，并且在相加前判断两个操作数是否为 `Inf`。如果业务允许接近 `long.MaxValue` 的合法路径，还要用 checked 加法或先比较 `left > Inf - right`，否则有限路径也可能被误判为不可达。
+需要处理没有上述数值限制的输入时，可以改用 `System.Numerics.BigInteger` 保存有限距离，并用独立的布尔矩阵表示可达性。不要仅把大正数截断为 `Inf`：含负权边时，后续路径可能从该大正数下降到可表示的有效距离。实际项目应先根据顶点数、边权限制和是否允许负环选择数值表示，再决定使用 `long` 还是任意精度整数。
 
 ## 7. 运行检查
 
@@ -146,3 +162,10 @@ if (finite[0, 2] != 7 || finite[2, 0] != FloydWarshall.Inf)
     throw new InvalidOperationException("不可达和最短距离检查失败");
 Console.WriteLine("Floyd-Warshall 检查通过");
 ```
+
+还应检查两种数值错误：单条边权等于 `FloydWarshall.Inf` 时应抛出 `ArgumentOutOfRangeException`；三顶点链的两条边权都为 `FloydWarshall.Inf - 1` 时，有限距离相加超出范围，应抛出 `OverflowException`。后者虽然不一定使 `long` 本身溢出，但已与示例的不可达标记冲突，必须拒绝计算。
+
+## 参考资料
+
+- [Floyd-Warshall — cp-algorithms](https://cp-algorithms.com/graph/all-pair-shortest-path-floyd-warshall.html)：动态规划阶段、路径恢复、负权环与距离溢出。
+- [Bellman-Ford — cp-algorithms](https://cp-algorithms.com/graph/bellman_ford.html)：比较带负权边的单源最短路场景。

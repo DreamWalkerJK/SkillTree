@@ -4,7 +4,7 @@
 
 ## 1. 数据结构与不变量
 
-每个元素保存一个父节点编号。根节点的父节点是自己，根节点代表整个集合。直接按树高合并会退化成链，因此实现通常同时使用：
+每个元素保存一个父节点编号。根节点的父节点是自己，根节点代表整个集合。不控制合并方向时，父节点关系可能退化成链，因此实现通常同时使用：
 
 * **路径压缩**：`Find(x)` 返回根时，把沿途节点直接挂到根上。
 * **按大小（或按秩）合并**：总是把较小的树挂到较大的树上。
@@ -13,7 +13,7 @@
 
 ## 2. 基础用法：判断连通性
 
-下面代码兼容 C# 8 及以上，示例项目使用 .NET 8（`net8.0`）。`Union` 返回值表示是否真的合并了两个不同集合，可用于统计连通分量数量。
+下面示例使用 C# 14 与 .NET 10（`net10.0`），实现本身不依赖新的语言语法。`Union` 返回值表示是否真的合并了两个不同集合，可用于统计连通分量数量。
 
 ```csharp
 public sealed class DisjointSetUnion
@@ -127,3 +127,7 @@ public sealed class WeightedDsu
 4. 编号从 1 开始却分配 `new int[n]`；要么统一使用 0 基编号，要么分配 `n + 1`。
 5. 并查集只适合无向连通关系。带方向的可达性、最短路径和拓扑约束不能用 DSU 代替。
 
+## 参考资料
+
+- [Disjoint Set Union — cp-algorithms](https://cp-algorithms.com/data_structures/disjoint_set_union.html)：路径压缩、按大小合并和摊销复杂度。
+- [Deleting in O(T(n) log n) — cp-algorithms](https://cp-algorithms.com/data_structures/deleting_in_log_n.html)：回滚并查集与离线动态连通性。

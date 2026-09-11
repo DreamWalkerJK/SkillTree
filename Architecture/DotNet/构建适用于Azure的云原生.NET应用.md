@@ -1,6 +1,6 @@
 # 构建适用于 Azure 的云原生 .NET 应用
 
-本文结合 Microsoft .NET Cloud Native 和 Azure Architecture Center 的建议，介绍从设计到上线的一套云原生实现。示例以 **.NET 10、ASP.NET Core 10、C# 14** 为主，兼顾 **.NET 8 LTS**；不使用尚未稳定的 .NET 11 API。云原生的重点不是“把程序放进云服务器”，而是让应用能够在自动化平台上独立部署、弹性伸缩、故障恢复和持续交付。
+本文结合 Microsoft .NET Cloud Native 和 Azure Architecture Center 的建议，介绍从设计到上线的一套云原生实现。示例统一采用 **.NET 10、ASP.NET Core 10、C# 14**，应用目标框架为 `net10.0`，不使用预览 API。云原生的重点不是“把程序放进云服务器”，而是让应用能够在自动化平台上独立部署、弹性伸缩、故障恢复和持续交付。
 
 > 主要参考：[构建适用于 Azure 的云原生 .NET 应用](https://learn.microsoft.com/zh-cn/dotnet/architecture/cloud-native/)。
 
@@ -63,7 +63,7 @@ using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// .NET 8+：优先使用托管身份从 App Configuration/Key Vault 读取配置。
+// .NET 10：优先使用托管身份从 App Configuration/Key Vault 读取配置。
 if (!builder.Environment.IsDevelopment())
 {
     var credential = new DefaultAzureCredential();
@@ -316,7 +316,7 @@ builder.Services.AddAuthorization(options =>
 
 ### 11.1 记录真正有解释力的处理指标
 
-以下代码使用 **.NET 8/10 的 `System.Diagnostics.Metrics` 和 `TimeProvider`**，测量一次处理尝试的时间和结果。`TimeProvider` 在 .NET 8 引入，便于在测试中控制时间；`Meter` 指标 API 在 .NET 6 引入。
+以下代码使用 **.NET 10 / C# 14 的 `System.Diagnostics.Metrics` 和 `TimeProvider`**，测量一次处理尝试的时间和结果。`TimeProvider` 在 .NET 8 引入，便于在测试中控制时间；`Meter` 指标 API 在 .NET 6 引入。
 
 ```csharp
 using System.Diagnostics.Metrics;
@@ -363,7 +363,7 @@ public sealed class ProcessingMetrics(TimeProvider clock)
 
 容器收到停止通知后，消费者应先停止领取新消息，再等待在途事务结束。已提交业务但未确认的消息可以重新投递；未提交的事务应回滚。不要为了让停止更快，在业务完成之前确认消息。
 
-ASP.NET Core/Generic Host 可以配置优雅停机等待时间，以下为 **.NET 8/10** 启动片段：
+ASP.NET Core/Generic Host 可以配置优雅停机等待时间，以下为 **.NET 10 / C# 14** 启动片段：
 
 ```csharp
 builder.Services.Configure<HostOptions>(options =>
@@ -397,7 +397,11 @@ Service Bus 的预取也会消耗消息锁时间。处理很慢时，将 `Prefet
 - .NET 10（2025-11，当前示例）：ASP.NET Core 10、C# 14；API 以正式 SDK 文档为准。
 - .NET 11（预计 2026-11）：截至 2026-09 仍为预览版本，不建议用于生产环境。
 
-官方参考：
+### 参考资料
+
+- [云原生应用的弹性模式](https://learn.microsoft.com/zh-cn/dotnet/architecture/cloud-native/application-resiliency-patterns)：区分超时、重试、熔断各自处理的问题。
+- [Service Bus 消息锁与确认](https://learn.microsoft.com/zh-cn/azure/service-bus-messaging/message-transfers-locks-settlement)：对照本文的续锁、处理失败和重复投递场景。
+- [Azure Container Apps 修订版本](https://learn.microsoft.com/zh-cn/azure/container-apps/revisions)：核对发布、流量分配与回滚的实际操作。
 
 - [.NET 云原生应用概述](https://learn.microsoft.com/zh-cn/dotnet/architecture/cloud-native/)
 - [Azure Architecture Center](https://learn.microsoft.com/zh-cn/azure/architecture/)

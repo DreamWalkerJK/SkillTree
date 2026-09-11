@@ -8,7 +8,9 @@
 [在线文档](https://dreamwalkerjk.github.io/SkillTree/) · [GitHub 仓库](https://github.com/DreamWalkerJK/SkillTree) · [作者主页](https://github.com/DreamWalkerJK)
 </div>
 
-SkillTree 是面向软件开发者的结构化技术知识库，覆盖计算机基础、算法与数学、.NET、架构设计、数据库、云原生、密码学和网络安全。每篇笔记尽量保留问题背景、概念边界、工程取舍与可验证示例。
+SkillTree 是面向软件开发者的结构化技术知识库，覆盖计算机基础、算法与数学、.NET、架构设计、数据库、云原生、密码学和网络安全。每篇笔记尽量说明问题背景、适用条件、实现方法与验证过程。
+
+新增的数据结构、图论、动态规划、C# 专题和 .NET 架构文章统一采用 **.NET 10 / C# 14** 示例，文末提供带阅读说明的参考资料。版本历史仍注明特性首次引入时间，不与示例运行环境混写。可运行项目见 [伴随示例](DotNet/Examples/CSharpNetLts/README.md)；正文中的局部代码需按说明放入宿主项目，不能把项目构建成功理解为所有代码块都已单独测试。
 
 ## 先从任务开始
 
@@ -67,10 +69,11 @@ GeneralCodingSkills/ Mathematics/ Network/ OperatingSystem/ docs/
 
 ## 内容维护
 
-1. 将 Markdown 放入对应知识域目录，写清背景、边界、取舍和验证方式。
+1. 将 Markdown 放入对应知识域目录，写清背景、适用条件、实现方法和验证方式。
 2. 在 [docs/_sidebar.md](docs/_sidebar.md) 补充导航；核心入口变化时同步更新 [docs/home.md](docs/home.md) 与本 README。
 3. 检查相对链接、代码语言标记和移动端排版，并用本地 Docsify 页面实际点击。
 4. 提交到 `main` 后等待 GitHub Pages 部署；站点外观与交互维护在 [docs/index.html](docs/index.html)、[styles.css](docs/assets/styles.css) 和 [site.js](docs/assets/site.js)。
+5. 文末优先引用官方文档、原始论文或可靠课程，说明每条资料对应的知识点；引用第三方算法实现时说明语言差异，API 链接选择与示例匹配的版本。
 
 内容以学习和工程实践为目的。进行压力测试、扫描或安全实验前，请取得书面授权，并使用隔离资产与预设的停止、监控和回滚方案。
 

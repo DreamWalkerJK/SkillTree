@@ -1,6 +1,6 @@
 # CSharp和.NET Core 的高阶用法
 
-> 本文把“CSharp”和“.NET Core”作为检索标题保留。自 .NET 5 起，统一产品名称是 **.NET**；ASP.NET Core、EF Core 等组件继续保留 Core 后缀。示例优先采用 .NET 10（LTS）和 .NET 8（LTS），并在需要时标注 .NET 11 Preview。本文编写时（2026-09）.NET 11 仍属于预览版本，生产系统应以受支持的 .NET 10 或 .NET 8 补丁版本为准。
+> 本文把“CSharp”和“.NET Core”作为检索标题保留。自 .NET 5 起，统一产品名称是 **.NET**；ASP.NET Core、EF Core 等组件继续保留 Core 后缀。本文和伴随项目的示例统一使用 **.NET 10（LTS）/ C# 14**，目标框架为 `net10.0`。早期版本用于说明特性的引入时间，.NET 11 仅出现在版本历史对照中，不作为示例依赖。
 
 本文不是 API 目录，而是一份工程手册：先说明运行时如何工作，再讨论类型系统、异步、数据访问、诊断和部署。每个技术点都给出适用版本、基础写法、进阶写法及失效原因。源码示例均为 C#。
 
@@ -29,9 +29,9 @@
 
 | 版本 | C# 默认版本 | TFM | 生命周期（2026-09） | 本文定位 |
 | --- | --- | --- | --- | --- |
-| .NET 11 Preview | C# 15 Preview（随 SDK 变化） | `net11.0` | 预览 | 只用于试验新 API；不用于生产环境。 |
-| .NET 10 | C# 14 | `net10.0` | LTS | 新项目首选，本文示例主要采用。 |
-| .NET 8 | C# 12 | `net8.0` | LTS 维护期 | 既有生产系统和长期支持环境。 |
+| .NET 11 Preview | C# 15 Preview（随 SDK 变化） | `net11.0` | 预览 | 仅作版本对照，本文不提供预览示例。 |
+| .NET 10 | C# 14 | `net10.0` | LTS | 本文全部示例的运行环境。 |
+| .NET 8 | C# 12 | `net8.0` | LTS 维护期 | 仅用于理解既有系统和特性历史。 |
 
 语言版本、目标框架和运行时是三个独立概念。将 SDK 升级到 10 并不会让 `net8.0` 自动获得 .NET 10 API；同样，强行设置更高的 `LangVersion` 也不会改变运行时能力。
 
@@ -52,17 +52,9 @@
 </Project>
 ```
 
-`.NET 8 / C# 12` 项目只需将 TFM 和语言版本改为 `net8.0`、`12.0`。类库可同时目标两个 LTS：
+本文类库和控制台项目均只面向 `net10.0`。ASP.NET Core 项目使用 `Microsoft.NET.Sdk.Web`，MAUI 项目使用 .NET 10 的平台目标框架；SDK 类型与平台后缀不同，不代表另选一代 .NET 运行时。
 
-```xml
-<PropertyGroup>
-  <TargetFrameworks>net10.0;net8.0</TargetFrameworks>
-  <Nullable>enable</Nullable>
-  <ImplicitUsings>enable</ImplicitUsings>
-</PropertyGroup>
-```
-
-在仓库根目录使用 `global.json` 锁定 SDK，避免开发机和 CI 使用不同编译器：
+在示例工作目录使用 `global.json` 固定 SDK。伴随项目位于 `DotNet/Examples/CSharpNetLts`，构建前先进入该目录，以便命令行从当前目录向上找到配置：
 
 ```json
 {
@@ -74,7 +66,7 @@
 }
 ```
 
-试验 .NET 11 Preview 时，把 `allowPrerelease` 改为 `true` 并单独建立实验项目；不要让预览 SDK 参与生产发布流水线。
+这里的 `10.0.102` 是伴随项目采用的 SDK 版本；更新安全补丁时同步维护开发环境和 CI。保持 `allowPrerelease: false`，避免机器上安装的 .NET 11 预览 SDK 被自动选入本组示例。
 
 ### 1.3 常用命令
 
@@ -459,7 +451,7 @@ app.MapGet("/orders/{id:guid}", async (
 await app.RunAsync();
 ```
 
-`.NET 8` 提供 Typed Results 和原生 OpenAPI 支持；`.NET 10` 示例沿用相同模型。 `.NET 11 Preview` 的 API 可能变化，应在独立项目验证。
+这里使用 .NET 10 的 Typed Results 与 OpenAPI API。Typed Results 自 ASP.NET Core 7 提供；通过 `AddOpenApi` 和 `MapOpenApi` 内置生成 OpenAPI 文档的机制自 ASP.NET Core 9 提供，不应与早期版本的端点元数据支持混为一谈。
 
 ## 11. EF Core 与数据访问
 
@@ -551,9 +543,11 @@ dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishReadyToRu
 - Span/Memory 引用的内存由谁拥有，何时失效？
 - 非托管句柄和内存是否有确定的释放路径？
 - 日志和诊断数据是否包含凭据或个人信息？
-- 示例是否标明 .NET 8、.NET 10 或 .NET 11 Preview？
+- 示例是否使用 `net10.0` 和 C# 14，平台项目与包版本是否匹配？特性首次引入版本是否与当前示例环境分开说明？
 
 ## 附录：官方资料
+
+查术语时从术语表开始，查具体成员时选择 API 文档的 .NET 10 视图，判断首次引入版本时查 C# 版本历史。Microsoft Learn 页面会持续更新，页面最新内容不一定对应旧文章中的运行环境。
 
 - [.NET 术语表](https://learn.microsoft.com/zh-cn/dotnet/standard/glossary)
 - [.NET 支持策略](https://dotnet.microsoft.com/zh-cn/platform/support/policy/dotnet-core)
@@ -561,13 +555,13 @@ dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishReadyToRu
 - [C# 14 新增功能](https://learn.microsoft.com/zh-cn/dotnet/csharp/whats-new/csharp-14)
 - [异步编程概述](https://learn.microsoft.com/zh-cn/dotnet/csharp/asynchronous-programming/)
 - [泛型](https://learn.microsoft.com/zh-cn/dotnet/standard/generics)
-- [反射概述](https://learn.microsoft.com/zh-cn/dotnet/fundamentals/reflection/)
+- [反射概述](https://learn.microsoft.com/zh-cn/dotnet/fundamentals/reflection/overview)
 - [表达式树](https://learn.microsoft.com/zh-cn/dotnet/csharp/advanced-topics/expression-trees/)
-- [源生成器](https://learn.microsoft.com/zh-cn/dotnet/csharp/roslyn-sdk/source-generators-overview)
+- [Roslyn 增量源生成器](https://github.com/dotnet/roslyn/blob/main/docs/features/incremental-generators.md)：直接阅读输入管道、缓存和生成输出的设计说明。
 - [高性能代码](https://learn.microsoft.com/zh-cn/dotnet/csharp/advanced-topics/performance/)
 - [依赖注入](https://learn.microsoft.com/zh-cn/dotnet/core/extensions/dependency-injection)
 - [Generic Host](https://learn.microsoft.com/zh-cn/dotnet/core/extensions/generic-host)
-- [ASP.NET Core](https://learn.microsoft.com/zh-cn/aspnet/core/)
+- [ASP.NET Core](https://learn.microsoft.com/zh-cn/aspnet/core/?view=aspnetcore-10.0)
 - [EF Core](https://learn.microsoft.com/zh-cn/ef/core/)
 - [.NET 本机互操作](https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/)
 - [Native AOT 部署](https://learn.microsoft.com/zh-cn/dotnet/core/deploying/native-aot/)

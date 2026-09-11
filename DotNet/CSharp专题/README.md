@@ -1,6 +1,6 @@
 # C# / .NET 专题
 
-本目录按主题拆分 C# 语言特性与 .NET 运行时组件。文章示例采用 **.NET 8 / C# 12**，目标框架为 `net8.0`；文首会标出特性的首次引入版本，需要 .NET 10 或 .NET 11 Preview 的部分会单独注明。示例代码均为 C#。
+本目录按主题拆分 C# 语言特性与 .NET 运行时组件。文章示例采用 **.NET 10 / C# 14**，目标框架为 `net10.0`；文首会标出特性的首次引入版本，历史版本差异会在正文说明。示例代码均为 C#。
 
 ## 语言与类型
 
@@ -42,3 +42,9 @@
 2. 再阅读异步编程、线程处理、并行编程和异步流，区分 I/O 并发与 CPU 并行。
 3. 需要框架扩展时阅读反射、表达式树、源生成器和 DI/AOP，并在裁剪或 Native AOT 发布中复测。
 4. 最后根据性能剖析结果选择 Span、Memory、池化或不安全代码；不要以基准测试之外的直觉替代测量。
+
+## 参考资料
+
+- [C# 文档](https://learn.microsoft.com/dotnet/csharp/)：语言教程、参考和版本历史的入口。
+- [.NET API 浏览器](https://learn.microsoft.com/dotnet/api/?view=net-10.0)：按命名空间和程序集查询运行时 API 及支持版本。
+- [.NET 平台概述](https://learn.microsoft.com/dotnet/core/introduction)：了解 SDK、运行时、目标框架和部署模型之间的关系。

@@ -2,7 +2,7 @@
 
 Prim 算法从一个顶点开始，维护“已加入树的顶点集合”和它们连接到外部顶点的最小边。每次取出跨越该割的最轻边，把新顶点及其边加入树。它与 Dijkstra 使用相似的优先队列，但 Prim 的优先级是“连接边权”，不是从源点累积的路径距离。
 
-**示例环境：C# 12、.NET 8。** 采用邻接表和 `PriorityQueue`，适合稀疏图。
+**示例环境：C# 14、.NET 10。** 采用邻接表和 `PriorityQueue`，适合稀疏图。
 
 ## 1. 复杂度与选择
 
@@ -121,3 +121,8 @@ public sealed class DisjointSet(int size)
 ~~~
 
 网络布线、道路规划和聚类中的相似度连接都可以使用 MST。若边权表示成本，MST 只保证总成本最小，不保证任意两点之间的路径最短。
+
+## 参考资料
+
+- [Prim — cp-algorithms](https://cp-algorithms.com/graph/mst_prim.html)：稠密图与稀疏图实现及割性质证明。
+- [Kruskal with DSU — cp-algorithms](https://cp-algorithms.com/graph/mst_kruskal_with_dsu.html)：比较 Prim 与 Kruskal 的适用输入。

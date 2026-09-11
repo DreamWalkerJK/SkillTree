@@ -1,6 +1,6 @@
 # 基础数据结构
 
-本目录的示例统一采用 C# 12 与 .NET 8（`net8.0`）。文档中的版本说明针对 API 或语言特性标注；算法本身不依赖特定运行时。
+本目录的示例统一采用 C# 14 与 .NET 10（`net10.0`）。文档中的版本说明针对 API 或语言特性标注；算法本身不依赖特定运行时。
 
 ## 文档索引
 
@@ -10,3 +10,8 @@
 * [栈基础应用](./栈基础应用.md)：括号匹配、后缀表达式、单调栈和显式递归栈。
 * [队列基础应用](./队列基础应用.md)：任务队列、BFS、Channels 生产者/消费者。
 * [栈与队列基础应用（合并总览）](./栈与队列基础应用.md)：两种容器的对照说明和综合示例。
+
+## 参考资料
+
+- [CP-Algorithms 数据结构目录](https://cp-algorithms.com/)：从 Data Structures 分类查找并查集、线段树和队列优化的实现思路。
+- [Microsoft Learn：System.Collections.Generic](https://learn.microsoft.com/zh-cn/dotnet/api/system.collections.generic?view=net-10.0)：核对 .NET 10 中 `Stack<T>`、`Queue<T>` 等集合 API。

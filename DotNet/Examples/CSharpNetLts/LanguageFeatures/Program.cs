@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Point = (int X, int Y);
 
-Console.WriteLine("C# 12 / .NET 8");
+Console.WriteLine("C# 14 / .NET 10: language and library features introduced in earlier releases");
 
 var calculator = new PriceCalculator(0.13m);
 Console.WriteLine(calculator.Gross(100m));

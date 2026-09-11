@@ -1,6 +1,6 @@
 # LINQ：分组、聚合与 IQueryable
 
-> 版本信息：.NET 8（C# 12）。LINQ 于 .NET 3.5/C# 3.0 引入；IQueryable<T> 和表达式树同代提供；Enumerable.Chunk 于 .NET 6；MaxBy/MinBy 于 .NET 6。示例目标为 `net8.0`，可迁移到 .NET 10；.NET 11 Preview 需按目标 SDK 验证。
+> 版本信息：.NET 10（C# 14）。LINQ 于 .NET 3.5/C# 3.0 引入；IQueryable<T> 和表达式树同代提供；Enumerable.Chunk 于 .NET 6；MaxBy/MinBy 于 .NET 6。示例目标为 `net10.0`。
 
 LINQ 有两套主要执行模型：Enumerable 在进程内枚举 IEnumerable<T>；Queryable 把 Expression<Func<...>> 交给远端提供程序（通常是数据库）。两者方法名相似，执行位置和可翻译范围不同。
 
@@ -63,7 +63,7 @@ List<OrderTotal> result = await query
     .ToListAsync(cancellationToken);
 ~~~
 
-IQueryable 只是查询描述，不代表一定安全或高效。提供程序可能无法翻译任意 C# 方法；在数据库查询中使用本地方法会抛 NotSupportedException。先在服务器端完成 Where、Select、GroupBy，再调用 AsEnumerable 切换到内存：
+`IQueryable` 只是查询描述，不代表一定安全或高效。提供程序不能翻译任意 C# 方法；例如 EF Core 遇到无法翻译的 `Where` 条件通常抛出 `InvalidOperationException`，但允许在最外层投影中进行部分客户端计算。应先在服务器端完成筛选、投影和聚合，再明确选择客户端计算：
 
 ~~~csharp
 var serverRows = await db.Orders
@@ -107,3 +107,9 @@ public sealed record CustomerTotal(Guid CustomerId, decimal Amount, int Count);
 ~~~
 
 不同数据库提供程序对日期函数、字符串操作和分组投影的翻译能力不同。上线前应检查生成 SQL、索引使用和参数化情况；不要为了复用一个 C# 方法而强行把不可翻译逻辑放进 `IQueryable`。
+
+## 参考资料
+
+- [Language Integrated Query（Microsoft Learn）](https://learn.microsoft.com/dotnet/csharp/linq/)：总览查询语法、标准查询运算符和延迟执行。
+- [`IQueryable<T>` API](https://learn.microsoft.com/dotnet/api/system.linq.iqueryable-1?view=net-10.0)：说明表达式树、查询提供程序和执行边界。
+- [EF Core 查询概述](https://learn.microsoft.com/ef/core/querying/)：查看数据库翻译、客户端评估和生成 SQL 的实践建议。

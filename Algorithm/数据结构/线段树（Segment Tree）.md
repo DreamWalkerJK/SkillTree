@@ -4,7 +4,7 @@
 
 ## 1. 结构与复杂度
 
-**示例环境：C# 12、.NET 8（`net8.0`）。** 线段树是算法层面的数据结构，.NET 版本只影响示例使用的集合和语言语法。
+**示例环境：C# 14、.NET 10（`net10.0`）。** 线段树是算法层面的数据结构，.NET 版本只影响示例使用的集合和语言语法。
 
 节点 `[l, r)` 表示半开区间。叶节点长度为 1；内部节点由左右子节点合并。树高为 `O(log n)`，节点数小于 `4n`（递归数组实现的常用上界）。
 
@@ -15,7 +15,7 @@
 
 聚合操作必须满足结合律。求和、最小值等满足结合律，减法和除法不满足，不能直接套用普通线段树。
 
-## 2. 基础用法：区间和与单点更新（.NET 8）
+## 2. 基础用法：区间和与单点更新（.NET 10）
 
 ```csharp
 public sealed class SumSegmentTree
@@ -177,3 +177,8 @@ public sealed class RangeAddSumTree
 3. 使用懒标记更新后忘记 `Pull`，父节点聚合值会过期。
 4. 查询前不 `Push`，子节点仍是旧值，部分覆盖查询会返回错误结果。
 5. 和、乘积可能溢出 `int`；根据约束选 `long`，并注意 `delta * (r - l)` 的乘法类型。
+
+## 参考资料
+
+- [Segment Tree — cp-algorithms](https://cp-algorithms.com/data_structures/segment_tree.html)：区间查询、懒标记、持久化和动态开点。
+- [Fenwick Tree — cp-algorithms](https://cp-algorithms.com/data_structures/fenwick.html)：比较树状数组在前缀聚合场景的优势。

@@ -1,6 +1,6 @@
 # .NET 微服务：容器化 .NET 应用程序的体系结构
 
-本文以微软《.NET 微服务：容器化 .NET 应用程序的体系结构》为主线，说明如何把一个业务系统拆分为可独立发布的服务，并使用容器运行。示例代码以 **.NET 10、ASP.NET Core 10、C# 14** 为目标；需要长期支持版本时可将目标框架改为 **.NET 8 LTS**。文中提到的 .NET 11 均表示截至 2026 年仍处于预览阶段的 API，生产环境应先验证兼容性。
+本文以微软《.NET 微服务：容器化 .NET 应用程序的体系结构》为主线，说明如何把一个业务系统拆分为可独立发布的服务，并使用容器运行。示例统一采用 **.NET 10、ASP.NET Core 10、C# 14**，目标框架为 `net10.0`。文中的早期版本仅用于说明功能来源，不提供其他运行时版本的示例。
 
 > 主要参考：[微服务 .NET 应用体系结构](https://learn.microsoft.com/zh-cn/dotnet/architecture/microservices/)。
 
@@ -283,7 +283,7 @@ public sealed class ReservationConsumer(InventoryDbContext db)
 
 ## 5. 容器镜像
 
-`Dockerfile` 使用多阶段构建，运行阶段只保留 ASP.NET Core Runtime。下面示例对应 .NET 10；将两个基础镜像标签同时改为 `8.0` 即可用于 .NET 8 LTS。
+`Dockerfile` 使用多阶段构建，构建镜像和运行镜像均采用 .NET 10；运行阶段只保留 ASP.NET Core Runtime。应用项目的目标框架须为 `net10.0`，不能只改镜像标签而保留旧目标框架。
 
 ```dockerfile
 # syntax=docker/dockerfile:1
@@ -415,12 +415,14 @@ spec:
 | .NET 10、C# 14、ASP.NET Core 10 | 2025-11，本文主要示例版本 |
 | .NET 11 | 预计 2026-11；截至本文日期为预览，不用于生产环境 |
 
-## 官方参考
+## 参考资料
 
-- [微服务 .NET 应用的体系结构](https://learn.microsoft.com/zh-cn/dotnet/architecture/microservices/)
+- [.NET 微服务架构电子书](https://learn.microsoft.com/zh-cn/dotnet/architecture/microservices/)：按服务职责、数据所有权和容器部署阅读完整设计背景；书中的历史示例不代表本文使用的 SDK 版本。
+- [异步消息通信](https://learn.microsoft.com/zh-cn/dotnet/architecture/microservices/architect-microservice-container-applications/asynchronous-message-based-communication)：理解事件通信、重复投递以及数据库事务与消息发送的协调。
+- [补偿事务模式](https://learn.microsoft.com/zh-cn/azure/architecture/patterns/compensating-transaction)：设计 Saga 失败后的业务补偿，而非假设跨服务能整体回滚。
 - [多容器和微服务型 .NET 应用](https://learn.microsoft.com/zh-cn/dotnet/architecture/microservices/multi-container-microservice-net-applications/)
 - [使用 Docker 容器化 .NET 应用](https://learn.microsoft.com/zh-cn/dotnet/core/docker/build-container)
-- [ASP.NET Core Docker 部署](https://learn.microsoft.com/zh-cn/aspnet/core/host-and-deploy/docker/)
-- [ASP.NET Core 健康检查](https://learn.microsoft.com/zh-cn/aspnet/core/host-and-deploy/health-checks)
+- [ASP.NET Core Docker 部署](https://learn.microsoft.com/zh-cn/aspnet/core/host-and-deploy/docker/?view=aspnetcore-10.0)
+- [ASP.NET Core 健康检查](https://learn.microsoft.com/zh-cn/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-10.0)
 - [OpenTelemetry .NET 可观测性](https://learn.microsoft.com/zh-cn/dotnet/core/diagnostics/observability-with-otel)
 - [Azure 架构中心：微服务](https://learn.microsoft.com/zh-cn/azure/architecture/guide/architecture-styles/microservices)

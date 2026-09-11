@@ -1,6 +1,6 @@
 # 依赖注入（DI）与 AOP
 
-> 版本信息：Microsoft.Extensions.DependencyInjection 随 .NET Core 1.0 提供，Generic Host 于 .NET Core 2.1 成熟；Keyed services 于 .NET 8 引入；AOP 不是 C# 内置功能，常用 DispatchProxy、装饰器、拦截器或编译期源生成。示例目标为 `net8.0`，可迁移到 .NET 10；.NET 11 Preview 需按目标 SDK 验证。
+> 版本信息：Microsoft.Extensions.DependencyInjection 随 .NET Core 1.0 提供，Generic Host 于 .NET Core 2.1 成熟；Keyed services 于 .NET 8 引入；AOP 不是 C# 内置功能，常用 DispatchProxy、装饰器、拦截器或编译期源生成。示例目标为 `net10.0`、C# 14。
 
 依赖注入把对象创建和依赖关系交给容器，业务类只声明所需抽象。面向切面编程（AOP）把日志、事务、缓存、授权等横切逻辑集中处理，但必须保持调用链可追踪。
 
@@ -35,7 +35,7 @@ public sealed class Worker(IServiceScopeFactory scopes) : BackgroundService
 }
 ~~~
 
-## Keyed services（.NET 8）
+## Keyed services（.NET 8 起）
 
 ~~~csharp
 using Microsoft.AspNetCore.Mvc;
@@ -152,3 +152,9 @@ public sealed class AuditingHandler(
 ~~~
 
 切面日志只记录稳定字段和耗时，不能记录完整请求体、令牌或连接字符串。多个装饰器的顺序会改变语义，例如事务应包住真正的业务调用，重试应位于能够判断幂等性的边界。
+
+## 参考资料
+
+- [ASP.NET Core 依赖注入](https://learn.microsoft.com/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-10.0)：说明服务注册、构造函数注入、作用域和容器验证。
+- [.NET 中的依赖注入](https://learn.microsoft.com/dotnet/core/extensions/dependency-injection)：适用于 Generic Host、控制台程序和后台服务的通用 DI API。
+- [`DispatchProxy` API](https://learn.microsoft.com/dotnet/api/system.reflection.dispatchproxy?view=net-10.0)：参考运行时代理实现 AOP 的限制；生产代码仍需评估装饰器或源生成器方案。

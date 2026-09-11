@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/Console/">
     <Project Path="AdvancedPatterns/AdvancedPatterns.csproj" />
-    <Project Path="Net8Features/Net8Features.csproj" />
+    <Project Path="LanguageFeatures/LanguageFeatures.csproj" />
     <Project Path="Net10Features/Net10Features.csproj" />
   </Folder>
   <Folder Name="/Web/">

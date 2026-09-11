@@ -1,6 +1,6 @@
 # 面向 Web Forms ASP.NET Web Forms 开发人员的 Blazor
 
-本文按照 Microsoft Architecture Center 的迁移思路，把熟悉 ASP.NET Web Forms 的开发经验映射到 Blazor。示例以 **.NET 10、ASP.NET Core 10、C# 14** 编写；**Blazor Web App 和统一渲染模型在 .NET 8 引入**，需要长期支持时可选择 **.NET 8 LTS**。本文不依赖 .NET 11 的预览 API。
+本文按照 Microsoft Architecture Center 的迁移思路，把熟悉 ASP.NET Web Forms 的开发经验映射到 Blazor。示例统一以 **.NET 10、ASP.NET Core 10、C# 14** 编写，目标框架为 `net10.0`。Blazor Web App 和统一渲染模型在 .NET 8 引入，这是功能历史，不是本文的运行环境。
 
 > 主要参考：[面向 Web Forms 开发人员的 Blazor](https://learn.microsoft.com/zh-cn/dotnet/architecture/blazor-for-web-forms-developers/)。
 
@@ -21,7 +21,7 @@ Web Forms 把页面生命周期、服务器控件和 ViewState 作为主要抽�
 
 迁移时先划分页面和控件的业务职责，把数据访问移到注入的服务中，再把显示部分转换成组件。不要把现有的 Web Forms 控件逐个“翻译”为组件，否则会保留 ViewState 和事件链造成的隐式耦合。
 
-## 2. .NET 8+ Blazor Web App 架构
+## 2. .NET 10 Blazor Web App 架构
 
 从 .NET 8 开始，Blazor Web App 允许一个应用同时使用静态服务器端渲染（Static SSR）和交互式渲染。每个组件可以声明渲染模式：
 
@@ -257,7 +257,7 @@ Web Forms 的一次 PostBack 会重新创建页面对象，`IsPostBack` 常用�
 | 响应按钮点击 | 返回 `Task` 的事件处理程序 | 框架可以等待操作并处理异常 |
 | 解除订阅、取消查询 | `IDisposable` / `IAsyncDisposable` | 离开页面后不能继续保留事件订阅 |
 
-异步查询还可能乱序完成。用户先打开订单 A，再迅速打开订单 B，A 的慢请求不能覆盖 B 的结果。以下 **.NET 8/10** 组件基类同时使用取消和请求身份检查；取消用于节省资源，身份检查处理底层服务忽略取消的情况。
+异步查询还可能乱序完成。用户先打开订单 A，再迅速打开订单 B，A 的慢请求不能覆盖 B 的结果。以下 **.NET 10 / C# 14** 组件基类同时使用取消和请求身份检查；取消用于节省资源，身份检查处理底层服务忽略取消的情况。
 
 ```csharp
 using Microsoft.AspNetCore.Components;
@@ -340,12 +340,17 @@ Interactive Server 的组件字段保存在服务器电路中。短暂断线可�
 - .NET 10（2025-11，当前示例）：ASP.NET Core 10 与 C# 14；具体 API 以目标 SDK 文档为准。
 - .NET 11（预计 2026-11）：截至本文日期仍为预览版本，部署前需单独验证。
 
-官方资料：
+### 参考资料
+
+先用 Web Forms 迁移电子书理解组件模型，再查 ASP.NET Core 10 的 API 和行为；旧版电子书中的项目模板不宜直接当作当前模板使用。
+
+- [Blazor 组件生命周期](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/lifecycle?view=aspnetcore-10.0)：核对参数变化、预呈现和异步加载时机。
+- [Blazor 同步上下文](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/synchronization-context?view=aspnetcore-10.0)：解释组件在异步等待后的重入，以及外部事件为何需要 `InvokeAsync`。
 
 - [Blazor 概述（ASP.NET Core 10）](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/?view=aspnetcore-10.0)
-- [ASP.NET Core Blazor 渲染模式](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/render-modes)
+- [ASP.NET Core Blazor 渲染模式](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/components/render-modes?view=aspnetcore-10.0)
 - [面向 Web Forms 开发人员的 Blazor 电子书](https://learn.microsoft.com/zh-cn/dotnet/architecture/blazor-for-web-forms-developers/)
-- [Blazor 表单和验证](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/forms/)
-- [Blazor JavaScript 互操作](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/javascript-interoperability/)
-- [Blazor 安全性](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/security/)
+- [Blazor 表单和验证](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/forms/?view=aspnetcore-10.0)
+- [Blazor JavaScript 互操作](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/javascript-interoperability/?view=aspnetcore-10.0)
+- [Blazor 安全性](https://learn.microsoft.com/zh-cn/aspnet/core/blazor/security/?view=aspnetcore-10.0)
 - [.NET Architecture Center](https://learn.microsoft.com/zh-cn/dotnet/architecture/)

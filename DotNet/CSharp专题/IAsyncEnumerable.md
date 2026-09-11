@@ -1,6 +1,6 @@
 # IAsyncEnumerable<T> 与异步流
 
-> 版本信息：.NET Core 3.0/C# 8 引入异步迭代器、`IAsyncEnumerable<T>`、`await foreach` 和 `await using`。本文示例使用 .NET 8（C# 12）中的 `Channel<T>`、`ReadAllAsync` 和 `HttpClient` API，目标框架为 `net8.0`；可迁移到 .NET 10，.NET 11 Preview 需按目标 SDK 验证。
+> 版本信息：.NET Core 3.0/C# 8 引入异步迭代器、`IAsyncEnumerable<T>`、`await foreach` 和 `await using`。本文示例使用 .NET 10（C# 14）中的 `Channel<T>`、`ReadAllAsync` 和 `HttpClient` API，目标框架为 `net10.0`。
 
 异步流按需产生数据，每次 MoveNextAsync 都可以异步等待，适合分页 API、日志 tail、消息消费和大型文件处理。它与一次性返回 Task<List<T>> 的区别是内存占用和首项延迟更低。
 
@@ -31,7 +31,16 @@ EnumeratorCancellation 特性把调用方令牌传给迭代器。await foreach �
 
 ## 异步 LINQ
 
-System.Linq.Async（NuGet）提供 SelectAwait、WhereAwait 等扩展；.NET 9/10 的 BCL 可能继续增加异步 LINQ，请以目标 SDK API 为准。没有额外依赖时可手写迭代器：
+.NET 10 内置 `System.Linq.AsyncEnumerable`，为 `IAsyncEnumerable<T>` 提供 `Where`、`Select`、`ToListAsync` 等 LINQ 运算符，不需要为了这些操作额外安装旧的 `System.Linq.Async` 包。例如可以先筛选分页流，再物化为列表：
+
+~~~csharp
+List<Product> products = await ReadPagesAsync(client, token)
+    .Where(product => product.Name.Length > 0)
+    .Take(100)
+    .ToListAsync(token);
+~~~
+
+旧项目若已引用 `System.Linq.Async`，升级到 .NET 10 时应检查扩展方法二义性，按迁移文档调整包引用。异步委托重载与旧包的 `SelectAwait` 等名称也不完全相同。需要自定义遍历逻辑时，仍可手写迭代器：
 
 ~~~csharp
 static async IAsyncEnumerable<string> ReadLinesAsync(
@@ -114,3 +123,10 @@ public sealed record Product(int Id, string Name);
 ~~~
 
 异步流不是自动的限流器。下游处理速度低于生产速度时，调用方应在消费循环中控制并发，或使用有界 `Channel<T>`；需要重试时按页或按项目设计幂等键，避免重复写入。
+
+## 参考资料
+
+- [异步流（Microsoft Learn）](https://learn.microsoft.com/dotnet/csharp/iterators)：说明异步迭代器、`await foreach` 和取消令牌的编译器行为。
+- [`IAsyncEnumerable<T>` API](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1?view=net-10.0)：查阅接口成员、异步枚举器生命周期和框架版本信息。
+- [`Channel<T>` API](https://learn.microsoft.com/dotnet/api/system.threading.channels.channel-1?view=net-10.0)：了解有界通道、背压和生产者/消费者协调方式。
+- [.NET 10 的异步 LINQ 兼容性说明](https://learn.microsoft.com/dotnet/core/compatibility/core-libraries/10.0/asyncenumerable)：介绍内置 `AsyncEnumerable` 后的扩展方法冲突和旧包迁移。

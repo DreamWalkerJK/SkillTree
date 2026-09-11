@@ -2,7 +2,7 @@
 
 单调队列是一个双端队列，队列中的元素按照值保持单调递增或递减。处理数组的固定长度滑动窗口时，队首始终是窗口最值；每个元素最多入队、出队一次，因此总复杂度为线性。
 
-**示例环境：C# 12、.NET 8（`net8.0`）。** `ReadOnlySpan<T>` 在 C# 7.2/.NET Core 2.1 时代引入，示例用它避免复制输入数组。
+**示例环境：C# 14、.NET 10（`net10.0`）。** `ReadOnlySpan<T>` 在 C# 7.2/.NET Core 2.1 时代引入，示例用它避免复制输入数组。
 
 ## 1. 滑动窗口最大值
 
@@ -12,7 +12,7 @@
 2. 弹出已经离开窗口（`index <= i - k`）的队首。
 3. 当前窗口最大值为队首下标对应的值。
 
-每个下标只进出一次，时间复杂度 `O(n)`，额外空间 `O(k)`。示例采用 .NET 8 的数组手写环形双端队列，避免 `LinkedList<T>` 节点分配。
+每个下标只进出一次，时间复杂度 `O(n)`，额外空间 `O(k)`。示例采用 .NET 10 的数组手写环形双端队列，避免 `LinkedList<T>` 节点分配。
 
 ```csharp
 public static int[] MaxSlidingWindow(ReadOnlySpan<int> values, int windowSize)
@@ -51,7 +51,7 @@ int[] result = MaxSlidingWindow(new[] { 1, 3, -1, -3, 5, 3, 6, 7 }, 3);
 Console.WriteLine(string.Join(", ", result)); // 3, 3, 5, 5, 6, 7
 ```
 
-求最小值时把比较符号改为 `>=`，使队列中的值递增。若要保留相同值的最早下标，可使用严格比较并在队首过期时再删除；两种策略都正确，但要保持规则一致。
+求最小值时，应弹出队尾所有 `values[backIndex] >= values[i]` 的下标；对应代码中的退出条件应改为 `if (values[backIndex] < values[i]) break;`，使队列中的值递增。若要保留相同值的最早下标，可使用严格的删除条件，并在队首过期时再删除；两种策略都正确，但要保持规则一致。
 
 ## 2. 进阶：和单调队列相关的 DP 优化
 
@@ -98,7 +98,7 @@ public static long MinJumpCost(ReadOnlySpan<int> cost, int maxJump)
 给定可能包含负数的数组，求和至少为 `target` 的最短连续子数组。令 `prefix[i]` 表示前 `i` 个元素的和。对当前下标 `i`：
 
 - 如果 `prefix[i] - prefix[队首] >= target`，队首对应的区间已经满足条件，应持续弹出并更新最短长度；
-- 如果新前缀和不小于队尾前缀和，队尾永远不会成为最优起点，应弹出；
+- 如果新前缀和不大于队尾前缀和，队尾永远不会成为最优起点，应弹出；
 - 剩余下标保持前缀和递增。
 
 ```csharp
@@ -136,3 +136,8 @@ Console.WriteLine(ShortestSubarrayAtLeast([-1, -2], 1));   // 0
 ## 5. 与优先队列的选择
 
 优先队列允许任意顺序插入和删除全局最小（或最大）元素，通常为 `O(log n)`；单调队列依赖窗口左端只向右移动，并主动丢弃不可能成为答案的元素，单次操作摊销 `O(1)`。任务调度、全局最小堆和 Dijkstra 应使用优先队列；固定窗口、前缀和区间优化才适合单调队列。选择错误会导致结果错误，或在本可线性的算法中引入不必要的对数开销。
+
+## 参考资料
+
+- [Minimum Queue — cp-algorithms](https://cp-algorithms.com/data_structures/stack_queue_modification.html)：单调队列删尾规则和线性摊销证明。
+- [PriorityQueue<TElement,TPriority> — Microsoft Learn](https://learn.microsoft.com/zh-cn/dotnet/api/system.collections.generic.priorityqueue-2?view=net-10.0)：对照优先队列的全局最小值语义。

@@ -1,12 +1,12 @@
 # 性能优化：Span、Memory 与 Unsafe
 
-> 版本信息：Span<T>/ReadOnlySpan<T> 的语言支持于 C# 7.2，相关运行时 API 和 Memory<T> 于 .NET Core 2.1 提供，用于高性能内存操作；System.Buffers.ArrayPool<T> 于 .NET Core 2.0；Unsafe API 由 System.Runtime.CompilerServices.Unsafe 包提供，本文按 .NET 8 使用。示例目标 net8.0，可迁移到 net10/11。
+> 版本信息：C# 7.2 引入 `ref struct` 等语言支持，`Span<T>`、`ReadOnlySpan<T>` 和 `Memory<T>` API 随 .NET Core 2.1 提供；`ArrayPool<T>` 在 .NET Core 1.0 已可用。语言语法与运行时类型应分别看待，不能把 `Memory<T>` 当作 C# 7.2 的语言特性。本文使用 .NET 10 / C# 14，目标框架为 `net10.0`。
 
 性能优化先测量再改动。使用 BenchmarkDotNet、dotnet-counters、dotnet-trace 和内存剖析器确认瓶颈，避免为了少一次分配而牺牲可读性。
 
 ## Span<T> 基础
 
-Span<T> 是 ref struct，只能存在于栈上，不能跨 await、yield 或装箱。它提供数组、字符串和非托管缓冲区的统一切片视图：
+`Span<T>` 是 `ref struct`，不能装箱或存入普通类字段。它描述的内存可以来自托管数组、栈或非托管分配，并不要求数据本身位于栈上。C# 13 起允许在异步方法和迭代器中使用 `ref struct` 局部变量，但变量不能跨越 `await` 或 `yield return` 保持有效。需要跨异步挂起点保存缓冲区时使用 `Memory<T>`。
 
 ~~~csharp
 static int Sum(ReadOnlySpan<int> values)
@@ -99,9 +99,18 @@ static bool TryParsePoint(
         return false;
     }
 
+    y = 0; // 左侧解析失败时 && 会短路，仍需保证 out 参数已赋值。
     return int.TryParse(text[..separator], out x)
         && int.TryParse(text[(separator + 1)..], out y);
 }
 ~~~
 
 Span 只解决切片和临时分配问题，不能代替算法优化。优化前后应比较吞吐、P95/P99 延迟、分配字节数和 GC 次数；如果输入很少或路径不热，普通字符串代码通常更容易维护。
+
+## 参考资料
+
+- [Span<T> 和 Memory<T>](https://learn.microsoft.com/dotnet/standard/memory-and-spans/)：介绍切片、异步 API 传递和 `ref struct` 限制。
+- [Memory<T> 和 Span<T> 使用指南](https://learn.microsoft.com/dotnet/standard/memory-and-spans/memory-t-usage-guidelines)：说明所有权、借用、生命周期和异步调用期间的内存使用约定。
+- [`ArrayPool<T>` API](https://learn.microsoft.com/dotnet/api/system.buffers.arraypool-1?view=net-10.0)：参考数组租用、归还和敏感数据清理。
+- [dotnet-trace 性能分析](https://learn.microsoft.com/dotnet/core/diagnostics/dotnet-trace)：用于采集运行时事件并验证优化是否有效。
+- [C# 13 的 ref 和 unsafe 限制调整](https://learn.microsoft.com/dotnet/csharp/whats-new/csharp-13)：核对异步方法、迭代器和 `ref struct` 局部变量的使用规则。
