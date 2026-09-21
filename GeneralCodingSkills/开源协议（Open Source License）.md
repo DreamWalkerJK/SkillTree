@@ -191,7 +191,7 @@ AGPLv3 在 GPL 类规则之外增加了网络交互要求。第 13 条规定：�
 
 - tlnshuju：[主流的开源协议（MIT，Apache，GPL v2/v3） - 实践](https://www.cnblogs.com/tlnshuju/p/19101348)。
 - 蚊子爱喝水：[一文搞懂主流开源协议：从 MIT、Apache 到 GPL 的选择之道](https://blog.csdn.net/liuxl57805678/article/details/150855477)。
-- [用户提供的知乎文章](https://zhuanlan.zhihu.com/p/457278398)：本次访问返回 HTTP 403，未核验全文。
+- [GPL、MIT、Apache...一文讲清楚开源协议间的区别](https://zhuanlan.zhihu.com/p/457278398)
 
 需要确认具体条件时，可直接查阅：
 
