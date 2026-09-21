@@ -22,6 +22,7 @@ SkillTree 是面向软件开发者的结构化技术知识库，覆盖计算机�
 | 排查数据库瓶颈 | [MySQL](DataBase/MySql/MySQL.md) · [SQL Server 执行计划](<DataBase/SQL Server/SQL Server执行计划.md>) · [CTE 与 View](DataBase/CTE和View.md) |
 | 搭建云原生组件 | [Helm Chart](<Component/Helm Chart.md>) · [Kafka 外部地址](Component/kafka配置外部地址.md) · [Nginx](Component/Nginx.md) |
 | 建立安全分析能力 | [Kerckhoffs 原则](Cryptography/Kerckhoffs原则.md) · [DDoS 防护](Cybersecurity/分布式拒绝服务攻击.md) · [安全实验](Cybersecurity/Lab/notice.md) |
+| 选择和使用开源协议 | [开源协议（Open Source License）](<GeneralCodingSkills/开源协议（Open Source License）.md>)：常见协议对照、商用与闭源条件、选型及发布要点 |
 
 ## 知识导航
 
@@ -36,8 +37,8 @@ SkillTree 是面向软件开发者的结构化技术知识库，覆盖计算机�
 - **云原生与组件**：Helm、Kafka、Nginx 以及可部署、可审计的配置实践。
 - **密码学与网络安全**：SHA-256、哈希碰撞、DDoS、Kali 与隔离实验。
   [SHA-256](Cryptography/SHA-256.md) · [Kali](Cybersecurity/Tools/Kali.md)
-- **计算机基础**：网络模型、Linux / Windows 命令与通用编码技能。
-  [网络模型](Network/网络模型.md) · [Linux](OperatingSystem/Linux/操作命令.md) · [Windows](OperatingSystem/Windows/基础命令.md)
+- **计算机基础**：网络模型、Linux / Windows 命令、通用编码技能与开源合规。
+  [网络模型](Network/网络模型.md) · [Linux](OperatingSystem/Linux/操作命令.md) · [Windows](OperatingSystem/Windows/基础命令.md) · [开源协议](<GeneralCodingSkills/开源协议（Open Source License）.md>)
 
 ## 建议学习路径
 
@@ -46,6 +47,7 @@ SkillTree 是面向软件开发者的结构化技术知识库，覆盖计算机�
 3. **提升设计能力**：用 [DDD](Architecture/DDD.md)、[状态机](Architecture/状态机.md) 和 [SOLID](DesignPrinciples/SOLID.md) 复盘真实业务模块。
 4. **连接生产环境**：结合 [数据库优化](DataBase/MySql/MySQL.md)、[Helm Chart](<Component/Helm Chart.md>) 和 [云原生 .NET 架构](Architecture/DotNet/构建适用于Azure的云原生.NET应用.md)。
 5. **补齐安全视角**：从 [Kerckhoffs 原则](Cryptography/Kerckhoffs原则.md) 到 [DDoS 防护](Cybersecurity/分布式拒绝服务攻击.md)，在隔离的 [Docker 实验环境](Cybersecurity/Lab/notice.md) 中验证。
+6. **正确使用开源软件**：阅读 [开源协议](<GeneralCodingSkills/开源协议（Open Source License）.md>)，比较常见许可证，了解商用、闭源和源码提供的条件，掌握引入依赖与发布项目的基本要求。
 
 ## 在线文档与本地预览
 
